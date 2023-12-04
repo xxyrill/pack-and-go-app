@@ -1,4 +1,4 @@
-# my-project
+# Pack&Go
 
 > Nuxt.js + Vuetify.js project
 
