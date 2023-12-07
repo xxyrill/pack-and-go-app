@@ -1,8 +1,52 @@
 <template>
-  <v-layout class="main-reset">
+  <v-layout>
       <toolbar />
-        <v-main class="main-reset">
-        </v-main>
+      <v-main>
+        <v-container>
+          <v-layout class="align-content-center justify-center pa-15" >
+            <v-card outline class="pa-10 rounded-xl">
+              <p class="headline text-center">LOGIN</p>
+              <p class="caption text-center" >Please enter your email and password.</p>
+              <v-flex>
+                <v-text-field
+                  outlined
+                  dense
+                  class="rounded-xl"
+                  v-model="form.email"
+                  label="Email Address"
+                  persistent-placeholder
+                  prepend-inner-icon="mail_outline"
+                  placeholder="Email"
+                  :error-messages="this.errors ? this.errors.email : ''"
+                  v-on:keyup.enter="login"
+                />
+                
+                <v-text-field
+                  outlined
+                  dense
+                  class="rounded-xl"
+                  v-model="form.password"
+                  placeholder="Password"
+                  persistent-placeholder
+                  label="Password"
+                  prepend-inner-icon="mdi-lock-outline"
+                  @click:append="show = !show"
+                  :append-icon="show ? 'visibility' : 'visibility_off'"
+                  :type="show ? 'text' : 'password'"
+                  :error-messages="this.errors ? this.errors.password : ''"
+                  v-on:keyup.enter="login"
+                />
+              </v-flex>
+              <p class="caption text-center"><a>Forgot password?</a></p>
+              <v-flex class="d-flex justify-center">
+                <v-btn block depressed @click="login" :loading="loading" class="white--text" color="#249d5d">
+                  LOGIN
+                </v-btn>
+              </v-flex>
+            </v-card>
+          </v-layout>
+        </v-container>
+      </v-main>
   </v-layout>
 </template>
 
@@ -19,6 +63,7 @@ export default {
     errorMessage: '',
     form: {},
     email: null,
+    show: false,
     password: null,
     loginloading: false,
   }),
@@ -56,10 +101,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.main-reset {
-  margin: 0;
-  padding: 0;
-}
-</style>
