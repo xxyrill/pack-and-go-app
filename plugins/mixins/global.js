@@ -14,7 +14,9 @@ export default {
         this.$router.push('/logout')
         this.$router.push('/')
       }
-      console.log('dave', route)
+    },
+    goToLogin(route) {
+      this.$router.push(route)
     },
     toolBarName (payload) {
       this.SET_DYNAMIC_TOOLBAR_NAME(payload)
