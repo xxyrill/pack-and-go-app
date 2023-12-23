@@ -1,9 +1,22 @@
 <template>
-  <v-layout class="main-reset">
-      <toolbar />
-        <v-main class="main-reset">
-        </v-main>
-  </v-layout>
+  <v-app class="landing-bg-img">
+    <toolbar-landing/>
+    <v-layout>
+      <v-flex md7 class="d-flex align-center flex-column">
+        <v-flex pa-5 class="d-flex flex-column justify-center">
+          <span style="font-weight: bold; font-size: 100px; color: #ffffff; font-family: 'Segoe UI Black', 'Segoe UI', sans-serif">
+            Moving is
+          </span>
+          <span style="font-weight: bold; font-size: 100px; color: #ffffff; font-family: 'Segoe UI Black', 'Segoe UI', sans-serif;">
+            what we
+          </span>
+          <span style="font-weight: bold; font-size: 100px; color: #ffffff; font-family: 'Segoe UI Black', 'Segoe UI', sans-serif;">
+            love.
+          </span>
+        </v-flex>
+      </v-flex>
+    </v-layout>
+  </v-app>
 </template>
 
 <script>
@@ -19,6 +32,7 @@ export default {
     errorMessage: '',
     form: {},
     email: null,
+    show: false,
     password: null,
     loginloading: false,
   }),
@@ -56,10 +70,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.main-reset {
-  margin: 0;
-  padding: 0;
-}
-</style>

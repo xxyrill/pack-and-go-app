@@ -15,7 +15,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'HCDC',
+    title: 'PACK&GO',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -50,7 +50,6 @@ module.exports = {
   },
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify'
   ],
   modules: [
