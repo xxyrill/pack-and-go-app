@@ -6,7 +6,6 @@
     style="background-color: #ebebeb"
     light
     permanent
-    :mini-variant.sync="mini" 
   >
   <div>
   <v-list-item class="px-2 py-5">
@@ -21,7 +20,6 @@
       <div>
         <template v-for="(item, i) in items">
           <v-list-item
-          {{ item.href }}
             @click="goTo(item.href)"
             class="py-1 pointer"
             active-class="#F0ADAD"
@@ -73,11 +71,6 @@
   
     mixins: [Global, Imagepath],
 
-    computed: {
-      ...mapGetters('navbarevents', ['nav', 'navbarLists']),
-      ...mapGetters('login', ['loginUser']),
-    },
-
     watch: {
       'nav': {
         handler () {
@@ -99,28 +92,9 @@
     },
 
     methods: {
-      ...mapMutations('navbarevents', ['SET_NAV']),
-      hide () {
-        this.SET_NAV(false)
-      },
-      getNavs() {
-        // this.navs = this.nav
-      },
-      getRoleDisplay () {
-        if(this.loginUser.user){
-          this.form = this.loginUser.user
-          this.roles = this.form.roles.toString()
-          if (this.form.avatar === 'users/default.png') {
-            this.image.file = null
-          } else {
-            this.image.file = process.env.API_PIC + this.form.avatar
-          }
-        }
-      }
     },
 
     mounted () {
-      this.getRoleDisplay()
     }
   }
 </script>

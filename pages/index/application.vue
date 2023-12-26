@@ -1,7 +1,7 @@
 <template>
     <v-layout dark>
       <client-only>
-        <navbar :items="navbar" />
+        <!-- <navbar :items="navbar" /> -->
         <toolbar />
         <nuxt-child />
       </client-only>

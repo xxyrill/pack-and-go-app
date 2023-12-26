@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 
 import users from './modules/users'
 import login from './modules/login'
+import vehicle from './modules/vehicle'
 
 
 Vue.use(Vuex)
@@ -13,6 +14,7 @@ const store = () => {
     modules: {
       users,
       login,
+      vehicle
     }
   })
 }
