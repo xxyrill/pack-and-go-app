@@ -18,7 +18,7 @@
                   persistent-placeholder
                   prepend-inner-icon="mail_outline"
                   placeholder="Email"
-                  :error-messages="this.errors ? this.errors.email : ''"
+                  :error-messages="this.errors ? this.errors.email ? this.errors.email[0] : '' : ''"
                   v-on:keyup.enter="login"
                 />
                 
@@ -34,13 +34,13 @@
                   @click:append="show = !show"
                   :append-icon="show ? 'visibility' : 'visibility_off'"
                   :type="show ? 'text' : 'password'"
-                  :error-messages="this.errors ? this.errors.password : ''"
+                  :error-messages="this.errors ? this.errors.password ? this.errors.password[0] : '' : ''"
                   v-on:keyup.enter="login"
                 />
               </v-flex>
               <p class="caption text-center"><a>Forgot password?</a></p>
               <v-flex class="d-flex justify-center">
-                <v-btn block depressed @click="login" :loading="loading" class="white--text" color="#249d5d">
+                <v-btn block depressed @click="login" :loading="loginloading" class="white--text" color="#249d5d">
                   LOGIN
                 </v-btn>
               </v-flex>
@@ -62,7 +62,6 @@ export default {
   ],
   data: () => ({
     errors: {},
-    errorMessage: '',
     form: {},
     email: null,
     show: false,
@@ -70,12 +69,12 @@ export default {
     loginloading: false,
   }),
   computed: {
-        ...mapGetters('login', ['loginUser']),
+        ...mapGetters('login', ['log']),
   },
   watch: {
-    'loginUser': {
+    'log': {
       handler() {
-        this.data = this.loginUser
+        this.data = this.log
       }, deep: true
     }
   },
@@ -89,15 +88,11 @@ export default {
         password: this.form.password ? this.form.password : null,
       }
      this.POST_LOGIN(login).then(data => {
-        console.log('data',data)
-        // console.log('error', data.data.errors.Message[0])
-        this.SET_LOGIN(data)
-        // this.goTo('/users')
+        this.SET_LOGIN(data.data)
+        this.loginloading = false
       }).catch(error => {
         this.loginloading = false
-        console.log('errorajsdkljaskldjkas', error)
-        // this.error('qwe', data.data.errors.Message[0])
-        // this.errorMessage = error.data.errors.Message[0];
+        this.errors = error.response.data.errors;
       })
     }
   }

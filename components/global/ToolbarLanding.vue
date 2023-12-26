@@ -4,9 +4,11 @@
         <v-img :src=imgs.product_logo alt="Pack and Go Logo" max-height="150" max-width="400"></v-img>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-flex mt-3 class="d-flex justify-end" >
-      <v-btn class="mr-5" outlined large rounded text @click="login">LOGIN</v-btn>
-    </v-flex>
+    <!-- <v-flex mt-3 class="d-flex justify-end" >
+      <v-btn class="mr-3" outlined large rounded text @click="login">LOGIN</v-btn>
+    </v-flex> -->
+    <dialog-login/>
+    <dialog-sign-up/>
   </v-app-bar>
 </template>
 <script>

@@ -25,6 +25,7 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
     ]
   },
+  transpile: [/^vue2-google-maps($|\/)/],
   components: true,
   plugins: [
     '~/plugins/vuetify.js',
@@ -36,6 +37,7 @@ module.exports = {
     '~/plugins/vue-croppa.js',
     '~/plugins/vue-wysiwyg.js',
     {src: '~/plugins/vue-sample-uploader.js', ssr: false},
+    {src: '~/plugins/vue2-google-maps.js', ssr: false},
     '~/plugins/vue-js-modal',
     {src: '~/plugins/localStorage.js', ssr: false },
     '~/plugins/filters.js',
@@ -45,7 +47,7 @@ module.exports = {
     '~/assets/style/app.styl',
   ],
   env: {
-    API_URL: 'http://192.168.1.13',
+    API_URL: 'http://192.168.1.13:50504',
     BASE_URL: 'http://192.168.1.13',
   },
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

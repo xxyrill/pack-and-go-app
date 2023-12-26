@@ -1,7 +1,7 @@
-import { postApi, patchApi } from '~/plugins/http'
+import { postApi, patchApi, deleteApi } from '~/plugins/http'
+
 const initialState = () => {
   return {
-    log: {}
   }
 }
 const state = () => {
@@ -9,14 +9,8 @@ const state = () => {
 }
 
 const mutations = {
-  SET_LOGIN (state, payload) {
-    state.log = payload
-  },
-  SET_USER_DATA (state, payload) {
-    state.log.user.avatar = payload
-  },
-  RESET_LOGIN_STATE (state) {
-    /*
+  RESET_VEHICLE_STATE (state) {
+      /*
         FUNCTION:
         RESET TO INITIAL STATE. YOU WILL APPRECIATE THIS FUNCTIONALITY
         WHEN YOU ALREADY DEALING WITH COOKIE / LOCAL STORAGE
@@ -26,13 +20,11 @@ const mutations = {
 }
 
 const getters = {
-  log: state => state.log,
-  token: state => state.token
 }
 
 const actions = {
-  POST_LOGIN ({ commit }, payload) {
-    return postApi('/login', payload)
+  VEHICLE_LIST ({ commit }, payload) {
+    return postApi(`/vehicle-dropdown`, payload)
   },
 }
 
