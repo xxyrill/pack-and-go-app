@@ -8,7 +8,12 @@
       <v-btn class="mr-3" outlined large rounded text @click="login">LOGIN</v-btn>
     </v-flex> -->
     <dialog-login/>
-    <dialog-sign-up/>
+    <a style="color: white; text-decoration: none" class="mr-4 pa-2 subtitle-1" href="/customer">SIGN UP</a>
+    <a style="color: white; text-decoration: none" class="mr-4 pa-2 subtitle-1" href="/business">SIGN UP AS BUSINESS</a>
+    <a style="color: white; text-decoration: none" class="mr-4 pa-2 subtitle-1" href="/driver">SIGN UP AS DRIVER</a>
+    <!-- <dialog-sign-up/> -->
+    <!-- <dialog-sign-up-business/> -->
+    <!-- <dialog-sign-up-driver/> -->
   </v-app-bar>
 </template>
 <script>

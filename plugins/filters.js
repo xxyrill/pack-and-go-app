@@ -20,3 +20,5 @@ Vue.filter('decimalcomma', number => number ? Number.parseFloat(number).toString
 Vue.filter('commaarray', string => [...new Set(string)].join(', '))
 
 Vue.filter('dotdot', string => (string.length <= 20) ? string : string.slice(0, 20)+'...')
+
+Vue.filter('dateToWord', string => moment(string).format('MMMM D, YYYY'))

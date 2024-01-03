@@ -44,6 +44,7 @@
               class="rounded-l"
               v-bind="attrs"
               v-on="on"
+              clearable
             ></v-text-field>
           </template>
           <v-date-picker

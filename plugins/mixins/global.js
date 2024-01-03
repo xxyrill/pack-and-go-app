@@ -58,6 +58,42 @@ export default {
       } else {
         return false
       }
-    }
+    },
+    fieldsValidation(payloads) {
+      let errors = {}
+    
+      Object.keys(payloads).forEach((key) => {
+        let value = payloads[key];
+        // Trim string values
+        if (typeof value === 'string') {
+          value = value.trim();
+        }
+        if (
+          value === null ||
+          value === undefined ||
+          value === '' ||
+          value === 0
+        ) {
+          this.$set(errors, key, ['This field is required.']);
+        } else {
+          this.$delete(errors, key);
+        }
+      });
+      let payload = {};
+    
+      if (Object.keys(errors).length >= 1) {
+        payload = {
+          error: true,
+          errors: errors,
+        };
+        return payload;
+      } else {
+        payload = {
+          error: false,
+          errors: {},
+        };
+        return payload;
+      }
+    },
   }
 }

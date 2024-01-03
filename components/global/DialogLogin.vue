@@ -1,6 +1,7 @@
 <template>
   <div mt-3 class="d-flex justify-end rounded-xxl">
-    <v-btn class="mr-3" outlined large rounded text @click="loginDialog">LOGIN</v-btn>
+    <!-- <v-btn class="mr-3" large rounded text @click="loginDialog" color="white">LOGIN</v-btn> -->
+    <a style="color: white; text-decoration: none" class="mr-4 pa-2 subtitle-1" @click="loginDialog">LOGIN</a>
     <v-dialog
       v-model="dialog"
       width="350"
