@@ -3,11 +3,15 @@ import Vue from 'vue'
 
 Vue.filter('monthdayyear', date => moment(date).local().format('MMMM D, YYYY'))
 
-Vue.filter('monthyear', date => moment(date).local().format('MMMM YYYY'))
+Vue.filter('monthdayyearwithtime', date => moment(date).local().format('MMMM D, YYYY h:mm a'))
+
+Vue.filter('monthyear', date => moment(date).local().format('D MMMM YYYY'))
 
 Vue.filter('monthday', date => moment(date).local().format('MMM Do'))
 
 Vue.filter('datetime', date => moment(date).local().format('MMMM D, YYYY HH:mm A'))
+
+Vue.filter('time', date => moment(date).local().format('h:mm A'))
 
 Vue.filter('comma', number => Number.parseFloat(number).toFixed(0).split('.')[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
 

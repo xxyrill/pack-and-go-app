@@ -2,11 +2,7 @@ import { postApi, patchApi, deleteApi } from '~/plugins/http'
 
 const initialState = () => {
   return {
-    userRegister: {
-      basicInfo: {},
-      permaAddress: {},
-      currAddress: {}
-    }
+    user: null
   }
 }
 const state = () => {
@@ -14,8 +10,8 @@ const state = () => {
 }
 
 const mutations = {
-  SET_USER_BASIC_INFO (state, payload) {
-    state.userRegister.basicInfo = payload
+  SET_USER_ID (state, payload) {
+    state.user = payload
   },
 
   SET_USER_PERMA_ADDRESS (state, payload) {
@@ -37,7 +33,7 @@ const mutations = {
 }
 
 const getters = {
-  basicInfo: state => state.basicInfo,
+  user: state => state.user,
   permaAddress: state => state.permaAddress,
   currAddress: state => state.currAddress,
 }
@@ -45,40 +41,22 @@ const getters = {
 const actions = {
 
   //USERS
-  USERS_TABLE ({ commit }, payload) {
-    return postApi(`/users`, payload)
+  USERS_REGISTRATION ({ commit }, payload) {
+    return postApi(`/user-registration`, payload)
   },
-  CREATE_USERS ({ commit }, payload) {
-    return postApi(`/users/create`, payload)
+  USER_VERIFY_FEILDS ({ commit }, payload) {
+    return postApi('/verify-feilds', payload)
   },
-  REGISTER_USERS ({ commit }, payload) {
-    return postApi(`/users/register`, payload)
-  },
-  STORE_USERS ({ commit }, payload) {
-    return postApi(`/users/store`, payload)
-  },
-  DELETE_USER ({ commit }, payload) {
-    return deleteApi(`/users/delete/${id}`, payload)
-  },
-  EDIT_USER ({ commit }, payload) {
-    return deleteApi(`/users/edit/${id}`, payload)
-  },
-  SHOW_USER ({ commit }, payload) {
-    return getApi(`/users/show/${id}`, payload)
-  },
-  UPDATE_USER ({ commit }, payload) {
-    return patchApi(`users/update/${id}`, payload)
+  GET_DETAILS_OF_CURRENT_LOGIN ({ commit }, payload) {
+    return postApi('/user/get', payload)
   },
 
-  
-  //PERMANENT ADDRESS
-  USER_PERMANENT_ADDRESS ({ commit }, payload) {
-    return postApi(`address/permanent/`, payload)
-  }, 
-
-  //CURRENT ADDRESS
-  USER_CURRENT_ADDRESS ({ commit }, payload) {
-    return postApi(`address/current/`, payload)
+  //OTP
+  REGISTRATION_SEND_OTP ({ commit }, payload) {
+    return postApi(`send-otp/`, payload)
+  },
+  VERIFY_OTP ({ commit }, payload) {
+    return postApi(`verify/`, payload)
   },
 
 }

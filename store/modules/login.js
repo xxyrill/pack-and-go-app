@@ -34,6 +34,9 @@ const actions = {
   POST_LOGIN ({ commit }, payload) {
     return postApi('/login', payload)
   },
+  POST_LOGOUT ({ commit }, payload) {
+    return postApi('/logout', payload)
+  },
 }
 
 export default {

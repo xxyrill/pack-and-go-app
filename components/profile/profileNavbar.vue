@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-navigation-drawer permanent>
+    <v-navigation-drawer permanent app>
       <v-list-item two-line>
         <v-list-item-avatar>
           <img src="https://randomuser.me/api/portraits/women/81.jpg">
@@ -43,6 +43,9 @@ import axios from 'axios'
       items: [
         { title: 'Profile', icon: 'mdi-account' },
         { title: 'Change Password', icon: 'mdi-key' },
+        { title: 'Vehicles', icon: 'mdi-car-estate' },
+        { title: 'Service Hours', icon: 'mdi-hours-24' },
+        { title: 'Subscription', icon: 'mdi-currency-usd' },
       ],
       right: null,
     }),

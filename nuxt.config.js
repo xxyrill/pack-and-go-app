@@ -37,6 +37,7 @@ module.exports = {
     '~/plugins/vue-croppa.js',
     '~/plugins/vue-wysiwyg.js',
     {src: '~/plugins/vue-sample-uploader.js', ssr: false},
+    {src: '~/plugins/pusher-js.js', ssr: false},
     {src: '~/plugins/vue2-google-maps.js', ssr: false},
     '~/plugins/vue-js-modal',
     {src: '~/plugins/localStorage.js', ssr: false },

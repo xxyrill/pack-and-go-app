@@ -92,6 +92,7 @@
     methods: {
       ...mapActions('login', ['POST_LOGIN']),
       ...mapMutations('login', ['SET_LOGIN']),
+      ...mapMutations('users', ['SET_USER_ID']),
       login() {
         this.loginloading = true
         let login = {
@@ -100,10 +101,28 @@
         }
       this.POST_LOGIN(login).then(data => {
           this.SET_LOGIN(data.data)
+          this.SET_USER_ID(data.data.id)
+          localStorage.setItem('token', data.data.token)
+          if (!_.isNull(localStorage.getItem('token'))) {
+            console.log(data.data.type)
+            if(data.data.type == 'customer'){
+              this.goTo('/application/customer')
+              this.loginloading = false
+            } else if(data.data.type == 'driver') {
+              this.goTo('/application/driver')
+              this.loginloading = false
+            } else if(data.data.type == 'business') {
+              this.goTo('/application/business')
+              this.loginloading = false
+            }else{
+              this.goTo('/')
+            }
+          }else{
+            this.goTo('/application/customer')
+          }
+        }).catch(response => {
           this.loginloading = false
-        }).catch(error => {
-          this.loginloading = false
-          this.errors = error.response.data.errors;
+          this.errors = response.response.data.errors;
         })
       },
       loginDialog() {

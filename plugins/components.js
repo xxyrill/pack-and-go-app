@@ -2,11 +2,13 @@
 import Vue from 'vue'
 import Toolbar from '~/components/global/Toolbar'
 import ToolbarLanding from '~/components/global/ToolbarLanding'
+import ChatBox from '~/components/global/ChatBox'
 
 //login / registration
 import DialogLogin from '~/components/global/DialogLogin'
 
 //driver
+import DriverRecords from '~/components/driver/records/records'
 import DriverRecordsTable from '~/components/driver/records/table'
 import DriverRecordsFilter from '~/components/driver/records/filter'
 
@@ -18,17 +20,24 @@ import CustomerRecords from '~/components/customer/records/records'
 import CustomerRecordFilter from '~/components/customer/records/recordFilter'
 import CustomerRecordTable from '~/components/customer/records/recordTable'
 
-import CustomerProfile from '~/components/customer/profile/profile'
-import CustomerProfileNavbar from '~/components/customer/profile/profileNavbar'
+import BusinessRegistration from '~/components/registration/businessRegistration'
+import CustomerRegistration from '~/components/registration/customerRegistration'
+import DriverRegistration from '~/components/registration/driverRegistration'
+
+import Profile from '~/components/profile/profile'
+import ProfileNavbar from '~/components/profile/profileNavbar'
+import ProfileData from '~/components/profile/profileData'
 import { Icon } from '@iconify/vue2';
 
 const components = {
   //Global
   Toolbar,
   ToolbarLanding,
+  ChatBox,
 
   DialogLogin,
 
+  DriverRecords,
   DriverRecordsTable,
   DriverRecordsFilter,
 
@@ -39,9 +48,13 @@ const components = {
   CustomerRecordFilter,
   CustomerRecordTable,
 
-  CustomerProfile,
-  CustomerProfileNavbar,
+  BusinessRegistration,
+  CustomerRegistration,
+  DriverRegistration,
 
+  Profile,
+  ProfileNavbar,
+  ProfileData,
   //Plugins
   Icon
 }

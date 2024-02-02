@@ -346,7 +346,10 @@
               <v-flex md4>
                 <v-autocomplete
                   v-model="form.vehicle_type_id"
-                  outlined 
+                  outlined
+                  :items="vehicle_list"
+                  item-text="type"
+                  return-object
                   dense
                   :error-messages="errors ? errors.vehicle_type_id ? errors.vehicle_type_id :'':''"
                 />
@@ -362,13 +365,13 @@
                   </v-card-title>
                   <v-card-text>
                     <v-layout column>
-                      <v-flex>Vehicle type: 500Kg Taxi MPV</v-flex>
-                      <v-flex>Date & time: August 10 from 4:30 to 5:30 PM</v-flex>
+                      <v-flex>Vehicle type: {{ form.vehicle_type_id ? form.vehicle_type_id.type : '' }}</v-flex>
+                      <v-flex>Date & time: {{ form.booking_date_time_start ? form.booking_date_time_start : '' }} - {{ form.booking_date_time_end ? form.booking_date_time_end : '' }}</v-flex>
                       <v-flex>Lot 34 Block 19 House 36</v-flex>
-                      <v-flex>Pick-up: Barangay 76-A, Bucana, Poblacion District</v-flex>
-                      <v-flex>Drop-off: Granvilla Crest Subdivision Davao City</v-flex>
+                      <v-flex>Pick-up: {{fromLocation ? fromLocation : ''}}</v-flex>
+                      <v-flex>Drop-off: {{toLocation ? toLocation : ''}}</v-flex>
                       <v-card outlined class="pa-1">
-                        Notes to the driver: Ikaduha nga kanto gikan sa amesco pharmacy, tapad sa kapilya ang among balay
+                        {{ form.pickup_adition_remarks ? form.pickup_adition_remarks : '' }}
                       </v-card>
                     </v-layout>
                   </v-card-text>
@@ -383,10 +386,10 @@
                   </v-card-title>
                   <v-card-text>
                     <v-layout column>
-                      <v-flex>Name: Xyrill To-ong</v-flex>
-                      <v-flex>Contact No.: 09223669958</v-flex>
-                      <v-flex>Alternative Contact No.: None</v-flex>
-                      <v-flex>Email: xyrillariel@gmail.com</v-flex>
+                      <v-flex>Name: {{userDetails ? userDetails.first_name ? userDetails.first_name : '' : ''}} {{userDetails ? userDetails.middle_name ? userDetails.middle_name : '' : ""}} {{userDetails ? userDetails.last_name ? userDetails.last_name : "" : ""}}</v-flex>
+                      <v-flex>Contact No.: +63{{form.alt_contact_number_one ? form.alt_contact_number_one : ''}}</v-flex>
+                      <v-flex>Alternative Contact No.: {{form.alt_contact_number_two ? '+63'+form.alt_contact_number_two : ''}}</v-flex>
+                      <v-flex>Email: {{form.alt_email ? form.alt_email : ''}}</v-flex>
                     </v-layout>
                   </v-card-text>
                   <v-card-actions>
@@ -416,23 +419,25 @@
                             <v-layout column>
                               <v-flex>
                                 <v-text-field
-                                  v-model="alt_contact_number_one"
+                                  v-model="form.alt_contact_number_one"
                                   label="Contact Number"
                                   clearable
                                   dense
                                   color="success"
                                   outlined
+                                  prefix="+63"
                                   persistent-placeholder
                                   class="rounded-l"
                                 ></v-text-field>
                               </v-flex>
                               <v-flex>
                                 <v-text-field
-                                  v-model="alt_contact_number_two"
-                                  label="Alt. Contact Number"
+                                  v-model="form.alt_contact_number_two"
+                                  label="Alt. Contact Number (optional)"
                                   clearable
                                   dense
                                   color="success"
+                                  prefix="+63"
                                   outlined
                                   persistent-placeholder
                                   class="rounded-l"
@@ -440,7 +445,7 @@
                               </v-flex>
                               <v-flex>
                                 <v-text-field
-                                  v-model="alt_email"
+                                  v-model="form.alt_email"
                                   label="Email"
                                   clearable
                                   dense
@@ -464,14 +469,7 @@
                             @click="dialogUpdateUser = false"
                             style="color: white;"
                           >
-                            Cancel
-                          </v-btn>
-                          <v-btn
-                            color="warning"
-                            depressed
-                            @click="saveUpdate"
-                          >
-                            Submit
+                            Close
                           </v-btn>
                         </v-card-actions>
                       </v-card>
@@ -503,8 +501,8 @@
               @click="continueStep(step)">
                 Continue 
                 <Icon icon="gg:arrow-up" width="25" height="25" :rotate="1" />
-              </v-btn>
-            <v-btn class="ma-1" depressed color="black" style="color:white" v-if="step == 5">Request Booking</v-btn>
+            </v-btn>
+            <v-btn class="ma-1" depressed color="black" style="color:white" v-if="step == 5" @click="submitFinal" :loading="finalSubmitLoading">Request Booking</v-btn>
           </v-flex>
         </v-card-actions>
       </v-card>
@@ -512,7 +510,7 @@
   </v-layout>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 import axios from 'axios'
 import Global from '~/plugins/mixins/global'
 import moment from 'moment';
@@ -526,7 +524,7 @@ import moment from 'moment';
       date_menu: false,
       modal: false,
       final_dates: null,
-      step: 5,
+      step: 1,
       markers: [],
       mapOptions: {
         mapTypeId: 'roadmap', // You can set the map type to 'roadmap' to turn off terrain
@@ -549,6 +547,9 @@ import moment from 'moment';
       alt_contact_number_one: null,
       alt_contact_number_two: null,
       alt_email: null,
+      vehicle_list: [],
+      userDetails: null,
+      finalSubmitLoading:false
     }),
     computed: {
       progress(){
@@ -566,6 +567,9 @@ import moment from 'moment';
       }
     },
     methods: {
+      ...mapActions('vehicle',['VEHICLE_LIST']),
+      ...mapActions('users', ['GET_DETAILS_OF_CURRENT_LOGIN']),
+      ...mapActions('booking', ['BOOKING_STORE']),
       continueStep(step){
         if(step == 1) {
           let payload = {
@@ -588,8 +592,10 @@ import moment from 'moment';
             this.errors = validation.errors
           }else{
             let extra = {
+              pick_up_location : this.fromLocation ? this.fromLocation  : null,
               pick_up_longitude : this.form ? this.fromMarkerPosition ? this.fromMarkerPosition.lng ? this.fromMarkerPosition.lng : null : null : null,
               pick_up_latitude : this.form ? this.fromMarkerPosition ? this.fromMarkerPosition.lat ? this.fromMarkerPosition.lat : null : null : null,
+              drop_off_location : this.toLocation ? this.toLocation  : null,
               drop_off_longitude : this.form ? this.toMarkerPosition ? this.toMarkerPosition.lng ? this.toMarkerPosition.lng : null : null : null,
               drop_off_latitude : this.form ? this.toMarkerPosition ? this.toMarkerPosition.lat ? this.toMarkerPosition.lat : null : null : null,
               pickup_helper_stairs : this.form ? this.form.pickup_helper_stairs ? this.form.pickup_helper_stairs : false : false,
@@ -634,13 +640,16 @@ import moment from 'moment';
           }
         }else if(step == 4){
           let payload = {
-            need_helper : this.need_helper ? this.need_helper : null,
-            vehicle_type_id : this.form ? this.form.vehicle_type_id ? this.form.vehicle_type_id : null : null 
+            vehicle_type_id : this.form ? this.form.vehicle_type_id ? this.form.vehicle_type_id.id : null : null 
           }
           let validation = this.fieldsValidation(payload)
+          console.log(validation)
           if(validation.error == true){
             this.errors = validation.errors
           }else{
+            
+            this.form.need_helper = this.need_helper ? this.need_helper : false,
+            this.step += 1
           }
         }
       },
@@ -704,12 +713,6 @@ import moment from 'moment';
           return 'Error fetching address';
         }
       },
-      saveUpdate(){
-        this.form.alt_contact_number_one = this.alt_contact_number_one
-        this.form.alt_contact_number_two = this.alt_contact_number_two
-        this.form.alt_email = this.alt_email
-        this.dialogUpdateUser = false
-      },
       getEventColor (event) {
         return event.color
       },
@@ -722,10 +725,60 @@ import moment from 'moment';
       next () {
         this.$refs.calendar.next()
       },
+      async getVehicleList(){
+        let payload = {
+          order_by : "type",
+          sort_by : "asc"
+        }
+        await this.VEHICLE_LIST(payload).then(data => {
+          this.vehicle_list = data.data.data
+        }).catch(response => {
+          this.$swal.fire({
+              title: `Something went wrong.`,
+              text: '',
+              icon: 'error',
+              confirmButtonColor: '#009c25',
+              confirmButtonText: 'OK'
+            })
+        })
+      },
+      async getDetails(){
+        await this.GET_DETAILS_OF_CURRENT_LOGIN().then(data => {
+          this.userDetails = data.data.data
+          this.form.alt_contact_number_one = this.userDetails ? this.userDetails.contact_number ? this.userDetails.contact_number : null : null
+          this.form.alt_email = this.userDetails ? this.userDetails.email ? this.userDetails.email : null : null
+        }).catch(response => {
+          console.log(response)
+        })
+      },
+      async submitFinal(){
+        this.finalSubmitLoading = true
+        this.form.vehicle_list_id = this.form.vehicle_type_id.id
+        await this.BOOKING_STORE(this.form).then(data => {
+          this.$swal.fire({
+            title: 'Thank you for your booking request!',
+            text: 'One of our drivers will communicate with you in the chat box to discuss the best price for your move service. Your booking status is currently set to pending until both parties agree on the cost. We appreciate your business.',
+            icon: 'success',
+            confirmButtonColor: '#009c25',
+            confirmButtonText: 'OK'
+          })
+          this.goTo('/application/customer')
+          this.finalSubmitLoading = false
+        }).catch( response => {
+          this.finalSubmitLoading = false
+          this.$swal.fire({
+            title: 'Something went wrong.',
+            text: 'try again later.',
+            icon: 'error',
+            confirmButtonColor: '#009c25',
+            confirmButtonText: 'OK'
+          })
+        })
+      }
     },
     mounted () {
-
+      this.getVehicleList()
+      this.getDetails()
     }
-    
   }
 </script>

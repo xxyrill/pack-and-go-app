@@ -1,8 +1,7 @@
 <template>
   <v-main>
     <client-only>
-    <toolbar/>
-      <driver-registration/>
+      <nuxt-child/>
     </client-only>
   </v-main>
 </template>
