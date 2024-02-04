@@ -35,6 +35,13 @@ const actions = {
   SET_OTP ({ commit }, payload) {
     return postApi(`/send-otp`, payload)
   },
+  SEND_MAIL ({ commit }, payload) {
+    return postApi(`/send-mail`, payload)
+  },
+  BOOKING_RESCHEDULE ({ commit }, payload) {
+    return postApi(`/booking/reschedule`, payload)
+  },
+  
 }
 
 export default {

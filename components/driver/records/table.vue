@@ -20,12 +20,12 @@
                     :(item.status == 'confirmed') ? 'yellow' : 'green'" class="px-4"><span style="color=white">{{ item.status | capitalfirst }}</span></v-card>
                   <span class="caption">{{ item.order_number }}</span>
                   <v-flex v-if="item.status == 'confirmed'" class="pa-1">
-                    <v-btn small depressed color="purple lighten-2">Reschedule</v-btn>
+                    <driver-records-reschedule :booking="item"/>
                   </v-flex>
               </td>
               <td class="text-center">
                 <div class="text-center">{{ item.booking_date_time_start | time}} - {{ item.booking_date_time_end | time}}</div>
-                <div class="text-center">{{ item.booking_date_time_start | monthyear }}</div>
+                <div class="text-center" v-for="(data, index) in item.dates" :key="index">{{ data.date ? data.date  : '' | monthyear }}</div>
               </td>
               <td class="text-center pa-2">
                 <div>
@@ -85,25 +85,24 @@
               <td class="text-center">
                 <v-flex class="pa-1">{{ item.price ? item.price : 'Not Set'}}</v-flex>
                 <v-flex class="pa-1" v-if="item.status == 'confirmed'">
-                  <v-btn small depressed color="primary">Change</v-btn>
+                  <driver-records-change :booking="item"/>
                 </v-flex>
               </td>
               <td class="text-center">
-                <v-flex>
-                  <v-btn
-                    small
-                    depressed
-                    color="success"
-                    @click="apply(item)">
-                    Accept
-                  </v-btn>
-                  <v-btn
-                    small
-                    depressed
-                    color="info">
-                    View
-                  </v-btn>
-                </v-flex>
+                <v-layout row>
+                  <v-flex>
+                    <v-btn
+                      small
+                      depressed
+                      color="success"
+                      @click="apply(item)">
+                      Accept
+                    </v-btn>
+                  </v-flex>
+                  <v-flex>
+                    <driver-records-view :booking="item"/>
+                  </v-flex>
+                </v-layout>
               </td>
             </tr>
           </template>

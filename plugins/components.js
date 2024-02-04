@@ -11,6 +11,9 @@ import DialogLogin from '~/components/global/DialogLogin'
 import DriverRecords from '~/components/driver/records/records'
 import DriverRecordsTable from '~/components/driver/records/table'
 import DriverRecordsFilter from '~/components/driver/records/filter'
+import DriverRecordsView from '~/components/driver/records/view'
+import DriverRecordsChange from '~/components/driver/records/change'
+import DriverRecordsReschedule from '~/components/driver/records/reschedule'
 
 //customer
 import CustomerBooking from '~/components/customer/booking/booking'
@@ -40,6 +43,9 @@ const components = {
   DriverRecords,
   DriverRecordsTable,
   DriverRecordsFilter,
+  DriverRecordsView,
+  DriverRecordsChange,
+  DriverRecordsReschedule,
 
   CustomerBooking,
   CustomerBookingCreate,
