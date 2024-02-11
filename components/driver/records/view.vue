@@ -30,15 +30,21 @@
               </v-btn>
             </template>
 
-            <v-list>
-              <v-list-item>
-                <v-list-item-title>TAG COMPLETE</v-list-item-title>
+            <v-list class="pa-0">
+              <v-list-item class="pa-0">
+                <v-list-item-title class="pa-0">
+                  <v-btn text color="success" small @click="tag('complete')">TAG COMPLETE</v-btn>
+                </v-list-item-title>
               </v-list-item>
-              <v-list-item>
-                <v-list-item-title>TAG CANCELLED</v-list-item-title>
+              <v-list-item class="pa-0">
+                <v-list-item-title class="pa-0">
+                  <v-btn text color="error" small @click="tag('cancelled')">TAG CANCELLED</v-btn>
+                </v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
+          <span class="subtitle-1 px-2">{{ booking.status | capitalfirst }} - {{ booking.order_number }}</span>
+          <v-spacer/>
         </v-card-title>
         <v-divider/>
         <v-card-text>
@@ -81,6 +87,59 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="dialogCancel"
+      width="400"
+    >
+      <v-card>
+        <v-card-text>
+          <v-layout pa-3 column justify-center align-center>
+            <v-flex>
+              <span> Reschedule reason</span>
+            </v-flex>
+            <v-flex>
+              <v-autocomplete
+                v-model="reason"
+                outlined
+                dense
+                class="rounded-xl"
+                :items="reasons"
+                :error-messages="errors ? errors.reason ? errors.reason[0] : '' : ''"
+              />
+            </v-flex>
+            <v-flex v-if="reason == 'Other reason'">
+              <v-textarea
+                v-model="other_reason"
+                rows="1" 
+                auto-grow 
+                class="rounded-xl" 
+                outlined
+                persistent-placeholder
+                label="Other reasons"
+                dense
+                :error-messages="errors ? errors.other_reason ? errors.other_reason[0] : '' : ''"/>
+            </v-flex>
+            <v-flex>
+              <span>
+                Move order will be rescheduled in the following day
+              </span>
+            </v-flex>
+            <v-flex>
+              <span>
+                An email notification will be sent to the customer.
+              </span>
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+        <v-divider/>
+        <v-card-actions>
+          <v-flex class="text-center">
+            <v-btn depressed color="black" style="color: white;" small @click="closeCancel">Cancel</v-btn>
+            <v-btn depressed color="success" small @click="proceedCancelation">Proceed</v-btn>
+          </v-flex>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-flex>
 </template>
 <script>
@@ -94,19 +153,121 @@ export default {
     booking: [Object]
   },
   data: () => ({
-    dialogView: false
+    dialogView: false,
+    dialogCancel: false,
+    reasons: [
+      'Unreachable',
+      'Not in pick-up address',
+      'Bad weather',
+      'Technical issues',
+      'Other reason',
+    ],
+    reason: null,
+    other_reason: null,
+    errors: {}
   }),
   computed: {
   },
   watch: {
   },
   methods: {
-    ...mapActions('booking', ['BOOKING_LIST', 'SET_OTP', 'BOOKING_UPDATE']),
+    ...mapMutations('booking', ['SET_REFRESH']),
+    ...mapActions('booking', ['BOOKING_LIST', 'SET_OTP', 'BOOKING_UPDATE', 'BOOKING_CANCEL','BOOKING_HISTORY']),
     close(){
       this.dialogView = false
     },
     view(){
       this.dialogView = true
+    },
+    tag(type){
+      if(type == 'complete'){
+        this.$swal.fire({
+          title: `Would you like to tag the move order as complete?`,
+          text: "This action cannot be undone.",
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#009c25',
+          cancelButtonColor: '#b6b6b6',
+          confirmButtonText: 'Yes!',
+          cancelButtonText: 'Cancel'
+        }).then(async result => {
+          if (result.isConfirmed) {
+            await this.bookingHistory('completed')
+            this.updateStatus('completed')
+            this.close()
+          }
+        })
+      }else{
+        this.dialogCancel = true
+      }
+    },
+    async updateStatus(status){
+      let payload = {
+        id: this.booking.id ? this.booking.id : null,
+        status: status,
+      }
+      await this.BOOKING_UPDATE(payload).then(data => {
+        this.SET_REFRESH(true)
+      })
+    },
+    async bookingCancelation(){
+      let payload = {
+        booking_id : this.booking.id,
+        reason : (this.reason == 'Other reason') ? this.other_reason : this.reason,
+      }
+      await this.BOOKING_CANCEL(payload).then(async data => {
+        await this.bookingHistory('cancelled')
+        this.dialogCancel = false
+      })
+    },
+    async bookingHistory(status){
+      let reason = (this.reason == 'Other reason') ? this.other_reason : this.reason
+      let payload = {
+        booking_id : this.booking.id,
+        track_details : (status == 'completed') ? 'Delevered' : 'Cancelled (Driver). '+reason  
+      }
+      await this.BOOKING_HISTORY(payload)
+    },
+    proceedCancelation(){
+      if(this.reason == '' || this.reason == null) { 
+        this.$set(this.errors, 'reason', ['This field is required.'])
+      }else{
+        this.$delete(this.errors, 'reason')
+        if(this.reason == 'Other reason'){
+          if(this.other_reason == '' || this.other_reason == null){
+            this.$set(this.errors, 'other_reason', ['This field is required.'])
+          }else{
+            this.$delete(this.errors, 'other_reason')
+            this.functionCancel()
+          }
+        }else{
+          this.functionCancel()
+        }
+      }
+    },
+    functionCancel(){
+      this.$swal.fire({
+        title: `Would you like to tag the move order as cancelled?`,
+        text: "This action cannot be undone.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#009c25',
+        cancelButtonColor: '#b6b6b6',
+        confirmButtonText: 'Yes!',
+        cancelButtonText: 'Cancel'
+      }).then(async result => {
+        if (result.isConfirmed) {
+          await this.bookingCancelation()
+          this.updateStatus('cancelled')
+          this.close()
+        }
+      })
+    },
+    close(){
+      this.dialogView = false
+    },
+    closeCancel(){
+      this.dialogCancel = false
     }
   },
 

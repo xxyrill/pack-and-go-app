@@ -1,6 +1,6 @@
 <template>
   <v-flex>
-    <v-btn small depressed color="purple lighten-2" @click="reschedule">Reschedule</v-btn>
+    <v-btn small depressed color="#7E57C2" @click="reschedule" :disabled="booking.status == 'confirmed' ? false : true">Reschedule</v-btn>
     <v-dialog
       v-model="dialogReschedule"
       width="400"
@@ -85,6 +85,7 @@ export default {
   watch: {
   },
   methods: {
+    ...mapMutations('booking', ['SET_REFRESH']),
     ...mapActions('booking', ['BOOKING_LIST', 'SET_OTP', 'BOOKING_UPDATE', 'BOOKING_RESCHEDULE', 'SEND_MAIL']),
     close(){
       this.dialogReschedule = false
@@ -133,6 +134,7 @@ export default {
       await this.BOOKING_RESCHEDULE(payload).then(async data => {
         this.loading = false
         this.dialogReschedule = false
+        this.SET_REFRESH(true)
         this.$swal.fire({
           title: 'Booking Rescheduled.',
           icon: 'success',
@@ -140,6 +142,7 @@ export default {
           confirmButtonText: 'OK'
         })
       }).catch(response => {
+        this.SET_REFRESH(true)
         this.loading = false
         this.dialogReschedule = false
       })

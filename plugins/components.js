@@ -27,9 +27,29 @@ import BusinessRegistration from '~/components/registration/businessRegistration
 import CustomerRegistration from '~/components/registration/customerRegistration'
 import DriverRegistration from '~/components/registration/driverRegistration'
 
-import Profile from '~/components/profile/profile'
 import ProfileNavbar from '~/components/profile/profileNavbar'
-import ProfileData from '~/components/profile/profileData'
+//profile
+import Profile from '~/components/profile/profile'
+import ProfileProfile from '~/components/profile/profile/profileProfile'
+import ProfileUpdateLicense from '~/components/profile/profile/updateLicensePicture'
+import ProfileUpdateEmail from '~/components/profile/profile/updateEmail'
+import ProfileUpdateContactNumber from '~/components/profile/profile/updateContactNumber'
+//security
+import SecurityMain from '~/components/profile/security-main'
+import ProfileSecurity from '~/components/profile/security/profileSecurity'
+import DialogPassword from '~/components/profile/security/dialogPassword'
+//vehicles
+import VehiclesMain from '~/components/profile/vehicles-main'
+import ProfileVehicle from '~/components/profile/vehicles/profileVehicles'
+import DialogAddVehicle from '~/components/profile/vehicles/dialogAddVehicle'
+import DialogEditVehicle from '~/components/profile/vehicles/dialogEditVehicle'
+//subscription
+import SubscriptionMain from '~/components/profile/subscription-main'
+import ProfileSubscription from '~/components/profile/subscription/profileSubscription'
+import ProfileSubscriptionChoices from '~/components/profile/subscription/profileSubscriptionChoices'
+//ratings
+import RatingsMain from '~/components/profile/ratings-main'
+import ProfileRatings from '~/components/profile/ratings/profileRatings'
 import { Icon } from '@iconify/vue2';
 
 const components = {
@@ -60,7 +80,26 @@ const components = {
 
   Profile,
   ProfileNavbar,
-  ProfileData,
+  ProfileProfile,
+  ProfileUpdateLicense,
+  ProfileUpdateEmail,
+  ProfileUpdateContactNumber,
+
+  SecurityMain,
+  ProfileSecurity,
+  DialogPassword,
+
+  VehiclesMain,
+  DialogAddVehicle,
+  ProfileVehicle,
+  DialogEditVehicle,
+
+  SubscriptionMain,
+  ProfileSubscription,
+  ProfileSubscriptionChoices,
+  
+  RatingsMain,
+  ProfileRatings,
   //Plugins
   Icon
 }

@@ -7,6 +7,7 @@ import login from './modules/login'
 import vehicle from './modules/vehicle'
 import booking from './modules/booking'
 import chats from './modules/chats'
+import subscription from './modules/subscription'
 
 
 Vue.use(Vuex)
@@ -18,7 +19,8 @@ const store = () => {
       login,
       vehicle,
       booking,
-      chats
+      chats,
+      subscription
     }
   })
 }

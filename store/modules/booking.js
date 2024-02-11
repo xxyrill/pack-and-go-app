@@ -2,6 +2,7 @@ import { postApi, patchApi, deleteApi } from '~/plugins/http'
 
 const initialState = () => {
   return {
+    refresh : false,
   }
 }
 const state = () => {
@@ -9,6 +10,9 @@ const state = () => {
 }
 
 const mutations = {
+  SET_REFRESH (state, payload) {
+    state.refresh = payload
+  },
   RESET_BOOKING_STATE (state) {
       /*
         FUNCTION:
@@ -20,6 +24,7 @@ const mutations = {
 }
 
 const getters = {
+  refresh: state => state.refresh,
 }
 
 const actions = {
@@ -41,7 +46,12 @@ const actions = {
   BOOKING_RESCHEDULE ({ commit }, payload) {
     return postApi(`/booking/reschedule`, payload)
   },
-  
+  BOOKING_CANCEL ({ commit }, payload) {
+    return postApi(`/booking/canceled`, payload)
+  },
+  BOOKING_HISTORY ({ commit }, payload) {
+    return postApi(`/booking/history`, payload)
+  },
 }
 
 export default {

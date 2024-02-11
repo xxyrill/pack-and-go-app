@@ -5,8 +5,8 @@
       v-model="dialogChange"
       width="350"
     >
-      <v-card>
-        <v-card-text>
+      <v-card class="rounded-xl">
+        <v-card-text class="pa-0">
           <v-layout column justify-center align-center pa-5>
             <v-flex>
               <span>Please enter the new price</span>
@@ -20,25 +20,15 @@
               />
             </v-flex>
             <v-flex class="text-center">
-              <span>Please confirm the move service by entering the confirmation code provided by the customer.</span>
-            </v-flex>
-            <v-flex>
-              <v-otp-input
-                length="6"
-                v-model="verifyOtp"
-                :error-messages="errors ? errors.verifyOtp ? errors.verifyOtp :'':''"
-              />
-            </v-flex>
-            <v-flex>
-              <span>Did not recieve the code? <a @click="sendOtp">Resend</a></span>
-            </v-flex>
-            <v-flex class="pa-1">
-              <v-btn small dark depressed @click="otpVerification">Submit</v-btn>
-            </v-flex>
-            <v-flex class="pa-1">
-              <v-btn small depressed color="grey darken-1" @click="close">Close</v-btn>
+              <span class="font-italic caption">Note: The price you've enter will notify the customer and he/she will approved it.</span>
             </v-flex>
           </v-layout>
+          <v-card-actions>
+            <v-flex class="text-center">
+              <v-btn small dark depressed >Send</v-btn>
+              <v-btn small depressed color="grey darken-1" @click="close">Close</v-btn>
+            </v-flex>
+          </v-card-actions>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -80,6 +70,7 @@ export default {
   watch: {
   },
   methods: {
+    ...mapMutations('booking', ['SET_REFRESH']),
     ...mapActions('booking', ['BOOKING_LIST', 'SET_OTP', 'BOOKING_UPDATE']),
     ...mapActions('chats', ['CREATE_CHATROOM']),
     ...mapActions('users', ['VERIFY_OTP']),
@@ -110,7 +101,6 @@ export default {
       })
     },
     async change(){
-      await this.sendOtp()
       this.dialogChange = true
     },
     async sendOtp(){
@@ -122,61 +112,30 @@ export default {
         route: this.booking.pick_up_location+' - '+this.booking.drop_off_location,
         type: this.booking.vehicle_type.type,
       }
-      await this.SET_OTP(payload)
-    },
-    async otpVerification(){
-      let payload_validation = {
-        price : this.price ? this.price : null,
-        verifyOtp : this.verifyOtp ? this.verifyOtp : null
-      }
-      let validation = this.fieldsValidation(payload_validation)
-      if(validation.error == true){
-        this.errors = validation.errors
-      }else{
-        let payload = {
-          otp_code : this.verifyOtp ? this.verifyOtp : null,
-          contact_number : this.booking ? this.booking.alt_contact_number_one ? this.booking.alt_contact_number_one : null : null
-        }
-        await this.VERIFY_OTP(payload).then(async data => {
-          await this.updateBooking()
-          this.close()
-          setTimeout(() => {
-            this.$swal.fire({
-              title: data.data.message,
-              icon: 'success',
-              confirmButtonColor: '#009c25',
-              confirmButtonText: 'OK'
-            })
-          }, 1000);
-        }).catch(response => {
-          this.close()
-          setTimeout(() => {
-            this.$swal.fire({
-              title: response.response.data.message,
-              icon: 'error',
-              confirmButtonColor: '#009c25',
-              confirmButtonText: 'OK'
-            })
-          }, 1000);
-        })
-      }
+      await this.SET_OTP(payload).then(data => {
+        this.SET_REFRESH(true)
+        this.close()
+      }).catch(response => {
+        this.SET_REFRESH(true)
+        this.close()
+      })
     },
     close(){
       this.dialogChange = false
       this.verifyOtp = null
       this.price = null
     },
-    async updateBooking(){
-      let payload = {
-        id: this.booking.id ? this.booking.id : null,
-        status: 'confirmed',
-        price: this.price ? this.price : null,
-        user_driver_id: this.user ? this.user : null
-      }
-      await this.BOOKING_UPDATE(payload).then(data => {
-        this.getList()
-      })
-    }
+    // async updateBooking(){
+    //   let payload = {
+    //     id: this.booking.id ? this.booking.id : null,
+    //     status: 'confirmed',
+    //     price: this.price ? this.price : null,
+    //     user_driver_id: this.user ? this.user : null
+    //   }
+    //   await this.BOOKING_UPDATE(payload).then(data => {
+    //     this.getList()
+    //   })
+    // }
   },
 
   mounted () {

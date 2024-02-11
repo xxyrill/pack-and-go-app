@@ -4,7 +4,7 @@
       <profile-navbar :user_info="user_info"/>
     </v-flex>
     <v-flex md10 lg10 sm10 xs10 class="pa-3">
-      <profile-profile :user_info="user_info"/>
+      <profile-subscription :user_info="user_info"/>
     </v-flex>
   </v-layout>
 </template>

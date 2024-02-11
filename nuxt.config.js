@@ -48,7 +48,7 @@ module.exports = {
     '~/assets/style/app.styl',
   ],
   env: {
-    API_URL: 'http://192.168.1.13:50504',
+    API_URL: 'http://192.168.1.13:50506',
     BASE_URL: 'http://192.168.1.13',
   },
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

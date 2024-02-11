@@ -16,16 +16,19 @@
             <tr>
               <td class="text-center pa-2">
                   <v-card outlined :color="
-                    (item.status == 'pending') ? 'orange' 
-                    :(item.status == 'confirmed') ? 'yellow' : 'green'" class="px-4"><span style="color=white">{{ item.status | capitalfirst }}</span></v-card>
-                  <span class="caption">{{ item.order_number }}</span>
-                  <v-flex v-if="item.status == 'confirmed'" class="pa-1">
+                    (item.status == 'pending') ? '#FFA726' 
+                    :(item.status == 'confirmed') ? '#FFEE58'
+                    :(item.status == 'cancelled') ? '#D32F2F'
+                    :(item.status == 'completed') ? '#43A047'
+                    :(item.status == 'reschedule') ? '#7E57C2' : 'gray'" class="px-4"><span style="color=white" class="font-weight-bold">{{ item.status | capitalfirst }}</span></v-card>
+                  <span class="caption text-decoration-underline">#{{ item.order_number }}</span>
+                  <v-flex class="pa-1">
                     <driver-records-reschedule :booking="item"/>
                   </v-flex>
               </td>
               <td class="text-center">
                 <div class="text-center">{{ item.booking_date_time_start | time}} - {{ item.booking_date_time_end | time}}</div>
-                <div class="text-center" v-for="(data, index) in item.dates" :key="index">{{ data.date ? data.date  : '' | monthyear }}</div>
+                <div class="text-center" v-for="(data, index) in item.dates" :key="index"><span class="caption font-weight-bold">{{ data.date ? data.date  : '' | monthyear }}</span></div>
               </td>
               <td class="text-center pa-2">
                 <div>
@@ -58,7 +61,7 @@
                         v-bind="attrs"
                         v-on="on"
                       >
-                        See more
+                        See all
                       </a>
                     </template>
                     <v-card class="pa-3">
@@ -84,7 +87,7 @@
               <td class="text-center">{{ item.vehicle_list_id ? item.vehicle_type.type : '' }}</td>
               <td class="text-center">
                 <v-flex class="pa-1">{{ item.price ? item.price : 'Not Set'}}</v-flex>
-                <v-flex class="pa-1" v-if="item.status == 'confirmed'">
+                <v-flex class="pa-1" v-if="item.user_driver_id">
                   <driver-records-change :booking="item"/>
                 </v-flex>
               </td>
@@ -94,6 +97,7 @@
                     <v-btn
                       small
                       depressed
+                      :disabled="item.status == 'pending' ? false : true"
                       color="success"
                       @click="apply(item)">
                       Accept
@@ -117,8 +121,8 @@
       v-model="dialogApply"
       width="350"
     >
-      <v-card>
-        <v-card-text>
+      <v-card class="rounded-xl">
+        <v-card-text class="pa-0">
           <v-layout column justify-center align-center pa-5>
             <v-flex>
               <span>Please enter the agreed price</span>
@@ -132,26 +136,16 @@
               />
             </v-flex>
             <v-flex class="text-center">
-              <span>Please confirm the move service by entering the confirmation code provided by the customer.</span>
-            </v-flex>
-            <v-flex>
-              <v-otp-input
-                length="6"
-                v-model="verifyOtp"
-                :error-messages="errors ? errors.verifyOtp ? errors.verifyOtp :'':''"
-              />
-            </v-flex>
-            <v-flex>
-              <span>Did not recieve the code? <a>Resend</a></span>
-            </v-flex>
-            <v-flex class="pa-1">
-              <v-btn small dark depressed @click="otpVerification">Submit</v-btn>
-            </v-flex>
-            <v-flex class="pa-1">
-              <v-btn small depressed color="grey darken-1" @click="close">Close</v-btn>
+              <span class="font-italic caption">Note: The price you've enter will notify the customer and he/she will approved it.</span>
             </v-flex>
           </v-layout>
         </v-card-text>
+        <v-card-actions>
+          <v-flex class="text-center">
+            <v-btn small dark depressed @click="sendOtp">Send</v-btn>
+            <v-btn small depressed color="grey darken-1" @click="close">Close</v-btn>
+          </v-flex>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-card>
@@ -186,11 +180,20 @@ export default {
     selected_booking: {},
   }),
   computed: {
-    ...mapGetters('users', ['user'])
+    ...mapGetters('users', ['user']),
+    ...mapGetters('booking', ['refresh'])
   },
   watch: {
+    refresh: {
+      handler() {
+        if(this.refresh == true){
+          this.getList()
+        }
+      }, deep: true
+    },
   },
   methods: {
+    ...mapMutations('booking',['SET_REFRESH']),
     ...mapActions('booking', ['BOOKING_LIST', 'SET_OTP', 'BOOKING_UPDATE']),
     ...mapActions('chats', ['CREATE_CHATROOM']),
     ...mapActions('users', ['VERIFY_OTP']),
@@ -205,8 +208,10 @@ export default {
       await this.BOOKING_LIST(payload).then(data => {
         this.items = data.data.data
         this.loading = false
+        this.SET_REFRESH(false)
       }).catch(response => {
         this.loading = false
+        this.SET_REFRESH(false)
       })
     },
     async message(item){
@@ -220,7 +225,10 @@ export default {
         this.chat_room_name = item.customer
       })
     },
-    apply(item){
+    apply(){
+      this.dialogApply = true
+    },
+    sendOtp(item){
       let payload = {
         contact_number: item.alt_contact_number_one,
         type: 'booking_confirmation',
@@ -230,47 +238,8 @@ export default {
         type: item.vehicle_type.type,
       }
       this.SET_OTP(payload).then(data => {
-        this.dialogApply = true
         this.selected_booking = item
-        console.log(this.selected_booking)
       })
-    },
-    async otpVerification(){
-      let payload_validation = {
-        price : this.price ? this.price : null,
-        verifyOtp : this.verifyOtp ? this.verifyOtp : null
-      }
-      let validation = this.fieldsValidation(payload_validation)
-      if(validation.error == true){
-        this.errors = validation.errors
-      }else{
-        let payload = {
-          otp_code : this.verifyOtp ? this.verifyOtp : null,
-          contact_number : this.selected_booking ? this.selected_booking.alt_contact_number_one ? this.selected_booking.alt_contact_number_one : null : null
-        }
-        await this.VERIFY_OTP(payload).then(async data => {
-          await this.updateBooking()
-          this.close()
-          setTimeout(() => {
-            this.$swal.fire({
-              title: data.data.message,
-              icon: 'success',
-              confirmButtonColor: '#009c25',
-              confirmButtonText: 'OK'
-            })
-          }, 1000);
-        }).catch(response => {
-          this.close()
-          setTimeout(() => {
-            this.$swal.fire({
-              title: response.response.data.message,
-              icon: 'error',
-              confirmButtonColor: '#009c25',
-              confirmButtonText: 'OK'
-            })
-          }, 1000);
-        })
-      }
     },
     close(){
       this.dialogApply = false
