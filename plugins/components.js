@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Toolbar from '~/components/global/Toolbar'
 import ToolbarLanding from '~/components/global/ToolbarLanding'
 import ChatBox from '~/components/global/ChatBox'
+import GlobalProfile from '~/components/global/GlobalProfile'
 
 //login / registration
 import DialogLogin from '~/components/global/DialogLogin'
@@ -15,13 +16,24 @@ import DriverRecordsView from '~/components/driver/records/view'
 import DriverRecordsChange from '~/components/driver/records/change'
 import DriverRecordsReschedule from '~/components/driver/records/reschedule'
 
+//buiness
+import BusinessRecords from '~/components/business/records/records'
+import BusinessRecordsTable from '~/components/business/records/table'
+import BusinessRecordsFilter from '~/components/business/records/filter'
+import BusinessRecordsView from '~/components/business/records/view'
+import BusinessRecordsChange from '~/components/business/records/change'
+import BusinessRecordsReschedule from '~/components/business/records/reschedule'
+
 //customer
 import CustomerBooking from '~/components/customer/booking/booking'
 import CustomerBookingCreate from '~/components/customer/booking/createBooking'
 
 import CustomerRecords from '~/components/customer/records/records'
-import CustomerRecordFilter from '~/components/customer/records/recordFilter'
-import CustomerRecordTable from '~/components/customer/records/recordTable'
+import CustomerRecordsTable from '~/components/customer/records/table'
+import CustomerRecordsFilter from '~/components/customer/records/filter'
+import CustomerRecordsView from '~/components/customer/records/view'
+import CustomerRecordsPrice from '~/components/customer/records/price'
+import CustomerRecordsRate from '~/components/customer/records/rate'
 
 import BusinessRegistration from '~/components/registration/businessRegistration'
 import CustomerRegistration from '~/components/registration/customerRegistration'
@@ -34,6 +46,9 @@ import ProfileProfile from '~/components/profile/profile/profileProfile'
 import ProfileUpdateLicense from '~/components/profile/profile/updateLicensePicture'
 import ProfileUpdateEmail from '~/components/profile/profile/updateEmail'
 import ProfileUpdateContactNumber from '~/components/profile/profile/updateContactNumber'
+//profile view
+import ProfileView from '~/components/profile/viewProfile'
+
 //security
 import SecurityMain from '~/components/profile/security-main'
 import ProfileSecurity from '~/components/profile/security/profileSecurity'
@@ -50,6 +65,8 @@ import ProfileSubscriptionChoices from '~/components/profile/subscription/profil
 //ratings
 import RatingsMain from '~/components/profile/ratings-main'
 import ProfileRatings from '~/components/profile/ratings/profileRatings'
+import ProfileRatingCommentStoreDialog from '~/components/profile/ratings/profileRatingCommentStoreDialog'
+import ProfileRatingCommentUpdateDialog from '~/components/profile/ratings/profileRatingCommentUpdateDialog'
 import { Icon } from '@iconify/vue2';
 
 const components = {
@@ -57,6 +74,7 @@ const components = {
   Toolbar,
   ToolbarLanding,
   ChatBox,
+  GlobalProfile,
 
   DialogLogin,
 
@@ -67,12 +85,22 @@ const components = {
   DriverRecordsChange,
   DriverRecordsReschedule,
 
+  BusinessRecords,
+  BusinessRecordsTable,
+  BusinessRecordsFilter,
+  BusinessRecordsView,
+  BusinessRecordsChange,
+  BusinessRecordsReschedule,
+
   CustomerBooking,
   CustomerBookingCreate,
 
   CustomerRecords,
-  CustomerRecordFilter,
-  CustomerRecordTable,
+  CustomerRecordsTable,
+  CustomerRecordsFilter,
+  CustomerRecordsView,
+  CustomerRecordsPrice,
+  CustomerRecordsRate,
 
   BusinessRegistration,
   CustomerRegistration,
@@ -84,6 +112,8 @@ const components = {
   ProfileUpdateLicense,
   ProfileUpdateEmail,
   ProfileUpdateContactNumber,
+
+  ProfileView,
 
   SecurityMain,
   ProfileSecurity,
@@ -100,6 +130,8 @@ const components = {
   
   RatingsMain,
   ProfileRatings,
+  ProfileRatingCommentStoreDialog,
+  ProfileRatingCommentUpdateDialog,
   //Plugins
   Icon
 }

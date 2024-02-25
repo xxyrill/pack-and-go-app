@@ -4,6 +4,7 @@ const initialState = () => {
   return {
     user: null,
     refresh: false,
+    refresh_ratings: false,
     refresh_vehicles: false
   }
 }
@@ -17,6 +18,9 @@ const mutations = {
   },
   REFRESH_DATA (state, payload) {
     state.refresh = payload
+  },
+  REFRESH_RATINGS_DATA (state, payload) {
+    state.refresh_ratings = payload
   },
   REFRESH_DATA_VEHICLES (state, payload) {
     state.refresh_vehicles = payload
@@ -44,6 +48,7 @@ const getters = {
   refresh_vehicles: state => state.refresh_vehicles,
   refresh: state => state.refresh,
   user: state => state.user,
+  refresh_ratings: state => state.refresh_ratings,
   permaAddress: state => state.permaAddress,
   currAddress: state => state.currAddress,
 }
@@ -75,7 +80,33 @@ const actions = {
   USER_UPDATE_PASSWORD ({ commit }, payload) {
     return postApi(`/user/update/password`, payload)
   },
+  USER_RATE ({ commit }, payload) {
+    return postApi(`/user/rate`, payload)
+  },
+  USER_RATINGS ({ commit }, payload) {
+    return postApi(`/user/ratings`, payload)
+  },
+  USER_RATINGS_STARS ({ commit }, payload) {
+    return getApi(`/user/ratings/stars`, payload)
+  },
+  USER_BLOCKED ({ commit }, payload) {
+    return postApi(`/user/blocked`, payload)
+  },
+  USER_BLOCKED_LIST ({ commit }, payload) {
+    return postApi(`/user/list`, payload)
+  },
+  
 
+  //USER RATING COMMENT
+  USER_RATING_COMMENT_STORE ({ commit }, payload) {
+    return postApi(`/user-rating-comment/store`, payload)
+  },
+  USER_RATINGS_COMMENT_UPDATE ({ commit }, payload) {
+    return postApi(`/user-rating-comment/update`, payload)
+  },
+  USER_RATINGS_COMMENT_DELETE ({ commit }, payload) {
+    return deleteApi(`/user-rating-comment/${payload.id}`, payload)
+  },
 
   //OTP
   REGISTRATION_SEND_OTP ({ commit }, payload) {

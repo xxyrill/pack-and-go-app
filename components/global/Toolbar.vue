@@ -4,7 +4,6 @@
         <v-spacer></v-spacer>
         <v-btn v-if="log.type === 'customer'" @click="book" text color="white">New Order</v-btn>
         <v-btn v-if="log.type === 'driver' || log.type === 'business' || log.type === 'customer'" text color="white" @click="records">Records</v-btn>
-        <!-- <v-btn text color="white">{{userDetails.first_name}} {{userDetails.middle_name}} {{userDetails.last_name}}</v-btn> -->
         <v-menu offset-y rounded="b-xl">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -13,7 +12,12 @@
               v-bind="attrs"
               v-on="on"
             >
-              {{userDetails.first_name}} {{userDetails.middle_name}} {{userDetails.last_name}}
+              <span v-if="userDetails.type == 'business'">
+                {{userDetails ? userDetails.user_business ? userDetails.user_business.business_name ? userDetails.user_business.business_name : '' : '' : ''}}
+              </span>
+              <span v-else-if="userDetails.type == 'driver' || userDetails.type == 'customer'">
+                {{userDetails.first_name}} {{userDetails.middle_name}} {{userDetails.last_name}}
+              </span>
             </v-btn>
           </template>
           <v-list class="text-center">
@@ -66,6 +70,8 @@
           return '/application/customer/profile'
         }else if(this.log.type == 'driver'){
           return '/application/driver/profile'
+        }else if(this.log.type == 'business'){
+          return '/application/business/profile'
         }
       }
     },

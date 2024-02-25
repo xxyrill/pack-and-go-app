@@ -1,5 +1,5 @@
 <template>
   <v-layout>
-    <profile/>
+    <ratings-main/>
   </v-layout>
 </template>

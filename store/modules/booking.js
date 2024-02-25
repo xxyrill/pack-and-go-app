@@ -3,6 +3,8 @@ import { postApi, patchApi, deleteApi } from '~/plugins/http'
 const initialState = () => {
   return {
     refresh : false,
+    filters : {},
+    message_details : {}
   }
 }
 const state = () => {
@@ -12,6 +14,12 @@ const state = () => {
 const mutations = {
   SET_REFRESH (state, payload) {
     state.refresh = payload
+  },
+  SET_FILTERS (state, payload) {
+    state.filters = payload
+  },
+  SET_MESSAGE_BOOKING (state, payload) {
+    state.message_details = payload
   },
   RESET_BOOKING_STATE (state) {
       /*
@@ -24,7 +32,9 @@ const mutations = {
 }
 
 const getters = {
+  filters: state => state.filters,
   refresh: state => state.refresh,
+  message_details: state => state.message_details
 }
 
 const actions = {
@@ -52,6 +62,9 @@ const actions = {
   BOOKING_HISTORY ({ commit }, payload) {
     return postApi(`/booking/history`, payload)
   },
+  BOOKING_PRICE({ commit }, payload) {
+    return postApi(`/booking/price`, payload)
+  }
 }
 
 export default {

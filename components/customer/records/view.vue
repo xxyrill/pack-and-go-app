@@ -3,8 +3,8 @@
     <v-btn
       small
       depressed
-      block
       color="info"
+      block
       @click="view"
     >
       View
@@ -14,38 +14,8 @@
       width="600"
     >
       <v-card>
-        <v-card-title>
-          <v-menu
-            offset-x
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                v-bind="attrs"
-                v-on="on"
-                icon
-                small
-              >
-                <Icon icon="iconoir:nav-arrow-down" width="25" height="25"/>
-              </v-btn>
-            </template>
-
-            <v-list class="pa-0">
-              <v-list-item class="pa-0">
-                <v-list-item-title class="pa-0">
-                  <v-btn text color="success" small @click="tag('complete')">TAG COMPLETE</v-btn>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item class="pa-0">
-                <v-list-item-title class="pa-0">
-                  <v-btn text color="error" small @click="tag('cancelled')">TAG CANCELLED</v-btn>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-          <span class="subtitle-1 px-2">{{ booking.status | capitalfirst }} - {{ booking.order_number }}</span>
-          <v-spacer/>
+        <v-card-title >
+          <span class="subtitle-1 px-2 font-weight-bold">{{ booking.status | capitalfirst }} - {{ booking.order_number }}</span>
         </v-card-title>
         <v-divider/>
         <v-card-text>
@@ -78,12 +48,6 @@
             </v-flex>
             <v-flex class="pa-1 rounded-xl text-center" style="background-color: #E0E0E0;">
               <span class="font-weight-black subtitle-1 "> Booking History</span>
-            </v-flex>
-            <v-flex class="mt-2">
-              <v-flex v-for="(item, index) of booking.booking_history" :key="index" class="pa-1">
-                <span class="px-2">{{ item.created_at | monthdayyearwithtime }}</span> -
-                <span class="px-2">{{ item.track_details }}</span>
-              </v-flex>
             </v-flex>
           </v-layout>
         </v-card-text>

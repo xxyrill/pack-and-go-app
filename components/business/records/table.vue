@@ -23,7 +23,7 @@
                     :(item.status == 'reschedule') ? '#7E57C2' : 'gray'" class="px-4"><span style="color=white" class="font-weight-bold">{{ item.status | capitalfirst }}</span></v-card>
                   <span class="caption text-decoration-underline">#{{ item.order_number }}</span>
                   <v-flex class="pa-1">
-                    <driver-records-reschedule :booking="item"/>
+                    <business-records-reschedule :booking="item"/>
                   </v-flex>
               </td>
               <td class="text-center">
@@ -88,7 +88,7 @@
               <td class="text-center">
                 <v-flex class="pa-1">{{ item.price ? item.price : 'Not Set'}}</v-flex>
                 <v-flex class="pa-1" v-if="item.user_driver_id">
-                  <driver-records-change :booking="item"/>
+                  <business-records-change :booking="item"/>
                 </v-flex>
               </td>
               <td class="text-center px-0">
@@ -104,7 +104,7 @@
                       Accept
                     </v-btn>
                   </v-flex>
-                  <driver-records-view :booking="item"/>
+                  <business-records-view :booking="item"/>
                 </v-layout>
               </td>
             </tr>
@@ -296,6 +296,7 @@ export default {
 
   mounted () {
     this.getList()
+    
   }
 }
 </script>

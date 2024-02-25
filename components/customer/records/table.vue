@@ -22,9 +22,6 @@
                     :(item.status == 'completed') ? '#43A047'
                     :(item.status == 'reschedule') ? '#7E57C2' : 'gray'" class="px-4"><span style="color=white" class="font-weight-bold">{{ item.status | capitalfirst }}</span></v-card>
                   <span class="caption text-decoration-underline">#{{ item.order_number }}</span>
-                  <v-flex class="pa-1">
-                    <driver-records-reschedule :booking="item"/>
-                  </v-flex>
               </td>
               <td class="text-center">
                 <div class="text-center">{{ item.booking_date_time_start | time}} - {{ item.booking_date_time_end | time}}</div>
@@ -71,40 +68,27 @@
                 </div>
               </td>
               <td class="text-center">
-                <div class="pa-2">
-                  <span :style="!item.customer ? 'color:red' : ''" :class=" item.customer ? 'font-weight-bold' : ''">{{ item.customer ? item.customer.first_name+' '+item.customer.last_name : 'Not Assigned' }}</span>
-                </div>
-                <div class="pa-2">
-                  <v-btn
-                    small
-                    depressed
-                    @click="message(item)"
-                    color="primary">
-                    Message
-                  </v-btn>
+                <div class="pa-2" v-if="item.driver">
+                  <span v-if="item.driver.type == 'business'" :style="!item.driver ? 'color:red' : ''" :class=" item.driver ? 'font-weight-bold' : ''">
+                    {{ item.driver ? item.driver.user_business ? item.driver.user_business.business_name ? item.driver.user_business.business_name : 'Not Assigned': 'Not Assigned': 'Not Assigned' }}
+                  </span>
+                  <span v-else-if="item.driver.type == 'driver' || item.driver.type == 'customer'" :style="!item.driver ? 'color:red' : ''" :class=" item.driver ? 'font-weight-bold' : ''">
+                    {{ item.driver ? item.driver.first_name+' '+item.driver.last_name : 'Not Assigned' }}
+                  </span>
                 </div>
               </td>
               <td class="text-center">{{ item.vehicle_list_id ? item.vehicle_type.type : '' }}</td>
               <td class="text-center">
-                <v-flex class="pa-1">{{ item.price ? item.price : 'Not Set'}}</v-flex>
-                <v-flex class="pa-1" v-if="item.user_driver_id">
-                  <driver-records-change :booking="item"/>
+                <v-flex class="pa-1">
+                  <span v-if="item.price">{{ item.price }}</span>
+                  <span v-else style="color:red">Not Set</span>
                 </v-flex>
               </td>
               <td class="text-center px-0">
                 <v-layout column>
-                  <v-flex class="pa-1">
-                    <v-btn
-                      small
-                      block
-                      depressed
-                      :disabled="item.status == 'pending' ? false : true"
-                      color="success"
-                      @click="apply(item)">
-                      Accept
-                    </v-btn>
-                  </v-flex>
-                  <driver-records-view :booking="item"/>
+                    <customer-records-view :booking="item"/>
+                    <customer-records-price :booking="item"/>
+                    <customer-records-rate :booking="item"/>
                 </v-layout>
               </td>
             </tr>
@@ -163,7 +147,7 @@ export default {
       { text: 'Status', align: 'center', sortable: false, value: 'status' },
       { text: 'Delivery date', align: 'center', sortable: false, value: 'delivery_date' },
       { text: 'Route', align: 'center', sortable: false, value: 'route' },
-      { text: 'Customer', align: 'center', sortable: false, value: 'customer' },
+      { text: 'Driver', align: 'center', sortable: false, value: 'customer' },
       { text: 'Type', align: 'center', sortable: false, value: 'type' },
       { text: 'Price', align: 'center', sortable: false, value: 'price' },
       { text: '', align: 'center', sortable: false, value: 'action' },
@@ -173,6 +157,7 @@ export default {
     reciever_id: null,
     chat_room_name: null,
     dialogApply: false,
+    verifyOtp: null,
     price: null,
     errors: {},
     selected_booking: {},
@@ -196,8 +181,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('booking',['SET_REFRESH', 'SET_MESSAGE_BOOKING']),
-    ...mapActions('booking', ['BOOKING_LIST', 'SET_OTP', 'BOOKING_UPDATE', 'BOOKING_PRICE']),
+    ...mapMutations('booking',['SET_REFRESH']),
+    ...mapActions('booking', ['BOOKING_LIST', 'SET_OTP', 'BOOKING_UPDATE']),
     ...mapActions('chats', ['CREATE_CHATROOM']),
     ...mapActions('users', ['VERIFY_OTP']),
     async getList(){
@@ -224,74 +209,43 @@ export default {
         customer_id : item.user_id
       }
       await this.CREATE_CHATROOM(payload).then(data => {
-        let payload = {
-          chat_room : data.data.data,
-          reciever_id : item.user_id,
-          chat_room_name : item.customer
-        }
-        this.SET_MESSAGE_BOOKING(payload)
+        this.chat_room = data.data.data
+        this.reciever_id = item.user_id
+        this.chat_room_name = item.customer
       })
     },
-    apply(item){
-      this.selected_booking = {}
+    apply(){
       this.dialogApply = true
-      this.selected_booking = item
     },
-    async sendOtp(){
-      if(this.price){
-        this.errors = {}
-        let payload = {
-          contact_number: this.selected_booking.alt_contact_number_one,
-          type: 'booking_confirmation',
-          order_number: this.selected_booking.order_number,
-          delivery_date: moment(this.selected_booking.booking_date_time_start).format('D MMMM YYYY')+' '+moment(this.selected_booking.booking_date_time_start).format('h:mm A')+'-'+moment(this.selected_booking.booking_date_time_end).format('h:mm A'),
-          route: this.selected_booking.pick_up_location+' - '+this.selected_booking.drop_off_location,
-          type: this.selected_booking.vehicle_type.type,
-        }
-        await this.SET_OTP(payload).then(async data => {
-          await this.saveRequestPrice()
-        })
-      }else{
-        this.$set(this.errors, 'price', ['This field is required.'])
-      }
-      
-    },
-    async saveRequestPrice(){
+    sendOtp(item){
       let payload = {
-        booking_id : this.selected_booking.id,
-        price : this.price
+        contact_number: item.alt_contact_number_one,
+        type: 'booking_confirmation',
+        order_number: item.order_number,
+        delivery_date: moment(item.booking_date_time_start).format('D MMMM YYYY')+' '+moment(item.booking_date_time_start).format('h:mm A')+'-'+moment(item.booking_date_time_end).format('h:mm A'),
+        route: item.pick_up_location+' - '+item.drop_off_location,
+        type: item.vehicle_type.type,
       }
-      await this.BOOKING_PRICE(payload).then(data => {
-        let Toast = this.$swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = this.$swal.stopTimer;
-            toast.onmouseleave = this.$swal.resumeTimer;
-          }
-        });
-        Toast.fire({
-          icon: "success",
-          title: 'Otp sent to customer.'
-        });
-        this.close()
-      }).catch( response => {
-        this.$swal.fire({
-          title: `Something went wrong!`,
-          text: '',
-          icon: 'error',
-          confirmButtonColor: '#009c25',
-          confirmButtonText: 'OK'
-        })
+      this.SET_OTP(payload).then(data => {
+        this.selected_booking = item
       })
     },
     close(){
       this.dialogApply = false
+      this.verifyOtp = null
       this.price = null
     },
+    async updateBooking(){
+      let payload = {
+        id: this.selected_booking.id ? this.selected_booking.id : null,
+        status: 'confirmed',
+        price: this.price ? this.price : null,
+        user_driver_id: this.user ? this.user : null
+      }
+      await this.BOOKING_UPDATE(payload).then(data => {
+        this.getList()
+      })
+    }
   },
 
   mounted () {

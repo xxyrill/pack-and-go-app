@@ -37,14 +37,8 @@ export default {
     loginloading: false,
   }),
   computed: {
-        ...mapGetters('login', ['loginUser']),
   },
   watch: {
-    'loginUser': {
-      handler() {
-        this.data = this.loginUser
-      }, deep: true
-    }
   },
   methods: {
     ...mapActions('login', ['POST_LOGIN']),

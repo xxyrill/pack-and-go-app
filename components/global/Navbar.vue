@@ -83,12 +83,6 @@
         },
         deep: true
       },
-      'loginUser': {
-        handler() {
-          this.getRoleDisplay()
-        },
-        deep: true
-      }
     },
 
     methods: {

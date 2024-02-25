@@ -1,5 +1,5 @@
 <template>
   <v-main>
-    <business-records/>
+    <profile-view/>
   </v-main>
 </template>

@@ -21,13 +21,35 @@
     <v-card-text>
       <v-divider/>
       <v-layout column class="pa-3 body-1">
+        <v-flex class="py-4" v-if="user_data.type == 'business'">
+          <v-layout row>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+              <span>Business name:</span>
+            </v-flex>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
+                <v-text-field 
+                  outlined 
+                  dense 
+                  v-model="user_data.business_name"
+                  color="success"
+                  :disabled="!edit_data"
+                  class="skekert rounded-xl"
+                  style="font-weight: bold;"
+                  :error-messages="errors ? errors.business_name ? errors.business_name :'':''"
+                    >
+                </v-text-field>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
         <v-flex class="py-4">
           <v-layout row>
-            <v-flex md2 lg2 sm6 xs6 class="d-flex align-center">
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
               <span>Username:</span>
             </v-flex>
-            <v-flex md10 lg10 sm6 xs6>
-              <v-flex md6>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
                 <v-text-field 
                   outlined 
                   dense 
@@ -45,11 +67,12 @@
         </v-flex>
         <v-flex class="py-4">
           <v-layout row>
-            <v-flex md2 lg2 sm6 xs6 class="d-flex align-center">
-            <span>First Name:</span>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+            <span v-if="user_data.type == 'business'">Owner First Name:</span>
+            <span v-else>First Name:</span>
             </v-flex>
-            <v-flex md10 lg10 sm6 xs6>
-              <v-flex md6>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
                 <v-text-field 
                   outlined 
                   dense 
@@ -67,11 +90,12 @@
         </v-flex>
         <v-flex class="py-4">
           <v-layout row>
-            <v-flex md2 lg2 sm6 xs6 class="d-flex align-center">
-            <span>Last Name:</span>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+            <span v-if="user_data.type == 'business'">Owner Last Name:</span>
+            <span v-else>Last Name:</span>
             </v-flex>
-            <v-flex md10 lg10 sm6 xs6>
-              <v-flex md6>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
                 <v-text-field 
                   outlined 
                   dense 
@@ -87,13 +111,13 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex class="py-4">
+        <v-flex class="py-4" v-if="user_data.type != 'business'">
           <v-layout row>
-            <v-flex md2 lg2 sm6 xs6 class="d-flex align-center">
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
             <span>Middle Name:</span>
             </v-flex>
-            <v-flex md10 lg10 sm6 xs6>
-              <v-flex md6>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
                 <v-text-field 
                   outlined 
                   dense 
@@ -107,13 +131,13 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex class="py-4">
+        <v-flex class="py-4" v-if="user_data.type != 'business'">
           <v-layout row>
-            <v-flex md2 lg2 sm6 xs6 class="d-flex align-center">
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
             <span>Suffix:</span>
             </v-flex>
-            <v-flex md10 lg10 sm6 xs6>
-              <v-flex md1 lg1 sm6 xs6>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md1 lg1 sm12 xs12>
                 <v-text-field 
                   outlined 
                   dense 
@@ -127,13 +151,13 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex class="py-4">
+        <v-flex class="py-4"  v-if="user_data.type != 'business'">
           <v-layout row>
-            <v-flex md2 lg2 sm6 xs6 class="d-flex align-center">
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
             <span>Gender:</span>
             </v-flex>
-            <v-flex md10 lg10 sm6 xs6>
-              <v-flex md6>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
                 <v-radio-group
                   v-model="user_data.gender"
                   row
@@ -156,13 +180,13 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex class="py-4">
+        <v-flex class="py-4"  v-if="user_data.type != 'business'">
           <v-layout row>
-            <v-flex md2 lg2 sm6 xs6 class="d-flex align-center">
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
             <span>Birth Date:</span>
             </v-flex>
-            <v-flex md10 lg10 sm6 xs6>
-              <v-flex md6>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
                 <v-dialog
                   ref="dialog"
                   v-model="modal"
@@ -215,11 +239,11 @@
         </v-flex>
         <v-flex class="py-4">
           <v-layout row>
-            <v-flex md2 lg2 sm6 xs6 class="d-flex align-center">
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
             <span>Email:</span>
             </v-flex>
-            <v-flex md10 lg10 sm6 xs6>
-              <v-flex md6>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
                 <v-text-field 
                   outlined 
                   dense 
@@ -236,11 +260,11 @@
         </v-flex>
         <v-flex class="py-4">
           <v-layout row>
-            <v-flex md2 lg2 sm6 xs6 class="d-flex align-center">
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
             <span>Phone Number:</span>
             </v-flex>
-            <v-flex md10 lg10 sm6 xs6>
-              <v-flex md6>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
                 <v-text-field 
                   outlined 
                   dense 
@@ -258,7 +282,7 @@
         </v-flex>
       </v-layout>
       <v-divider/>
-      <v-layout row class="pa-3">
+      <v-layout row class="pa-3" v-if="type == 'driver'">
         <v-flex md6 lg6 sm12 xs12>
           <v-layout column class="pa-3 body-1">
             <v-flex class="py-4">
@@ -419,6 +443,173 @@
         </v-flex>
       </v-layout>
       <v-divider/>
+      <v-layout column class="pa-3 body-1" v-if="type == 'business'">
+        <v-flex py-4>
+          <v-layout row>
+            <v-flex py-4>
+              <span class="title">Business Information </span>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex class="py-4">
+          <v-layout row>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+              <span>Business Address:</span>
+            </v-flex>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
+                <v-text-field 
+                  outlined 
+                  dense 
+                  v-model="user_data.business_address"
+                  color="success"
+                  :disabled="!edit_data"
+                  class="skekert rounded-xl"
+                  style="font-weight: bold;"
+                  persistent-placeholder
+                  label="Street Name, Building, House No."
+                  :error-messages="errors ? errors.business_address ? errors.business_address :'':''"
+                    >
+                </v-text-field>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex class="py-4">
+          <v-layout row>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+            </v-flex>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6>
+                <v-text-field 
+                  outlined 
+                  dense 
+                  v-model="user_data.business_complete_address"
+                  color="success"
+                  :disabled="!edit_data"
+                  class="skekert rounded-xl"
+                  style="font-weight: bold;"
+                  persistent-placeholder
+                  label="Barangay, City, Province, Postal Code"
+                  :error-messages="errors ? errors.business_complete_address ? errors.business_complete_address :'':''"
+                    >
+                </v-text-field>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex class="py-4">
+          <v-layout row>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+            <span>Business Permit Number:</span>
+            </v-flex>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
+                <v-text-field 
+                  outlined 
+                  dense 
+                  v-model="user_data.business_permit_number"
+                  color="success"
+                  :disabled="!edit_data"
+                  class="skekert rounded-xl"
+                  style="font-weight: bold;"
+                  :error-messages="errors ? errors.business_permit_number ? errors.business_permit_number :'':''"
+                    >
+                </v-text-field>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex class="py-4">
+          <v-layout row>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+            <span>DTI Registration Number:</span>
+            </v-flex>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
+                <v-text-field 
+                  outlined 
+                  dense 
+                  v-model="user_data.business_dti_number"
+                  color="success"
+                  :disabled="!edit_data"
+                  class="skekert rounded-xl"
+                  style="font-weight: bold;"
+                  :error-messages="errors ? errors.business_dti_number ? errors.business_dti_number :'':''"
+                    >
+                </v-text-field>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex class="py-4">
+          <v-layout row>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+            <span>City Tourism Number:</span>
+            </v-flex>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
+                <v-text-field 
+                  outlined 
+                  dense 
+                  v-model="user_data.business_city_tourism_number"
+                  color="success"
+                  :disabled="!edit_data"
+                  class="skekert rounded-xl"
+                  style="font-weight: bold;"
+                  :error-messages="errors ? errors.business_city_tourism_number ? errors.business_city_tourism_number :'':''"
+                    >
+                </v-text-field>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex class="py-4">
+          <v-layout row>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+            <span>Contact Person Name:</span>
+            </v-flex>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
+                <v-text-field 
+                  outlined 
+                  dense 
+                  v-model="user_data.business_contact_person"
+                  color="success"
+                  :disabled="!edit_data"
+                  class="skekert rounded-xl"
+                  style="font-weight: bold;"
+                  :error-messages="errors ? errors.business_contact_person ? errors.business_contact_person :'':''"
+                    >
+                </v-text-field>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex class="py-4">
+          <v-layout row>
+            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+            <span>Contact Person Number:</span>
+            </v-flex>
+            <v-flex md10 lg10 sm12 xs12>
+              <v-flex md6 lg6 sm12 xs12>
+                <v-text-field 
+                  outlined 
+                  dense 
+                  v-model="user_data.business_contact_person_number"
+                  color="success"
+                  :disabled="!edit_data"
+                  class="skekert rounded-xl"
+                  style="font-weight: bold;"
+                  :error-messages="errors ? errors.business_contact_person_number ? errors.business_contact_person_number :'':''"
+                    >
+                </v-text-field>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+      <v-divider/>
       <v-flex class="text-end pa-2">
         <v-btn small color="success" @click="save" :disabled="!edit_data" :loading="loading_save"> 
           <v-icon dense>
@@ -469,9 +660,11 @@ import Imagepath from '~/plugins/mixins/imagepath'
       loading_save: false,
       user_data: {},
       url: process.env.API_URL,
-      dialogImage: null
+      dialogImage: null,
+      type: null
     }),
     computed: {
+      ...mapGetters('login', ['log'])
     },
     watch: {
       user_info: {
@@ -479,10 +672,18 @@ import Imagepath from '~/plugins/mixins/imagepath'
           this.setData()
         }, deep: true
       },
+      log: {
+        handler() {
+          this.setType()    
+        }, deep: true
+      },
     },
     methods: {
       ...mapActions('users', ['USER_UPDATE']),
       ...mapMutations('users', ['REFRESH_DATA']),
+      setType(){
+        this.type = this.log.type
+      },
       setData(){
         let payload = {
           id: this.user_info ? this.user_info.id ? this.user_info.id : null : null,
@@ -510,6 +711,15 @@ import Imagepath from '~/plugins/mixins/imagepath'
           helper : this.user_info ? this.user_info.user_driver ? this.user_info.user_driver.helper ? this.user_info.user_driver.helper : null : null : null,
           created_at : this.user_info ? this.user_info.user_driver ? this.user_info.user_driver.created_at ? this.user_info.user_driver.created_at : null : null : null,
           license_expiry_date : this.user_info ? this.user_info.user_driver ? this.user_info.user_driver.license_expiry_date ? this.user_info.user_driver.license_expiry_date : null : null : null,
+
+          business_name : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_name ? this.user_info.user_business.business_name : null : null : null,
+          business_address : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_address ? this.user_info.user_business.business_address : null : null : null,
+          business_complete_address : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_complete_address ? this.user_info.user_business.business_complete_address : null : null : null,
+          business_permit_number : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_permit_number ? this.user_info.user_business.business_permit_number : null : null : null,
+          business_dti_number : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_dti_number ? this.user_info.user_business.business_dti_number : null : null : null,
+          business_city_tourism_number : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_tourism_number ? this.user_info.user_business.business_tourism_number : null : null : null,
+          business_contact_person : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_contact_person ? this.user_info.user_business.business_contact_person : null : null : null,
+          business_contact_person_number : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_contact_person_number ? this.user_info.user_business.business_contact_person_number : null : null : null,
         }
         this.user_data = payload
       },
@@ -520,25 +730,54 @@ import Imagepath from '~/plugins/mixins/imagepath'
         this.edit_data = false
       },
       save(){
-        let payload = {
-          id : this.user_data ? this.user_data.id ? this.user_data.id : null : null,
-          first_name : this.user_data ? this.user_data.first_name ? this.user_data.first_name : null : null,
-          last_name : this.user_data ? this.user_data.last_name ? this.user_data.last_name : null : null,
-          user_name : this.user_data ? this.user_data.user_name ? this.user_data.user_name : null : null,
-          gender : this.user_data ? this.user_data.gender ? this.user_data.gender : null : null,
-          birth_date : this.user_data ? this.user_data.birth_date ? this.user_data.birth_date : null : null,
-          user_driver_id : this.user_data ? this.user_data.user_driver_id ? this.user_data.user_driver_id : null : null,
-          driver_license_number : this.user_data ? this.user_data.driver_license_number ? this.user_data.driver_license_number : null : null,
-          license_expiry_date : this.user_data ? this.user_data.license_expiry_date ? this.user_data.license_expiry_date : null : null
+        let payload = {}
+        console.log(this.type)
+        if(this.type == 'customer'){
+          payload = {
+            id : this.user_data ? this.user_data.id ? this.user_data.id : null : null,
+            first_name : this.user_data ? this.user_data.first_name ? this.user_data.first_name : null : null,
+            last_name : this.user_data ? this.user_data.last_name ? this.user_data.last_name : null : null,
+            user_name : this.user_data ? this.user_data.user_name ? this.user_data.user_name : null : null,
+            gender : this.user_data ? this.user_data.gender ? this.user_data.gender : null : null,
+            birth_date : this.user_data ? this.user_data.birth_date ? this.user_data.birth_date : null : null,
+          }
+        }else if(this.type == 'driver'){
+          payload = {
+            id : this.user_data ? this.user_data.id ? this.user_data.id : null : null,
+            first_name : this.user_data ? this.user_data.first_name ? this.user_data.first_name : null : null,
+            last_name : this.user_data ? this.user_data.last_name ? this.user_data.last_name : null : null,
+            user_name : this.user_data ? this.user_data.user_name ? this.user_data.user_name : null : null,
+            gender : this.user_data ? this.user_data.gender ? this.user_data.gender : null : null,
+            birth_date : this.user_data ? this.user_data.birth_date ? this.user_data.birth_date : null : null,
+            user_driver_id : this.user_data ? this.user_data.user_driver_id ? this.user_data.user_driver_id : null : null,
+            driver_license_number : this.user_data ? this.user_data.driver_license_number ? this.user_data.driver_license_number : null : null,
+            license_expiry_date : this.user_data ? this.user_data.license_expiry_date ? this.user_data.license_expiry_date : null : null
+          }
+        }else if(this.type == 'business'){
+          payload = {
+            id : this.user_data ? this.user_data.id ? this.user_data.id : null : null,
+            first_name : this.user_data ? this.user_data.first_name ? this.user_data.first_name : null : null,
+            last_name : this.user_data ? this.user_data.last_name ? this.user_data.last_name : null : null,
+            user_name : this.user_data ? this.user_data.user_name ? this.user_data.user_name : null : null,
+            business_name : this.user_data ? this.user_data.business_name ? this.user_data.business_name : null : null,
+            business_address : this.user_data ? this.user_data.business_address ? this.user_data.business_address : null : null,
+            business_complete_address : this.user_data ? this.user_data.business_complete_address ? this.user_data.business_complete_address : null : null,
+            business_permit_number : this.user_data ? this.user_data.business_permit_number ? this.user_data.business_permit_number : null : null,
+            business_dti_number : this.user_data ? this.user_data.business_dti_number ? this.user_data.business_dti_number : null : null,
+            business_city_tourism_number : this.user_data ? this.user_data.business_city_tourism_number ? this.user_data.business_city_tourism_number : null : null,
+            business_contact_person : this.user_data ? this.user_data.business_contact_person ? this.user_data.business_contact_person : null : null,
+            business_contact_person_number : this.user_data ? this.user_data.business_contact_person_number ? this.user_data.business_contact_person_number : null : null,
+          }
         }
         let validation = this.fieldsValidation(payload)
+        console.log(validation)
         if(validation.error == true){
           this.errors = validation.errors
         }else{
           this.loading_save = true
           this.$set(payload, 'middle_name', this.user_data ? this.user_data.middle_name ? this.user_data.middle_name : null : null )
           this.$set(payload, 'suffix', this.user_data ? this.user_data.suffix ? this.user_data.suffix : null : null)
-          this.$set(payload, 'type', 'driver')
+          this.$set(payload, 'type', this.type)
           this.USER_UPDATE(payload).then(data => {
             this.loading_save = false
             this.REFRESH_DATA(true)
@@ -559,6 +798,7 @@ import Imagepath from '~/plugins/mixins/imagepath'
               title: "Information update process is complete."
             });
           }).catch(response => {
+            this.loading_save = false
             this.$swal.fire({
               title: `Something went wrong`,
               text: 'Please try again later.',
@@ -576,6 +816,7 @@ import Imagepath from '~/plugins/mixins/imagepath'
     },
     mounted () {
       this.setData()
+      this.setType()
     }
     
   }

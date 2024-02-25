@@ -1,5 +1,5 @@
 <template>
   <v-layout>
-    <profile/>
+    <vehicles-main/>
   </v-layout>
 </template>

@@ -19,7 +19,7 @@ Vue.filter('capitalfirst', string => _.startCase(_.lowerCase(string)))
 
 Vue.filter('capitalall', string => _.upperCase(string))
 
-Vue.filter('decimalcomma', number => number ? Number.parseFloat(number).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : null)
+Vue.filter('decimalcomma', number => number ? '₱'+Number.parseFloat(number).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : null)
 
 Vue.filter('commaarray', string => [...new Set(string)].join(', '))
 

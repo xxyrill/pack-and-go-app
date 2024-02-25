@@ -1,5 +1,5 @@
 <template>
   <v-layout>
-    <profile/>
+    <security-main/>
   </v-layout>
 </template>

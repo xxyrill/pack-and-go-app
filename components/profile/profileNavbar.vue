@@ -7,7 +7,8 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>{{user_info.first_name | capitalfirst}} {{user_info.last_name | capitalfirst}}</v-list-item-title>
+          <v-list-item-title v-if="user_info.type == 'business'">{{user_info ? user_info.user_business ? user_info.user_business.business_name ? user_info.user_business.business_name : '' : '' :''}}</v-list-item-title>
+          <v-list-item-title v-else>{{user_info.first_name | capitalfirst}} {{user_info.last_name | capitalfirst}}</v-list-item-title>
           <v-list-item-subtitle><a class="caption" @click="open">Change Picture</a></v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -82,13 +83,7 @@ import { Http } from '~/plugins/http'
       user_info: [Object]
     },
     data: () => ({
-      items: [
-        { title: 'Profile', icon: 'mdi-account' , href: '/application/driver/profile'},
-        { title: 'Change Password', icon: 'mdi-key', href: '/application/driver/profile/security' },
-        { title: 'Vehicles', icon: 'mdi-car-estate', href: '/application/driver/profile/vehicles' },
-        { title: 'Subscription', icon: 'mdi-currency-usd', href: '/application/driver/profile/subscription' },
-        { title: 'Ratings', icon: 'mdi-star', href: '/application/driver/profile/ratings' },
-      ],
+      items: [],
       right: null,
       dialog_change_profile: false,
       file: null,
@@ -97,9 +92,43 @@ import { Http } from '~/plugins/http'
       url: process.env.API_URL,
     }),
     computed: {
+      ...mapGetters('login', ['log'])
     },
+    watch: {
+    log: {
+      handler() {
+        this.setNavBar()
+      }, deep: true
+    }
+  },
     methods: {
       ...mapMutations('users', ['REFRESH_DATA']),
+      setNavBar(){
+        if(this.log.type == 'customer'){
+          this.items = [
+            { title: 'Profile', icon: 'mdi-account' , href: '/application/driver/profile'},
+            { title: 'Change Password', icon: 'mdi-key', href: '/application/driver/profile/security' }
+          ]
+        }else if(this.log.type == 'driver'){
+          this.items = [
+            { title: 'Profile', icon: 'mdi-account' , href: '/application/driver/profile'},
+            { title: 'Change Password', icon: 'mdi-key', href: '/application/driver/profile/security' },
+            { title: 'Vehicles', icon: 'mdi-car-estate', href: '/application/driver/profile/vehicles' },
+            { title: 'Subscription', icon: 'mdi-currency-usd', href: '/application/driver/profile/subscription' },
+            { title: 'Ratings', icon: 'mdi-star', href: '/application/driver/profile/ratings' },
+          ]
+        }else if(this.log.type == 'business'){
+          this.items = [
+            { title: 'Profile', icon: 'mdi-account' , href: '/application/driver/profile'},
+            { title: 'Change Password', icon: 'mdi-key', href: '/application/driver/profile/security' },
+            { title: 'Vehicles', icon: 'mdi-car-estate', href: '/application/driver/profile/vehicles' },
+            { title: 'Subscription', icon: 'mdi-currency-usd', href: '/application/driver/profile/subscription' },
+            { title: 'Ratings', icon: 'mdi-star', href: '/application/driver/profile/ratings' },
+          ]
+        }else{
+          this.items = []
+        }
+      },
       close(){
         this.dialog_change_profile = false
         this.file = null
@@ -172,6 +201,7 @@ import { Http } from '~/plugins/http'
       }
     },
     mounted () {
+      this.setNavBar()
     }
     
   }

@@ -1,5 +1,5 @@
 <template>
   <v-layout>
-    <profile/>
+    <subscription-main/>
   </v-layout>
 </template>

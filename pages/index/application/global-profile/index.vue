@@ -1,5 +1,5 @@
 <template>
   <v-main>
-    <business-records/>
+    <global-profile/>
   </v-main>
 </template>
