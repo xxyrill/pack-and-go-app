@@ -38,7 +38,6 @@
                         label="Location A"
                         prepend-inner-icon="mdi-map-marker"
                         clearable
-                        readonly
                         dense
                         color="success"
                         outlined
@@ -47,15 +46,11 @@
                         :error-messages="errors ? errors.fromMarkerPosition ? errors.fromMarkerPosition :'':''"
                       ></v-text-field>
                     </v-flex>
-                    <v-flex mx-1 mt-1 class="d-flex justify-center">
-                      <Icon icon="gravity-ui:arrow-up" width="30" height="30" :rotate="1" />
-                    </v-flex>
                     <v-flex mx-1 class="d-flex justify-center align-center">
                       <v-text-field
                         v-model="toLocation"
                         label="Location B"
                         prepend-inner-icon="mdi-map-marker"
-                        readonly
                         color="success"
                         dense
                         outlined
@@ -340,7 +335,61 @@
               <span class="display-1 font-weight-bold">What type of vehicle do you prefer?</span>
             </v-flex>
             <v-flex class="d-flex justify-center" ma-1>
-              <a>More information about vehicle sizes</a>
+              <v-dialog
+                v-model="dialog_vehicles"
+                width="600"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    color="blue"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
+                    text
+                    depressed
+                    small
+                    :ripple="false"
+                  >
+                    More information about vehicle sizes
+                  </v-btn>
+                </template>
+
+                <v-card>
+                  <v-card-text>
+                    <v-simple-table dense class="pt-3">
+                      <template v-slot:default>
+                        <thead>
+                          <tr>
+                            <th class="text-left">
+                              Vehicle
+                            </th>
+                            <th class="text-left">
+                              Height (ft)
+                            </th>
+                            <th class="text-left">
+                              Width (ft)
+                            </th>
+                            <th class="text-left">
+                              Capacity (kg)
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="(item, index) in more_vehicles"
+                            :key="index"
+                          >
+                            <td>{{ item.vehicle }}</td>
+                            <td>{{ item.height }}</td>
+                            <td>{{ item.width }}</td>
+                            <td>{{ item.capacity }}</td>
+                          </tr>
+                        </tbody>
+                      </template>
+                    </v-simple-table>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
             </v-flex>
             <v-flex class="d-flex justify-center" ma-1>
               <v-flex md4>
@@ -488,6 +537,7 @@
               depressed 
               outlined 
               color="black"
+              v-if="step > 1 "
               @click="backStep">
                 <Icon icon="gg:arrow-up" width="25" height="25" :rotate="3" /> 
                 Back
@@ -520,6 +570,8 @@ import moment from 'moment';
     ],
     data: () => ({
       form: {},
+      dialog_vehicles: false,
+      dialog: false,
       errors: {},
       date_menu: false,
       modal: false,
@@ -549,7 +601,69 @@ import moment from 'moment';
       alt_email: null,
       vehicle_list: [],
       userDetails: null,
-      finalSubmitLoading:false
+      finalSubmitLoading:false,
+      more_vehicles: [
+        {
+          vehicle: 'Motorcycle',
+          height: 3.5,
+          width: 8,
+          capacity: '150 (approx.)'
+        },
+        {
+          vehicle: 'Jeepney Standard',
+          height: 8,
+          width: 6,
+          capacity: '1,500 - 2,000 (approx.)'
+        },
+        {
+          vehicle: 'Jeepney Extended',
+          height: 8.5,
+          width: 8,
+          capacity: '2,000 - 2,500 (approx.)'
+        },
+        {
+          vehicle: 'Taxi Sedan',
+          height: 4.5,
+          width: 6,
+          capacity: '400 - 500 (approx.)'
+        },
+        {
+          vehicle: 'Taxi MPV',
+          height: 5,
+          width: 6,
+          capacity: '600 - 800 (approx.)'
+        },
+        {
+          vehicle: '6-wheel Box Truck',
+          height: 10,
+          width: 7,
+          capacity: '5,000 - 8,000 (approx.)'
+        },
+        {
+          vehicle: '10-wheel Box Truck',
+          height: 12,
+          width: 8,
+          capacity: '8,000 - 12,000 (approx.)'
+        },
+        {
+          vehicle: 'Samll Flatbed Truc',
+          height: 8,
+          width: 6,
+          capacity: '3,000 - 5,000 (approx.)'
+        },
+        {
+          vehicle: 'Medium Flatbed Truck',
+          height: 10,
+          width: 7,
+          capacity: '5,000 - 8,000 (approx.)'
+        },
+        {
+          vehicle: 'Large Flatbed Truck',
+          height: 12,
+          width: 8,
+          capacity: '8,000 - 12,000 (approx.)'
+        },
+      ]
     }),
     computed: {
       progress(){
@@ -573,8 +687,8 @@ import moment from 'moment';
       continueStep(step){
         if(step == 1) {
           let payload = {
-            fromMarkerPosition : this.fromMarkerPosition,
-            toMarkerPosition : this.toMarkerPosition
+            fromLocation : this.fromLocation,
+            fromLocation : this.fromLocation
           }
           let validation = this.fieldsValidation(payload)
           if(validation.error == true){

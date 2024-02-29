@@ -21,11 +21,13 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import Imagepath from '~/plugins/mixins/imagepath'
 import Global from '~/plugins/mixins/global'
 
 export default {
   mixins: [
     Global,
+    Imagepath
   ],
   data: () => ({
     errors: {},
@@ -41,26 +43,22 @@ export default {
   watch: {
   },
   methods: {
-    ...mapActions('login', ['POST_LOGIN']),
-    ...mapMutations('login', ['SET_LOGIN']),
-    login() {
-      this.loginloading = true
-      let login = {
-        email: this.form.email ? this.form.email : null,
-        password: this.form.password ? this.form.password : null,
-      }
-     this.POST_LOGIN(login).then(data => {
-        console.log('data',data)
-        // console.log('error', data.data.errors.Message[0])
-        this.SET_LOGIN(data)
-        // this.goTo('/users')
-      }).catch(error => {
-        this.loginloading = false
-        console.log('errorajsdkljaskldjkas', error)
-        // this.error('qwe', data.data.errors.Message[0])
-        // this.errorMessage = error.data.errors.Message[0];
-      })
-    }
-  }
+    ...mapMutations('booking', ['RESET_BOOKING_STATE']),
+    ...mapMutations('chats', ['RESET_CHATS_STATE']),
+    ...mapMutations('login', ['RESET_LOGIN_STATE']),
+    ...mapMutations('subscription', ['RESET_SUBSCRIPTION_STATE']),
+    ...mapMutations('users', ['RESET_USERS_STATE']),
+    ...mapMutations('vehicle', ['RESET_VEHICLE_STATE']),
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.RESET_BOOKING_STATE()
+      vm.RESET_CHATS_STATE()
+      vm.RESET_LOGIN_STATE()
+      vm.RESET_SUBSCRIPTION_STATE()
+      vm.RESET_USERS_STATE()
+      vm.RESET_VEHICLE_STATE()
+    })
+  },
 }
 </script>

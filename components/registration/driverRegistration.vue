@@ -456,17 +456,6 @@
           })
         }
       },
-      sendOtp() {
-        if (this.form.contact_number === undefined || this.form.contact_number === null) {
-          this.$set(this.errors, 'otp', ['Number field is required.'])
-        }else{
-          this.$delete(this.errors, 'otp')
-          this.send_otp_loading = true
-          setTimeout(() => {
-            this.send_otp_loading = false
-          }, 10000);
-        }
-      },
       close(){
         this.dialog = false
       },
@@ -493,9 +482,17 @@
               this.$set(this.errors, 'password', ['Password did not match.'])
               this.$set(this.errors, 'confirm_password', ['Password did not match.'])
             }else{
-              this.step += 1
               this.$delete(this.errors, 'password')
               this.$delete(this.errors, 'confirm_password')
+              let fields = {
+                email : this.form.email,
+                user_name : this.form.user_name
+              }
+              this.USER_VERIFY_FEILDS(fields).then(data => {
+                this.step += 1
+              }).catch(response => {
+                this.errors = response.response.data.errors
+              })
             }
           }
         }else if (value == 2){

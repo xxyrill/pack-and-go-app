@@ -1,10 +1,10 @@
 <template>
     <v-app-bar elevation="0" app color="#483285">
-        <v-toolbar-title class="white--text ml-3">PACK&GO</v-toolbar-title>
+        <v-toolbar-title class="white--text ml-3"><a href="/" style="text-decoration: none; color: white;">PACK&GO</a></v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn v-if="log.type === 'customer'" @click="book" text color="white">New Order</v-btn>
         <v-btn v-if="log.type === 'driver' || log.type === 'business' || log.type === 'customer'" text color="white" @click="records">Records</v-btn>
-        <v-menu offset-y rounded="b-xl">
+        <v-menu offset-y rounded="b-xl" v-if="log.type">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               text 
@@ -106,6 +106,8 @@
           this.goTo('/application/driver') 
         }else if(this.log.type == 'customer') {
           this.goTo('/application/customer')
+        }else if(this.log.type == 'business') {
+          this.goTo('/application/business')
         }
       }
     },

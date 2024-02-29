@@ -89,6 +89,16 @@
                     <customer-records-view :booking="item"/>
                     <customer-records-price :booking="item"/>
                     <customer-records-rate :booking="item"/>
+                    <v-flex>
+                      <v-btn
+                        small
+                        depressed
+                        color="error"
+                        block
+                      >
+                        Cancel
+                      </v-btn>
+                    </v-flex>
                 </v-layout>
               </td>
             </tr>
@@ -98,7 +108,6 @@
       </v-layout>
     </v-card-text>
     <v-flex class="d-flex justify-end">
-      <!-- <chat-box :chat_room="chat_room" :reciever_id="reciever_id" :chat_owner="chat_room_name"/> -->
     </v-flex>
     <v-dialog
       v-model="dialogApply"

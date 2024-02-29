@@ -1,7 +1,7 @@
 <template>
-  <div mt-3 class="d-flex justify-end rounded-xxl">
-    <!-- <v-btn class="mr-3" large rounded text @click="loginDialog" color="white">LOGIN</v-btn> -->
-    <a style="color: white; text-decoration: none" class="mr-4 pa-2 subtitle-1" @click="loginDialog">LOGIN</a>
+  <v-flex class="d-flex justify-end pa-0">
+    <v-btn rounded text @click="loginDialog" color="white">LOGIN</v-btn>
+    <!-- <a style="color: white; text-decoration: none" class="mr-4 pa-2 subtitle-1" @click="loginDialog">LOGIN</a> -->
     <v-dialog
       v-model="dialog"
       width="350"
@@ -55,7 +55,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-  </div>
+  </v-flex>
 </template>
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'

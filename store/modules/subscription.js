@@ -13,7 +13,7 @@ const mutations = {
   SET_REFRESH (state, payload) {
     state.refresh = payload
   },
-  RESET_BOOKING_STATE (state) {
+  RESET_SUBSCRIPTION_STATE (state) {
       /*
         FUNCTION:
         RESET TO INITIAL STATE. YOU WILL APPRECIATE THIS FUNCTIONALITY
