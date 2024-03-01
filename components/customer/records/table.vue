@@ -1,7 +1,7 @@
 <template>
   <v-card flat color="#f0f0f0">
     <v-card-text>
-      <v-layout style="min-height: 400px">
+      <v-layout column style="min-height: 400px">
         <v-flex lg12 md12 sm12 xs12>
           <v-data-table
             color="primary"
@@ -89,21 +89,23 @@
                     <customer-records-view :booking="item"/>
                     <customer-records-price :booking="item"/>
                     <customer-records-rate :booking="item"/>
-                    <v-flex>
-                      <v-btn
-                        small
-                        depressed
-                        color="error"
-                        block
-                      >
-                        Cancel
-                      </v-btn>
-                    </v-flex>
+                    <customer-records-cancel :booking="item"/>
                 </v-layout>
               </td>
             </tr>
           </template>
           </v-data-table>
+        </v-flex>
+        <v-flex>
+          <v-pagination
+            v-model="page"
+            :length="pageCount"
+            :total-visible="5"
+            @input="updatePage"
+            prev-icon="mdi-arrow-left-bold-outline"
+            next-icon="mdi-arrow-right-bold-outline"
+            circle
+          ></v-pagination>
         </v-flex>
       </v-layout>
     </v-card-text>
@@ -151,6 +153,9 @@ import moment from 'moment';
 export default {
   mixins: [Global],
   data: () => ({
+    page: 1,
+    form: {skip: 0, take: 5 },
+    count: 0,
     items: [],
     headers: [
       { text: 'Status', align: 'center', sortable: false, value: 'status' },
@@ -173,7 +178,14 @@ export default {
   }),
   computed: {
     ...mapGetters('users', ['user']),
-    ...mapGetters('booking', ['refresh', 'filters'])
+    ...mapGetters('booking', ['refresh', 'filters']),
+    pageCount () {
+      if (this.form.take == null ||
+                this.count == null
+      ) return 0
+
+      return Math.ceil(this.count / this.form.take)
+    }
   },
   watch: {
     refresh: {
@@ -199,18 +211,23 @@ export default {
       let payload = {
         order_by : "id",
         sort_by : "desc",
-        skip : 0,
-        take : 5,
+        ...this.form,
         ...this.filters
       }
       await this.BOOKING_LIST(payload).then(data => {
         this.items = data.data.data
+        this.count = data.data.details.total
         this.loading = false
         this.SET_REFRESH(false)
       }).catch(response => {
         this.loading = false
         this.SET_REFRESH(false)
       })
+    },
+    updatePage (pageIndex) {
+      this.page = pageIndex
+      this.form.skip = pageIndex === 1 ? 0 : (pageIndex - 1) * 5
+      this.getList()
     },
     async message(item){
       let payload = {

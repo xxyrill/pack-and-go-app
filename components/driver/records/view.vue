@@ -14,7 +14,11 @@
       width="600"
     >
       <v-card>
-        <v-card-title>
+        <v-card-title :class="(booking.status == 'pending') ? 'orange lighten-1' 
+                    :(booking.status == 'confirmed') ? 'yellow lighten-1'
+                    :(booking.status == 'cancelled') ? 'red darken-2'
+                    :(booking.status == 'completed') ? 'green darken-1'
+                    :(booking.status == 'reschedule') ? 'deep-purple lighten-1' : 'gray'">
           <v-menu
             offset-x
           >

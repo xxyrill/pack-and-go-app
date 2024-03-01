@@ -135,9 +135,9 @@
               :length="pageCount"
               :total-visible="5"
               @input="updatePage"
+              prev-icon="mdi-arrow-left-bold-outline"
+              next-icon="mdi-arrow-right-bold-outline"
               circle
-              navigation-color="blue lighten-3"
-              navigation-text-color="black"
             ></v-pagination>
           </v-card-actions>
         </v-card>

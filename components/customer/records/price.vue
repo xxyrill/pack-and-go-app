@@ -6,6 +6,7 @@
       color="success"
       block
       @click="view"
+      :disabled="(booking.status == 'cancelled' || booking.status == 'completed') ? true : false"
     >
       Price
     </v-btn>

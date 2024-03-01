@@ -1,6 +1,14 @@
 <template>
   <v-flex>
-    <v-btn small depressed color="#7E57C2" @click="reschedule" :disabled="booking.status == 'confirmed' ? false : true">Reschedule</v-btn>
+    <v-btn 
+      small 
+      depressed 
+      color="#7E57C2" 
+      @click="reschedule" 
+      :disabled="booking.status == 'confirmed' ? false : true"
+    >
+      Reschedule
+    </v-btn>
     <v-dialog
       v-model="dialogReschedule"
       width="400"

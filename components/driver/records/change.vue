@@ -1,6 +1,14 @@
 <template>
   <v-flex>
-    <v-btn small depressed color="primary" @click="change">Change</v-btn>
+    <v-btn 
+      small 
+      depressed 
+      color="primary" 
+      @click="change"
+      :disabled="(booking.status == 'cancelled' || booking.status == 'completed') ? true : false"
+    >
+      Change
+    </v-btn>
     <v-dialog
       v-model="dialogChange"
       width="350"

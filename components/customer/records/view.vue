@@ -14,7 +14,11 @@
       width="600"
     >
       <v-card>
-        <v-card-title >
+        <v-card-title :class="(booking.status == 'pending') ? 'orange lighten-1' 
+                    :(booking.status == 'confirmed') ? 'yellow lighten-1'
+                    :(booking.status == 'cancelled') ? 'red darken-2'
+                    :(booking.status == 'completed') ? 'green darken-1'
+                    :(booking.status == 'reschedule') ? 'deep-purple lighten-1' : 'gray'">
           <span class="subtitle-1 px-2 font-weight-bold">{{ booking.status | capitalfirst }} - {{ booking.order_number }}</span>
         </v-card-title>
         <v-divider/>
@@ -48,6 +52,12 @@
             </v-flex>
             <v-flex class="pa-1 rounded-xl text-center" style="background-color: #E0E0E0;">
               <span class="font-weight-black subtitle-1 "> Booking History</span>
+            </v-flex>
+            <v-flex class="mt-2">
+              <v-flex v-for="(item, index) of booking.booking_history" :key="index" class="pa-1">
+                <span class="px-2">{{ item.created_at | monthdayyearwithtime }}</span> -
+                <span class="px-2">{{ item.track_details }}</span>
+              </v-flex>
             </v-flex>
           </v-layout>
         </v-card-text>

@@ -34,6 +34,7 @@ import CustomerRecordsFilter from '~/components/customer/records/filter'
 import CustomerRecordsView from '~/components/customer/records/view'
 import CustomerRecordsPrice from '~/components/customer/records/price'
 import CustomerRecordsRate from '~/components/customer/records/rate'
+import CustomerRecordsCancel from '~/components/customer/records/cancel'
 
 import BusinessRegistration from '~/components/registration/businessRegistration'
 import CustomerRegistration from '~/components/registration/customerRegistration'
@@ -101,6 +102,7 @@ const components = {
   CustomerRecordsView,
   CustomerRecordsPrice,
   CustomerRecordsRate,
+  CustomerRecordsCancel,
 
   BusinessRegistration,
   CustomerRegistration,
