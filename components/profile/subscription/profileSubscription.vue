@@ -17,7 +17,7 @@
           <span class="headline font-weight-bold">Your Plan</span>
         </v-flex>
         <v-flex class="pa-1">
-          <v-card class="rounded-xl pa-4 elevation-15" color="purple darken-4">
+          <v-card class="rounded-xl pa-4 elevation-10" color="purple darken-4">
             <v-card-title>
               <span class="headline" style="color: white;">6 Months Subscription</span>
             </v-card-title>
@@ -52,7 +52,7 @@
                       <span style="color: white;">Your next bill is Php, 8,550 on 12/20/2023.</span>
                     </v-flex>
                     <v-flex class="d-flex align-center" pa-2>
-                      <span style="color: white;">Payment method</span>
+                      <span style="color: white;" class="pr-2">Payment method</span>
                       <v-img max-width="100" max-height="100" :src="imgs.maya_logo"/>
                     </v-flex>
                   </v-layout>
@@ -60,10 +60,8 @@
               </v-layout>
             </v-card-text>
           </v-card>
-          <v-flex pa-3>
-            <v-btn small depressed color="primary">
-              CHANGE PLAN
-            </v-btn>
+          <v-flex>
+            <profile-subscription-choices/>
           </v-flex>
         </v-flex>
       </v-layout>

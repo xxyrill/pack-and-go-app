@@ -147,6 +147,15 @@ import { mapMutations } from 'vuex'
         });
       },
       refresh(){
+        this.form.search  = null
+        this.form.status = null
+        this.form.date_range = null
+        let payload = {
+          search : null,
+          status : null,
+          date_range : null
+        }
+        this.SET_FILTERS(payload)
         this.SET_REFRESH(true)
       },
       clear(){

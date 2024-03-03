@@ -76,12 +76,17 @@
                     {{ item.driver ? item.driver.first_name+' '+item.driver.last_name : 'Not Assigned' }}
                   </span>
                 </div>
+                <div v-else class="pa-2">
+                  <span style="color: #F44336;">
+                    Not Assigned
+                  </span>
+                </div>
               </td>
               <td class="text-center">{{ item.vehicle_list_id ? item.vehicle_type.type : '' }}</td>
               <td class="text-center">
                 <v-flex class="pa-1">
-                  <span v-if="item.price">{{ item.price }}</span>
-                  <span v-else style="color:red">Not Set</span>
+                  <span v-if="item.price">{{ item.price | decimalcomma}}</span>
+                  <span v-else style="color:#F44336">Not Set</span>
                 </v-flex>
               </td>
               <td class="text-center px-0">

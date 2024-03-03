@@ -35,7 +35,7 @@
     <v-card-text>
       <v-card flat>
         <v-card-title>
-          <span>Ratings: {{ averageRating }} ({{rating.rating_numbers}} ratings)</span>
+          <span>Ratings: {{ averageRating }} ({{rating.rating_numbers ?? 0}} ratings)</span>
         </v-card-title>
         <v-card-text>
           <v-layout column>
@@ -142,9 +142,13 @@ import axios from 'axios'
     computed: {
       ...mapGetters('users', ['refresh_ratings']),
       averageRating(){
-        let total = 0
-        total = parseInt(this.rating.total_stars) / this.rating.rating_numbers
-        return total
+        if(this.rating.total_stars && this.rating.rating_numbers){
+          let total = 0
+          total = parseInt(this.rating.total_stars) / this.rating.rating_numbers
+          return total
+        }else{
+          return 0
+        }
       },
       pageCount () {
         if (this.form.take == null ||

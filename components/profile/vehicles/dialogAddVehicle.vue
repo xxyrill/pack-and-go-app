@@ -139,7 +139,21 @@ export default {
           this.REFRESH_DATA_VEHICLES(true)
           this.close()
         }).catch(response => {
-          this.errors = response.response.data.errors
+          let Toast = this.$swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = this.$swal.stopTimer;
+              toast.onmouseleave = this.$swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "info",
+            title: response.response.data.message
+          });
         })
       }
     },

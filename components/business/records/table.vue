@@ -86,7 +86,8 @@
               </td>
               <td class="text-center">{{ item.vehicle_list_id ? item.vehicle_type.type : '' }}</td>
               <td class="text-center">
-                <v-flex class="pa-1">{{ item.price ? item.price : 'Not Set'}}</v-flex>
+                <v-flex class="pa-1" v-if="item.price">{{ item.price | decimalcomma}}</v-flex>
+                <v-flex class="pa-1" v-else><span style="color:red">Not set</span></v-flex>
                 <v-flex class="pa-1" v-if="item.user_driver_id">
                   <business-records-change :booking="item"/>
                 </v-flex>

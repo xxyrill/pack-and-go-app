@@ -21,6 +21,7 @@
                     :(booking.status == 'reschedule') ? 'deep-purple lighten-1' : 'gray'">
           <v-menu
             offset-x
+            v-if="booking.status == 'confirmed' || booking.status == 'reschedule'"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn

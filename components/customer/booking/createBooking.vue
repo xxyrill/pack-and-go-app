@@ -323,13 +323,17 @@
             <v-flex class="d-flex justify-center" ma-1 mt-5>
               <span class="display-1 font-weight-bold">Would you like to add a helper?</span>
             </v-flex>
-            <v-flex class="d-flex justify-center" ma-1 pa-1>
-              <v-btn class="ma-2" color="success" depressed @click="helper == true">
-                YES
-              </v-btn>
-              <v-btn class="ma-2" color="error" depressed @click="helper == false">
-                NO
-              </v-btn>
+            <v-flex class="d-flex justify-center">
+              <div :style="helper == true ? 'background: #A5D6A7' : ''" class="rounded-lg ma-1 pa-1">
+                <v-btn color="success" depressed @click="changeHelper(true)">
+                  YES
+                </v-btn>
+              </div>
+              <div :style="helper == false ? 'background: #EF9A9A' : '' " class="rounded-lg ma-1 pa-1">
+                <v-btn color="error" depressed @click="changeHelper(false)">
+                  NO
+                </v-btn>
+              </div>
             </v-flex>
             <v-flex class="d-flex justify-center" ma-1>
               <span class="display-1 font-weight-bold">What type of vehicle do you prefer?</span>
@@ -594,7 +598,7 @@ import moment from 'moment';
       startTime: null,
       endTime: null,
       date_selected : (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      helper: false,
+      helper: null,
       dialogUpdateUser: false,
       alt_contact_number_one: null,
       alt_contact_number_two: null,
@@ -684,6 +688,9 @@ import moment from 'moment';
       ...mapActions('vehicle',['VEHICLE_LIST']),
       ...mapActions('users', ['GET_DETAILS_OF_CURRENT_LOGIN']),
       ...mapActions('booking', ['BOOKING_STORE']),
+      changeHelper(value){
+        this.helper = value
+      },
       continueStep(step){
         if(step == 1) {
           let payload = {
@@ -761,7 +768,6 @@ import moment from 'moment';
           if(validation.error == true){
             this.errors = validation.errors
           }else{
-            
             this.form.need_helper = this.need_helper ? this.need_helper : false,
             this.step += 1
           }

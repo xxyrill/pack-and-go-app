@@ -5,7 +5,7 @@
       depressed
       color="error"
       block
-      :disabled="(booking.status == 'cancelled' || booking.status == 'completed') ? true : false"
+      :disabled="(booking.status == 'cancelled' || booking.status == 'completed' || booking.status == 'confirmed' || booking.status == 'reschedule') ? true : false"
       @click="view"
     >
       Cancel

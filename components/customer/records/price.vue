@@ -40,14 +40,20 @@
               <v-layout column>
                 <span class="title">Details: </span>
                 <span>Appointment Handler: <span class="font-weight-bold">{{ booking ? 
-                                              booking.booking_request_price ? 
-                                              booking.booking_request_price.driver ? 
-                                              (booking.booking_request_price.driver.first_name && booking.booking_request_price.driver.last_name) ?
-                                              booking.booking_request_price.driver.first_name+' '+booking.booking_request_price.driver.last_name
-                                              :'N/A'
-                                              :'N/A'
-                                              :'N/A'
-                                              :'N/A'}}
+                                                  booking.booking_request_price ? 
+                                                      booking.booking_request_price.driver ? 
+                                                          (booking.booking_request_price.driver.type === 'business' ?
+                                                              (booking.booking_request_price.driver.user_business ? 
+                                                                  booking.booking_request_price.driver.user_business.business_name 
+                                                                  : 'N/A')
+                                                              : (booking.booking_request_price.driver.first_name && booking.booking_request_price.driver.last_name) ?
+                                                                  booking.booking_request_price.driver.first_name + ' ' + booking.booking_request_price.driver.last_name
+                                                                  : 'N/A'
+                                                          )
+                                                          : 'N/A'
+                                                      : 'N/A'
+                                                  : 'N/A'
+                                              }}
                                             </span>
                 </span>
                 <span>Price: <span class="font-weight-bold">{{ booking ? booking.booking_request_price ? booking.booking_request_price.price ? '₱'+booking.booking_request_price.price : 'N/A' : 'N/A' : 'N/A'}}</span></span>
