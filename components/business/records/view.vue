@@ -21,6 +21,7 @@
                     :(booking.status == 'reschedule') ? 'deep-purple lighten-1' : 'gray'">
           <v-menu
             offset-x
+            v-if="booking.status == 'confirmed' || booking.status == 'reschedule'"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -235,7 +236,7 @@ export default {
       let reason = (this.reason == 'Other reason') ? this.other_reason : this.reason
       let payload = {
         booking_id : this.booking.id,
-        track_details : (status == 'completed') ? 'Delevered' : 'Cancelled (Driver). '+reason  
+        track_details : (status == 'completed') ? 'Delivered' : 'Cancelled (Driver). '+reason  
       }
       await this.BOOKING_HISTORY(payload)
     },

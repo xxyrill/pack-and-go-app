@@ -33,7 +33,7 @@
           </v-layout>
           <v-card-actions>
             <v-flex class="text-center">
-              <v-btn small dark depressed @click="sendOtp">Send</v-btn>
+              <v-btn small dark depressed @click="sendOtp" :loading="loadingOtp">Send</v-btn>
               <v-btn small depressed color="grey darken-1" @click="close">Close</v-btn>
             </v-flex>
           </v-card-actions>
@@ -71,7 +71,8 @@ export default {
     dialogChange: false,
     verifyOtp: null,
     price: null,
-    errors: {}
+    errors: {},
+    loadingOtp: false
   }),
   computed: {
     ...mapGetters('users', ['user'])
@@ -89,7 +90,7 @@ export default {
   },
   methods: {
     ...mapMutations('booking', ['SET_REFRESH']),
-    ...mapActions('booking', ['BOOKING_LIST', 'SET_OTP', 'BOOKING_UPDATE']),
+    ...mapActions('booking', ['BOOKING_LIST', 'SET_OTP', 'BOOKING_UPDATE','BOOKING_PRICE']),
     ...mapActions('chats', ['CREATE_CHATROOM']),
     ...mapActions('users', ['VERIFY_OTP']),
     async change(){
@@ -98,6 +99,7 @@ export default {
     async sendOtp(){
       if(this.price){
         this.errors = {}
+        this.loadingOtp = true
         let payload = {
           contact_number: this.booking.alt_contact_number_one,
           type: 'booking_confirmation',
@@ -106,9 +108,25 @@ export default {
           route: this.booking.pick_up_location+' - '+this.booking.drop_off_location,
           type: this.booking.vehicle_type.type,
         }
-        await this.SET_OTP(payload).then(data => {
+        await this.SET_OTP(payload).then(async data => {
+          await this.addPrice()
           this.SET_REFRESH(true)
           this.close()
+          let Toast = this.$swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = this.$swal.stopTimer;
+              toast.onmouseleave = this.$swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "success",
+            title: 'Otp sent to customer.'
+          });
         }).catch(response => {
           this.SET_REFRESH(true)
           this.close()
@@ -117,10 +135,26 @@ export default {
         this.$set(this.errors, 'price', ['This field is required.'])
       }
     },
+    async addPrice(){
+      let payload = {
+        booking_id : this.booking.id,
+        price : parseFloat(this.price.replace(/,/g, ''))
+      }
+      await this.BOOKING_PRICE(payload).catch( response => {
+        this.$swal.fire({
+          title: `Something went wrong!`,
+          text: '',
+          icon: 'error',
+          confirmButtonColor: '#009c25',
+          confirmButtonText: 'OK'
+        })
+      })
+    },
     close(){
       this.dialogChange = false
       this.verifyOtp = null
       this.price = null
+      this.loadingOtp = false
     },
   },
 

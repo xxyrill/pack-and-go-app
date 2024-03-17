@@ -68,6 +68,21 @@ import RatingsMain from '~/components/profile/ratings-main'
 import ProfileRatings from '~/components/profile/ratings/profileRatings'
 import ProfileRatingCommentStoreDialog from '~/components/profile/ratings/profileRatingCommentStoreDialog'
 import ProfileRatingCommentUpdateDialog from '~/components/profile/ratings/profileRatingCommentUpdateDialog'
+
+//admin
+import NavigationBar from '~/components/admin/navbar'
+
+import Dashboard from '~/components/admin/dashboard'
+import DashboardCards from '~/components/admin/dashboard/dashcards'
+
+import BookingTransaction from '~/components/admin/bookings'
+import BookingTransactionTable from '~/components/admin/bookings/bookings'
+
+import Vehicles from '~/components/admin/vehicles'
+import VehiclesTable from '~/components/admin/vehicles/vehicles'
+
+import Financial from '~/components/admin/financial'
+import FinancialBreakdown from '~/components/admin/financial/financial'
 import { Icon } from '@iconify/vue2';
 
 const components = {
@@ -134,6 +149,19 @@ const components = {
   ProfileRatings,
   ProfileRatingCommentStoreDialog,
   ProfileRatingCommentUpdateDialog,
+
+  NavigationBar,
+
+  Dashboard,
+  DashboardCards,
+
+  BookingTransaction,
+  BookingTransactionTable,
+
+  Vehicles,
+  VehiclesTable,
+  Financial,
+  FinancialBreakdown,
   //Plugins
   Icon
 }

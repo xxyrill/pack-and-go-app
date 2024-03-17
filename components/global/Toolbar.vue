@@ -1,6 +1,6 @@
 <template>
     <v-app-bar elevation="0" app color="#483285">
-        <v-toolbar-title class="white--text ml-3"><a href="/" style="text-decoration: none; color: white;">PACK&GO</a></v-toolbar-title>
+        <v-toolbar-title class="white--text ml-3"><a :href="landing" style="text-decoration: none; color: white;">PACK&GO</a></v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn v-if="log.type === 'customer'" @click="book" text color="white">New Order</v-btn>
         <v-btn v-if="log.type === 'driver' || log.type === 'business' || log.type === 'customer'" text color="white" @click="records">Records</v-btn>
@@ -73,6 +73,21 @@
         }else if(this.log.type == 'business'){
           return '/application/business/profile'
         }
+      },
+      landing(){
+        if(this.log){
+          if(this.log.type == 'customer'){
+            return '/application/customer'
+          }else if(this.log.type == 'driver'){
+            return '/application/driver'
+          }else if(this.log.type == 'business'){
+            return '/application/business'
+          }else{
+            return '/'
+          }
+        }else{
+          return '/'
+        }
       }
     },
     watch: {
@@ -94,8 +109,35 @@
         })
       },
       async logout(){
-        await this.POST_LOGOUT().then(data => {
-          this.goTo('/')
+        this.$swal.fire({
+          title: `Are you sure you want to log out?`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#009c25',
+          cancelButtonColor: '#b6b6b6',
+          confirmButtonText: 'Yes!',
+          cancelButtonText: 'Cancel'
+        }).then(async result => {
+          if (result.isConfirmed) {
+            await this.POST_LOGOUT().then(data => {
+              this.goTo('/')
+              let Toast = this.$swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.onmouseenter = this.$swal.stopTimer;
+                  toast.onmouseleave = this.$swal.resumeTimer;
+                }
+              });
+              Toast.fire({
+                icon: "success",
+                title: 'Log out.'
+              });
+            })
+          }
         })
       },
       book(){

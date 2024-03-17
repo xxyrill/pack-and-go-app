@@ -56,7 +56,7 @@
                                               }}
                                             </span>
                 </span>
-                <span>Price: <span class="font-weight-bold">{{ booking ? booking.booking_request_price ? booking.booking_request_price.price ? '₱'+booking.booking_request_price.price : 'N/A' : 'N/A' : 'N/A'}}</span></span>
+                <span>Price: <span class="font-weight-bold">{{ bookingPrice }}</span></span>
               </v-layout>
             </v-flex>
           </v-layout>
@@ -87,6 +87,15 @@ export default {
     verifyOtp: null
   }),
   computed: {
+    bookingPrice(){
+      return this.booking ?
+             this.booking.booking_request_price ? 
+             this.booking.booking_request_price.price ? 
+             '₱'+Number.parseFloat(this.booking.booking_request_price.price).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : 
+             'N/A' : 
+             'N/A' : 
+             'N/A'
+    }
   },
   watch: {
   },

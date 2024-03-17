@@ -5,7 +5,8 @@ const initialState = () => {
     user: null,
     refresh: false,
     refresh_ratings: false,
-    refresh_vehicles: false
+    refresh_vehicles: false,
+    refresh_subscription: false,
   }
 }
 const state = () => {
@@ -18,6 +19,9 @@ const mutations = {
   },
   REFRESH_DATA (state, payload) {
     state.refresh = payload
+  },
+  REFRESH_SUBSCRIPTION (state, payload) {
+    state.refresh_subscription = payload
   },
   REFRESH_RATINGS_DATA (state, payload) {
     state.refresh_ratings = payload
@@ -51,6 +55,7 @@ const getters = {
   refresh_ratings: state => state.refresh_ratings,
   permaAddress: state => state.permaAddress,
   currAddress: state => state.currAddress,
+  refresh_subscription: state => state.refresh_subscription
 }
 
 const actions = {
@@ -95,6 +100,12 @@ const actions = {
   USER_BLOCKED_LIST ({ commit }, payload) {
     return postApi(`/user/list`, payload)
   },
+  USER_CURRENT_PLAN ({ commit }) {
+    return getApi(`/user/current-plan`)
+  },
+  USER_SUBSCRIBE_PLAN ({ commit }, payload) {
+    return postApi(`/user/subscribe-plan`, payload)
+  },
   
 
   //USER RATING COMMENT
@@ -137,6 +148,9 @@ const actions = {
   },
   USER_VEHICLE_DELETE ({ commit }, payload) {
     return deleteApi(`/user-vehicle/${payload.id}`, payload)
+  },
+  USER_VEHICLE_LISTING ({ commit }, payload) {
+    return postApi(`/user-vehicle/listing`, payload)
   },
 }
 

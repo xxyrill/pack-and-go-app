@@ -1,5 +1,5 @@
 <template>
   <v-layout>
-    <dashboard/>
+    <financial/>
   </v-layout>
 </template>

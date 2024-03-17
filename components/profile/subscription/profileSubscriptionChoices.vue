@@ -11,16 +11,20 @@
               <v-card-title class="d-flex justify-center">
                 <span class="title" style="color: white;">{{item.title}}</span>
               </v-card-title>
-              <v-card-sub-title class="d-flex justify-center py-0">
+              <v-card-subtitle class="d-flex justify-center py-0">
                 <span class="subtitle-2" style="color: white;">{{item.description}}</span>
-              </v-card-sub-title>
-              <v-divider/>
-              <v-card-subtitle>
-                <span class="caption" style="color: white;">Php 8,550 every 6 months. Cancel anytime.</span>
               </v-card-subtitle>
               <v-divider/>
-              <v-card-text>
+              <v-card-text style="min-height: 150px;">
+                <ul v-for="(it, ind) of item.subscription_inclusion" :key="ind">
+                  <li style="color: white;">
+                    <span class="caption" style="color: white;">{{ it.inclusion }}</span>
+                  </li> 
+                </ul>
               </v-card-text>
+              <v-card-actions class="d-flex justify-center pa-1">
+                <v-btn small color="info" class="rounded-xl" @click="updatePlan(item)"> Select Plan</v-btn>
+              </v-card-actions>
             </v-card>
           </v-flex>
         </v-layout>
@@ -44,23 +48,76 @@ export default {
     subscriptions_driver: []
   }),
   computed: {
+    ...mapGetters('login', ['log'])
   },
   watch: {
+    log: {
+        handler() {
+          if(this.log){
+            this.getSubscription()
+          }
+        }, deep: true
+      },
   },
   methods: {
-    ...mapActions('vehicle',['VEHICLE_LIST']),
-    ...mapActions('users', ['USER_VEHICLE_STORE']),
-    ...mapMutations('users', ['REFRESH_DATA_VEHICLES']),
+    ...mapMutations('users', ['REFRESH_SUBSCRIPTION']),
+    ...mapActions('users', ['USER_SUBSCRIBE_PLAN']),
     ...mapActions('subscription', ['GET_SUBSCRIPTIONS']),
     async getSubscription(){
-      let payload = {
-        status : 'active',
-        type : 'driver'
+      if(this.log){
+        let payload = {
+          status : 'active',
+          type : this.log ? this.log.type ? this.log.type : null : null
+        }
+        await this.GET_SUBSCRIPTIONS(payload).then(data => {
+          this.subscriptions_driver = data.data.data
+        })
       }
-      await this.GET_SUBSCRIPTIONS(payload).then(data => {
-        this.subscriptions_driver = data.data.data
-      })
     },
+    async updatePlan(item){
+      this.$swal.fire({
+        title: `Are You Sure About Modifying Your Plan?`,
+        text: "This action cannot be undone.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#009c25',
+        cancelButtonColor: '#b6b6b6',
+        confirmButtonText: 'Yes!',
+        cancelButtonText: 'Cancel'
+      }).then(async result => {
+        if (result.isConfirmed) {
+          let payload = {
+            subscription_id : item ? item.id ? item.id : null : null
+          }
+          await this.USER_SUBSCRIBE_PLAN(payload).then(data => {
+            this.REFRESH_SUBSCRIPTION(true)
+            let Toast = this.$swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = this.$swal.stopTimer;
+                toast.onmouseleave = this.$swal.resumeTimer;
+              }
+            });
+            Toast.fire({
+              icon: "success",
+              title: "Subscription Shift"
+            });
+          }).catch(response => {
+            this.$swal.fire({
+              title: 'Something went wrong. please contact administrator.',
+              icon: 'error',
+              confirmButtonColor: '#009c25',
+              confirmButtonText: 'OK'
+            })
+          })
+        }
+      })
+      
+    }
   },
 
   mounted () {

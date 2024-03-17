@@ -188,7 +188,7 @@
             <v-flex md10 lg10 sm12 xs12>
               <v-flex md6 lg6 sm12 xs12>
                 <v-dialog
-                  ref="dialog"
+                  ref="dia"
                   v-model="modal"
                   :return-value.sync="user_data.birth_date"
                   persistent
@@ -227,7 +227,7 @@
                     <v-btn
                       text
                       color="primary"
-                      @click="$refs.dialog.save(user_data.birth_date)"
+                      @click="$refs.dia.save(user_data.birth_date)"
                     >
                       OK
                     </v-btn>
@@ -315,7 +315,7 @@
                 <v-flex md8 lg8 sm6 xs6>
                   <v-flex md12>
                     <v-dialog
-                      ref="dialog"
+                      ref="di"
                       v-model="modal_license"
                       :return-value.sync="user_data.license_expiry_date"
                       persistent
@@ -354,7 +354,7 @@
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.dialog.save(user_data.license_expiry_date)"
+                          @click="$refs.di.save(user_data.license_expiry_date)"
                         >
                           OK
                         </v-btn>

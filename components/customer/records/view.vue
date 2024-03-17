@@ -205,7 +205,7 @@ export default {
       let reason = (this.reason == 'Other reason') ? this.other_reason : this.reason
       let payload = {
         booking_id : this.booking.id,
-        track_details : (status == 'completed') ? 'Delevered' : 'Cancelled (Driver). '+reason  
+        track_details : (status == 'completed') ? 'Delivered' : 'Cancelled (Driver). '+reason  
       }
       await this.BOOKING_HISTORY(payload)
     },

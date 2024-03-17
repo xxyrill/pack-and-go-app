@@ -1,5 +1,5 @@
 <template>
   <v-layout>
-    <dashboard/>
+    <vehicles/>
   </v-layout>
 </template>

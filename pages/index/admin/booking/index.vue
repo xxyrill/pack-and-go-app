@@ -1,5 +1,5 @@
 <template>
   <v-layout>
-    <dashboard/>
+    <booking-transaction/>
   </v-layout>
 </template>

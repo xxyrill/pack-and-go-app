@@ -114,6 +114,9 @@
             } else if(data.data.type == 'business') {
               this.goTo('/application/business')
               this.loginloading = false
+            } else if(data.data.type == 'admin') {
+              this.goTo('/admin')
+              this.loginloading = false
             }else{
               this.goTo('/')
             }
