@@ -62,6 +62,7 @@ import DialogEditVehicle from '~/components/profile/vehicles/dialogEditVehicle'
 //subscription
 import SubscriptionMain from '~/components/profile/subscription-main'
 import ProfileSubscription from '~/components/profile/subscription/profileSubscription'
+import ProfileSubscriptionApply from '~/components/profile/subscription/profileSubscriptionApplyPlan'
 import ProfileSubscriptionChoices from '~/components/profile/subscription/profileSubscriptionChoices'
 //ratings
 import RatingsMain from '~/components/profile/ratings-main'
@@ -76,13 +77,13 @@ import Dashboard from '~/components/admin/dashboard'
 import DashboardCards from '~/components/admin/dashboard/dashcards'
 
 import BookingTransaction from '~/components/admin/bookings'
-import BookingTransactionTable from '~/components/admin/bookings/bookings'
+import BookingTransactionTable from '~/components/admin/bookings/bookingsList'
 
 import Vehicles from '~/components/admin/vehicles'
-import VehiclesTable from '~/components/admin/vehicles/vehicles'
+import VehiclesTable from '~/components/admin/vehicles/vehiclesList'
 
 import Financial from '~/components/admin/financial'
-import FinancialBreakdown from '~/components/admin/financial/financial'
+import FinancialBreakdown from '~/components/admin/financial/financialBreakDown'
 import { Icon } from '@iconify/vue2';
 
 const components = {
@@ -143,6 +144,7 @@ const components = {
 
   SubscriptionMain,
   ProfileSubscription,
+  ProfileSubscriptionApply,
   ProfileSubscriptionChoices,
   
   RatingsMain,

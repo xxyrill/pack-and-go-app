@@ -383,9 +383,7 @@
           contact_number : this.form ? this.form.contact_number ? this.form.contact_number : null : null,
         }
         this.USERS_REGISTRATION(payload).then(data => {
-          console.log(data.data);
         }).catch(response => {
-          console.log(response.response)
         })
       }
     },

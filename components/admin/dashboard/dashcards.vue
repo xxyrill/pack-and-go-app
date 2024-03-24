@@ -7,12 +7,59 @@
     </v-card-title>
     <v-card-subtitle class="d-flex aling-center pa-0 px-2">
       <span class="pa-2">
-        <v-btn small color="info">
-          <v-icon dense>
-            mdi-filter
-          </v-icon>
-          Filter
-        </v-btn>
+        <v-dialog
+          v-model="modal"
+          persistent
+          width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              v-on="on"
+              small
+              color="primary"
+            >
+              <v-icon dense>
+                mdi-filter
+              </v-icon>
+                Filter by Date
+            </v-btn>
+          </template>
+          <v-date-picker
+            v-model="date"
+            scrollable
+            range
+          >
+            <v-flex class="d-flex justify-center">
+              <v-btn
+                text
+                color="warning"
+                @click="clear"
+              >
+                Clear
+              </v-btn>
+              <v-btn
+                text
+                color="error"
+                @click="modal = false"
+              >
+                Close
+              </v-btn>
+              <v-btn
+                text
+                color="primary"
+                @click="filter"
+              >
+                Submit
+              </v-btn>
+            </v-flex>
+          </v-date-picker>
+        </v-dialog>
+      </span>
+    </v-card-subtitle>
+    <v-card-subtitle class="d-flex aling-center pa-0 px-2">
+      <span class="pa-2 subtitle-2" v-if="date.length !== 0">
+        Filter : {{ date[0] }} -> {{ date[1] }}
       </span>
     </v-card-subtitle>
     <v-card-text>
@@ -55,14 +102,28 @@ import Imagepath from '~/plugins/mixins/imagepath'
     props: {
     },
     data: () => ({
-      items : []
+      items : [],
+      modal: false,
+      date: []
     }),
     watch: {
     },
     methods: {
       ...mapActions('analytics', ['DASH_CARDS']),
+      filter(){
+        this.getData()
+      },
+      clear(){
+        this.date = []
+        this.modal = false
+        this.getData()
+      },
       async getData(){
-        await this.DASH_CARDS().then((data) => {
+        let payload = {
+          filter_date : this.date ? this.date : null
+        }
+        await this.DASH_CARDS(payload).then((data) => {
+          this.items = []
           let array = []
           Object.keys(data.data).forEach((key, value) => {
             let title = null
@@ -86,16 +147,17 @@ import Imagepath from '~/plugins/mixins/imagepath'
               title = 'Total Revenue',
               color = 'purple'
             }
-
             let payload = {
               title : title,
-              value : value,
+              value : data.data[key],
               color : color
             }
-            console.log(value)
             array.push(payload)
           });
           this.items = array
+          if(this.date.length > 0){
+            this.modal = false
+          }
         })
       }
     },

@@ -105,7 +105,6 @@
         await this.GET_DETAILS_OF_CURRENT_LOGIN().then(data => {
           this.userDetails = data.data.data
         }).catch(response => {
-          console.log(response)
         })
       },
       async logout(){

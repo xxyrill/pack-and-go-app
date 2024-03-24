@@ -23,7 +23,7 @@
                 </ul>
               </v-card-text>
               <v-card-actions class="d-flex justify-center pa-1">
-                <v-btn small color="info" class="rounded-xl" @click="updatePlan(item)"> Select Plan</v-btn>
+                <profile-subscription-apply :subscription="item"/>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -60,66 +60,21 @@ export default {
       },
   },
   methods: {
-    ...mapMutations('users', ['REFRESH_SUBSCRIPTION']),
-    ...mapActions('users', ['USER_SUBSCRIBE_PLAN']),
     ...mapActions('subscription', ['GET_SUBSCRIPTIONS']),
     async getSubscription(){
       if(this.log){
-        let payload = {
-          status : 'active',
-          type : this.log ? this.log.type ? this.log.type : null : null
-        }
-        await this.GET_SUBSCRIPTIONS(payload).then(data => {
-          this.subscriptions_driver = data.data.data
-        })
+        setTimeout(() => {
+          let payload = {
+            status : 'active',
+            type : this.log ? this.log.type ? this.log.type : null : null
+          }
+          this.GET_SUBSCRIPTIONS(payload).then(data => {
+            this.subscriptions_driver = data.data.data
+          })
+        }, 1000);
       }
     },
-    async updatePlan(item){
-      this.$swal.fire({
-        title: `Are You Sure About Modifying Your Plan?`,
-        text: "This action cannot be undone.",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#009c25',
-        cancelButtonColor: '#b6b6b6',
-        confirmButtonText: 'Yes!',
-        cancelButtonText: 'Cancel'
-      }).then(async result => {
-        if (result.isConfirmed) {
-          let payload = {
-            subscription_id : item ? item.id ? item.id : null : null
-          }
-          await this.USER_SUBSCRIBE_PLAN(payload).then(data => {
-            this.REFRESH_SUBSCRIPTION(true)
-            let Toast = this.$swal.mixin({
-              toast: true,
-              position: "top-end",
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.onmouseenter = this.$swal.stopTimer;
-                toast.onmouseleave = this.$swal.resumeTimer;
-              }
-            });
-            Toast.fire({
-              icon: "success",
-              title: "Subscription Shift"
-            });
-          }).catch(response => {
-            this.$swal.fire({
-              title: 'Something went wrong. please contact administrator.',
-              icon: 'error',
-              confirmButtonColor: '#009c25',
-              confirmButtonText: 'OK'
-            })
-          })
-        }
-      })
-      
-    }
   },
-
   mounted () {
     this.getSubscription()
   }

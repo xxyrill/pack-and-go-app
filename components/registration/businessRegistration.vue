@@ -521,9 +521,7 @@
           
         }
         this.USERS_REGISTRATION(payload).then(data => {
-          console.log(data.data);
         }).catch(response => {
-          console.log(response.response)
         })
       }
     },

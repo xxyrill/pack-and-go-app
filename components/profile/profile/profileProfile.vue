@@ -731,7 +731,6 @@ import Imagepath from '~/plugins/mixins/imagepath'
       },
       save(){
         let payload = {}
-        console.log(this.type)
         if(this.type == 'customer'){
           payload = {
             id : this.user_data ? this.user_data.id ? this.user_data.id : null : null,
@@ -770,7 +769,6 @@ import Imagepath from '~/plugins/mixins/imagepath'
           }
         }
         let validation = this.fieldsValidation(payload)
-        console.log(validation)
         if(validation.error == true){
           this.errors = validation.errors
         }else{

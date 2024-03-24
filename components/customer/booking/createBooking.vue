@@ -764,7 +764,6 @@ import moment from 'moment';
             vehicle_type_id : this.form ? this.form.vehicle_type_id ? this.form.vehicle_type_id.id : null : null 
           }
           let validation = this.fieldsValidation(payload)
-          console.log(validation)
           if(validation.error == true){
             this.errors = validation.errors
           }else{
@@ -868,7 +867,6 @@ import moment from 'moment';
           this.form.alt_contact_number_one = this.userDetails ? this.userDetails.contact_number ? this.userDetails.contact_number : null : null
           this.form.alt_email = this.userDetails ? this.userDetails.email ? this.userDetails.email : null : null
         }).catch(response => {
-          console.log(response)
         })
       },
       async submitFinal(){

@@ -64,6 +64,9 @@ const actions = {
   },
   BOOKING_PRICE({ commit }, payload) {
     return postApi(`/booking/price`, payload)
+  },
+  BOOKING_NOTIFICATION({ commit }, payload) {
+    return postApi(`/booking/notification`, payload)
   }
 }
 

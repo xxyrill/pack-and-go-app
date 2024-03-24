@@ -511,7 +511,6 @@
             }else{
               this.$delete(this.errors, 'password')
               this.$delete(this.errors, 'confirm_password')
-              console.log(this.form.vehicle_list_id)
               if(this.form.vehicle_list_id === 2 || this.form.vehicle_list_id === 3 ){
                 this.step += 1
               }else{
@@ -589,9 +588,7 @@
           helper : this.form ? this.form.helper ? this.form.helper : false : false,
         }
         this.USERS_REGISTRATION(payload).then(data => {
-          console.log(data.data);
         }).catch(response => {
-          console.log(response.response)
         })
       },
       async getVehicleList(){

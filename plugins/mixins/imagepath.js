@@ -6,6 +6,8 @@ export default {
       product_logo: require('@/assets/images/product_logo.png'),
       maya_logo: require('@/assets/images/maya.png'),
       no_file: require('@/assets/images/no-image.png'),
+      master_card: require('@/assets/images/master_card.png'),
+      visa: require('@/assets/images/visa.png'),
     }
   })
 }

@@ -427,7 +427,7 @@ export default {
       })
     },
     viewProfile(){
-      this.goTo('/application/global-profile')
+      this.goTo('/application/global-profile/'+this.reciever)
     }
   },
   mounted () {

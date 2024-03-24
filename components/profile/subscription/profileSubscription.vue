@@ -13,7 +13,7 @@
     <v-divider/>
     <v-card-text>
       <v-layout column wrap>
-        <v-flex class="pa-1">
+        <v-flex class="pa-1" v-if="user_subscription">
           <span class="headline font-weight-bold">Your Plan</span>
         </v-flex>
         <v-flex class="pa-1">
@@ -45,7 +45,7 @@
                     </v-flex>
                     <v-flex class="d-flex align-center" pa-2>
                       <span style="color: white;" class="pr-2">Payment method</span>
-                      <v-img max-width="100" max-height="100" :src="imgs.maya_logo"/>
+                      <v-img max-width="70" max-height="70" :src="imgs.visa"/>
                     </v-flex>
                   </v-layout>
                 </v-flex>

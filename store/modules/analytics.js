@@ -24,6 +24,9 @@ const getters = {
 const actions = {
   DASH_CARDS ({ commit }, payload) {
     return postApi('/dashboard/dash-cards', payload)
+  },
+  DASH_REVENUE ({ commit }, payload) {
+    return postApi('/dashboard/revenue', payload)
   }
 }
 

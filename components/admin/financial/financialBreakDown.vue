@@ -6,18 +6,26 @@
       </span>
     </v-card-title>
     <v-card-subtitle class="d-flex aling-center pa-0 px-2">
-      <span class="pa-2">
-        <v-btn small color="info">
-          <v-icon dense>
-            mdi-filter
-          </v-icon>
-          Filter
-        </v-btn>
-      </span>
+      <v-flex md2 lg2 sm12 xs12 pa-1>
+        <v-autocomplete
+          outlined
+          dense
+          v-model="year"
+          :items="years"
+          class="rounded-xl"
+          persistent-placeholder
+          label="Filter by Year: "
+          hide-selected
+          color="success"
+          @change="getData"
+          clearable
+        >
+        </v-autocomplete>
+      </v-flex>
     </v-card-subtitle>
     <v-card-text>
       <v-flex class="pa-3">
-        TOTAL REVENUE : 
+        TOTAL REVENUE : {{ overall_revenue | decimalcomma }}
       </v-flex>
       <v-flex>
         <apexchart height="300" :options="chartOptions" :series="series"></apexchart>
@@ -40,15 +48,13 @@ import Imagepath from '~/plugins/mixins/imagepath'
       items : [],
       page : 1,
       count: 0,
-      form: {skip: 0, take: 7 },
-      headers: [
-          { text: 'Vehicle Type',align: 'start',sortable: false , value: 'type' },
-          { text: 'Date Added',align: 'center',sortable: false,value: 'created_at',},
-          { text: 'Make',align: 'center',sortable: false , value: 'make' },
-          { text: 'Year Model',align: 'center',sortable: false , value: 'year_model' },
-          { text: 'Plate Number',align: 'center',sortable: false , value: 'plate_number' },
-          { text: 'Status',align: 'center',sortable: false , value: 'status' }
-        ],
+      modal: false,
+      form: {},
+      date: [],
+      revenue: [],
+      year: new Date().getFullYear(),
+      overall_revenue: 0,
+      years: []
     }),
     computed: {
       pageCount () {
@@ -61,7 +67,7 @@ import Imagepath from '~/plugins/mixins/imagepath'
       series () {
         return [{
           name: 'Inflation',
-          data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2]
+          data: this.revenue
         }]
       },
       chartOptions () {
@@ -70,7 +76,7 @@ import Imagepath from '~/plugins/mixins/imagepath'
             type: 'bar',
             toolbar: {
               tools: {
-                download : false
+                download : true
               }
             },
           },
@@ -89,6 +95,11 @@ import Imagepath from '~/plugins/mixins/imagepath'
             width: 2,
             colors: ['transparent'],
           },
+          yaxis: {
+            title: {
+              text: '(Peso)'
+            }
+          },
           xaxis: {
             categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           },
@@ -101,12 +112,34 @@ import Imagepath from '~/plugins/mixins/imagepath'
     watch: {
     },
     methods: {
-      ...mapActions('users', ['USER_VEHICLE_LISTING']),
+      ...mapActions('analytics', ['DASH_REVENUE']),
+      generateYears() {
+      const currentYear = new Date().getFullYear();
+        for (let year = currentYear; year >= 2000; year--) {
+          this.years.push(year);
+        }
+      },
       async getData(){
-        await this.USER_VEHICLE_LISTING(this.form).then((data) => {
-          console.log(data.data)
-          this.items = data.data.data
-          this.count = data.data.details.total
+        let payload = {
+          year : this.year ? this.year : null
+        }
+        await this.DASH_REVENUE(payload).then((data) => {
+          let result = [
+            parseFloat(data.data.data[1]),
+            parseFloat(data.data.data[2]),
+            parseFloat(data.data.data[3]),
+            parseFloat(data.data.data[4]),
+            parseFloat(data.data.data[5]),
+            parseFloat(data.data.data[6]),
+            parseFloat(data.data.data[7]),
+            parseFloat(data.data.data[8]),
+            parseFloat(data.data.data[9]),
+            parseFloat(data.data.data[10]),
+            parseFloat(data.data.data[11]),
+            parseFloat(data.data.data[12])
+          ]
+          this.revenue = result
+          this.overall_revenue = result.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
         })
       },
       updatePage (pageIndex) {
@@ -116,6 +149,7 @@ import Imagepath from '~/plugins/mixins/imagepath'
       },
     },
     mounted () {
+      this.generateYears()
       this.getData()
     }
     

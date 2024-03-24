@@ -35,7 +35,9 @@ module.exports = {
     '~/plugins/http.js',
     '~/plugins/vue-smooth-picker.js',
     '~/plugins/vue-croppa.js',
+    '~/plugins/vue-the-mask.js',
     '~/plugins/vue-wysiwyg.js',
+    { src: '~/plugins/vue-apexcharts', ssr: false },
     {src: '~/plugins/vue-sample-uploader.js', ssr: false},
     {src: '~/plugins/pusher-js.js', ssr: false},
     {src: '~/plugins/vue2-google-maps.js', ssr: false},
@@ -48,8 +50,14 @@ module.exports = {
     '~/assets/style/app.styl',
   ],
   env: {
+    //local
     API_URL: 'http://192.168.1.13:50506',
     BASE_URL: 'http://192.168.1.13',
+    SITE_URL: 'http://192.168.1.13:8888/'
+
+    //production
+    // API_URL: 'http://167.172.95.30',
+    // BASE_URL: 'http://167.172.95.30',
   },
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [

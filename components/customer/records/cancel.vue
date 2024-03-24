@@ -161,8 +161,15 @@ export default {
     },
     functionCancel(){
       this.$swal.fire({
-        title: `Would you like to tag the move order as cancelled?`,
-        text: "This action cannot be undone.",
+        title: "Are you sure you want to cancel the moving service?",
+        text: `Please note that this cannot
+              be undone once it is cancelled. 
+              Three consecutive cancelled 
+              move services with in 24 hours 
+              of the scheduled day may require 
+              you to pay 50% deposit fee of the
+              agreed price on your next move service 
+              booking.`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#009c25',

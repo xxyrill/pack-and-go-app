@@ -7,12 +7,77 @@
     </v-card-title>
     <v-card-subtitle class="d-flex aling-center pa-0 px-2">
       <span class="pa-2">
-        <v-btn small color="info">
-          <v-icon dense>
-            mdi-filter
-          </v-icon>
-          Filter
-        </v-btn>
+        <v-dialog
+          v-model="modal"
+          persistent
+          width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              v-on="on"
+              small
+              color="primary"
+            >
+              <v-icon dense>
+                mdi-filter
+              </v-icon>
+                Filter by Date
+            </v-btn>
+          </template>
+          <v-date-picker
+            v-model="date"
+            scrollable
+            range
+          >
+            <v-flex class="d-flex justify-center">
+              <v-btn
+                text
+                color="warning"
+                @click="clear"
+              >
+                Clear
+              </v-btn>
+              <v-btn
+                text
+                color="error"
+                @click="modal = false"
+              >
+                Close
+              </v-btn>
+              <v-btn
+                text
+                color="primary"
+                @click="filter"
+              >
+                Submit
+              </v-btn>
+            </v-flex>
+          </v-date-picker>
+        </v-dialog>
+      </span>
+      <v-flex md2 lg2 sm12 xs12 pa-1>
+        <v-autocomplete
+          outlined
+          dense
+          v-model="status"
+          :items="statuses"
+          item-value="value"
+          item-text="name"
+          class="rounded-xl"
+          persistent-placeholder
+          label="Status"
+          hide-selected
+          color="success"
+          @change="filter"
+          clearable
+        >
+        </v-autocomplete>
+      </v-flex>
+    </v-card-subtitle>
+    <v-card-subtitle class="d-flex aling-center pa-0 px-2">
+      <span class="pa-2 subtitle-2" v-if="date.length !== 0 || status !== null">
+        Filter : <span v-if="date.length !== 0">{{ date[0] }} -> {{ date[1] }}</span><span v-if="date.length !== 0 && status !== null">,</span> <span v-if="status">{{ status | capitalfirst}}</span>
       </span>
     </v-card-subtitle>
     <v-card-text>
@@ -105,8 +170,11 @@ import Imagepath from '~/plugins/mixins/imagepath'
     data: () => ({
       items : [],
       page : 1,
+      date : [],
       count: 0,
+      status: null,
       form: {skip: 0, take: 4 },
+      modal: false,
       headers: [
           { text: 'Order ID',align: 'start',sortable: false,value: 'order_number',},
           { text: 'Order Date',align: 'center',sortable: false , value: 'created_at' },
@@ -117,6 +185,13 @@ import Imagepath from '~/plugins/mixins/imagepath'
           { text: 'Price',align: 'center',sortable: false , value: 'price' },
           { text: 'Status',align: 'center',sortable: false , value: 'status' },
         ],
+      statuses: [
+        { name : 'Pending', value : 'pending'},
+        { name : 'Confirmed', value : 'confirmed'},
+        { name : 'Reschedule', value : 'reschedule'},
+        { name : 'Completed', value : 'completed'},
+        { name : 'Cancelled', value : 'cancelled'}
+      ]
     }),
     computed: {
       pageCount () {
@@ -131,6 +206,12 @@ import Imagepath from '~/plugins/mixins/imagepath'
     },
     methods: {
       ...mapActions('booking', ['BOOKING_LIST']),
+      filter(){
+        this.$set(this.form, 'status', this.status ? this.status : null)
+        this.$set(this.form, 'date_range', this.date ? this.date : null)
+        this.getData()
+        this.modal = false
+      },
       async getData(){
         await this.BOOKING_LIST(this.form).then((data) => {
           this.items = data.data.data
@@ -140,6 +221,12 @@ import Imagepath from '~/plugins/mixins/imagepath'
       updatePage (pageIndex) {
         this.page = pageIndex
         this.form.skip = pageIndex === 1 ? 0 : (pageIndex - 1) * 4
+        this.getData()
+      },
+      clear(){
+        this.date = []
+        this.modal = false
+        this.filter()
         this.getData()
       },
     },
