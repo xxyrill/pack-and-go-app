@@ -35,6 +35,7 @@
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   import axios from 'axios'
   import Global from '~/plugins/mixins/global'
+  import moment from 'moment'
 
   export default {
     props: {
@@ -94,18 +95,44 @@
       'log': {
         handler() {
           this.data = this.log
+          this.getSuspension()
         }, deep: true
       }
     },
 
     methods: {
-      ...mapActions('users', ['GET_DETAILS_OF_CURRENT_LOGIN']),
+      ...mapActions('users', ['GET_DETAILS_OF_CURRENT_LOGIN', 'USER_SUSPENSION']),
       ...mapActions('login', ['POST_LOGOUT']),
       async getDetails(){
         await this.GET_DETAILS_OF_CURRENT_LOGIN().then(data => {
           this.userDetails = data.data.data
         }).catch(response => {
         })
+      },
+      async getSuspension(){
+        if(this.log.type == 'driver' || this.log.type == 'business'){
+          await this.USER_SUSPENSION().then(data => {
+            if(data.data.suspended == true){
+              this.$swal.fire({
+                title: 'Account suspended.',
+                html: `<p style='text-align: justify; text-justify: inter-word;'>Your rating is below 3.0 and your account will not be able to receive bookings for 7 days
+                      from today. Your account will resume to get new bookings after 7 days and please ensure
+                      that you need to get a rating of above 3.0 to remove the penalty. Booking will resume on <b>${moment(data.data.expiry).format('MMMM D, YYYY')}</b>.</p>`,
+                icon: 'warning',
+                confirmButtonColor: '#009c25',
+                confirmButtonText: 'OK'
+              })
+            }
+          }).catch(response => {
+            this.$swal.fire({
+              title: 'Something went wrong.',
+              text: 'Please contact administrator.',
+              icon: 'error',
+              confirmButtonColor: '#009c25',
+              confirmButtonText: 'OK'
+            })
+          }) 
+        }
       },
       async logout(){
         this.$swal.fire({
@@ -155,6 +182,7 @@
 
     mounted () {
       this.getDetails()
+      this.getSuspension()
     }
   }
 </script>

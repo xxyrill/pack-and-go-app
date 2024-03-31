@@ -106,6 +106,9 @@ const actions = {
   USER_SUBSCRIBE_PLAN ({ commit }, payload) {
     return postApi(`/user/subscribe-plan`, payload)
   },
+  USER_SUSPENSION ({ commit }, payload) {
+    return postApi(`/user/suspension`, payload)
+  },
   USER_DETAILS ({ commit }, payload) {
     return getApi(`/user/show/${payload.id}`, payload)
   },

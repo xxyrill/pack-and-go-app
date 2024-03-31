@@ -13,7 +13,7 @@
       </v-flex>
       <v-flex class="py-3" v-if="averageRating <= 3 && rating.rating_numbers >= 40">
         <v-card flat class="rounded-xl pa-2" color="warning">
-          <span class="font-weight-bold">Attention:</span><span>You are on a least of priority to be booked by customer due to very low rating.</span>
+          <span class="font-weight-bold">Attention:</span><span>Your account is penalized for 7 days from today due to a very low rating.</span>
           <v-tooltip bottom max-width="300">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -26,7 +26,10 @@
                 <span class="font-weight-bold text-decoration-underline">WHAT'S THIS?</span>
               </v-btn>
             </template>
-            <span>Your ratings is below 3.0 and you are on a least of priority to be booked by customer due to very low rating. To regain your regular booking priority, focus on improving your rating to above 3.0. Providing excellent service is key!</span>
+            <span>Your rating is below 3.0 and your account will not be able to receive bookings for 7 days
+              from today. Your account will resume to get new bookings after 7 days and please ensure
+              that you need to get a rating of above 3.0 to remove the penalty.
+            </span>
           </v-tooltip>
         </v-card>
       </v-flex>
@@ -145,7 +148,7 @@ import axios from 'axios'
         if(this.rating.total_stars && this.rating.rating_numbers){
           let total = 0
           total = parseInt(this.rating.total_stars) / this.rating.rating_numbers
-          return total
+          return total.toFixed(1)
         }else{
           return 0
         }

@@ -214,7 +214,7 @@ export default {
     async getList(){
       this.loading = true
       let payload = {
-        order_by : "id",
+        order_by : "updated_at",
         sort_by : "desc",
         ...this.form,
         ...this.filters

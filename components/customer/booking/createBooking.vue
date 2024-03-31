@@ -170,14 +170,6 @@
                         flat
                       >
                         <v-btn
-                          outlined
-                          class="mr-4"
-                          color="grey darken-2"
-                          @click="setToday"
-                        >
-                          Today
-                        </v-btn>
-                        <v-btn
                           fab
                           text
                           small
@@ -235,7 +227,7 @@
                               outlined
                               dense
                               v-model="startTime"
-                              label="Picker in dialog"
+                              label="Select time"
                               prepend-inner-icon="mdi-clock-time-four-outline"
                               readonly
                               v-bind="attrs"
@@ -279,7 +271,7 @@
                               outlined
                               dense
                               v-model="endTime"
-                              label="Picker in dialog"
+                              label="Select time"
                               prepend-inner-icon="mdi-clock-time-four-outline"
                               readonly
                               v-bind="attrs"
@@ -747,16 +739,35 @@ import moment from 'moment';
             if(validation.error == true){
               this.errors = validation.errors
             }else{
-              let start_date = `${this.date_selected} ${payload.startTime}:00`
-              let end_date = `${this.date_selected} ${payload.endTime}:00`
-              let dates = {
-                booking_date_time_start : start_date ? moment(start_date).format('YYYY-MM-DD HH:mm:ss') : null,
-                booking_date_time_end : end_date ? moment(end_date).format('YYYY-MM-DD HH:mm:ss') : null 
+              this.errors = {}
+              if(moment(this.date_selected).format('YYYY-MM-DD') <= moment().format('YYYY-MM-DD')){
+                this.$swal.fire({
+                  title: `Please check the date.`,
+                  text: `Begin scheduling from tomorrow and onwards.`,
+                  icon: 'warning',
+                  confirmButtonColor: '#009c25',
+                  confirmButtonText: 'OK'
+                })
+              }else if(moment(this.startTime, 'HH:mm').format('HH:mm') >= moment(this.endTime, 'HH:mm').format('HH:mm')){
+                this.$swal.fire({
+                  title: `Please check the time.`,
+                  text: `Please ensure that the start time is after the end time.`,
+                  icon: 'warning',
+                  confirmButtonColor: '#009c25',
+                  confirmButtonText: 'OK'
+                })
+              }else{
+                let start_date = `${this.date_selected} ${payload.startTime}:00`
+                let end_date = `${this.date_selected} ${payload.endTime}:00`
+                let dates = {
+                  booking_date_time_start : start_date ? moment(start_date).format('YYYY-MM-DD HH:mm:ss') : null,
+                  booking_date_time_end : end_date ? moment(end_date).format('YYYY-MM-DD HH:mm:ss') : null 
+                }
+                this.form = {
+                  ...this.form ,...dates
+                }
+                this.step += 1
               }
-              this.form = {
-                ...this.form ,...dates
-              }
-              this.step += 1
             }
           }
         }else if(step == 4){
