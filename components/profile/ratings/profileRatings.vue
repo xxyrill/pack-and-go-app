@@ -11,7 +11,7 @@
           View customer ratings of your service
         </span>
       </v-flex>
-      <v-flex class="py-3" v-if="averageRating <= 3 && rating.rating_numbers >= 40">
+      <v-flex class="py-3" v-if="averageRating <= 3 && rating.rating_numbers >= 5">
         <v-card flat class="rounded-xl pa-2" color="warning">
           <span class="font-weight-bold">Attention:</span><span>Your account is penalized for 7 days from today due to a very low rating.</span>
           <v-tooltip bottom max-width="300">
