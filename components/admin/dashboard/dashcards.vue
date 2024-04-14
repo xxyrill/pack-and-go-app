@@ -77,7 +77,8 @@
                       <span :class="`${item.color}--text`" style="font-size: 17px;">{{ item.title }}</span>
                     </v-flex>
                     <v-flex xs12>
-                      <span class="grey--text" style="font-size: 25px;">{{ item.value }}</span>
+                      <span class="grey--text" style="font-size: 25px;" v-if="item.title == 'Total Revenue'">{{ (item.value !== 0) ? item.value : '0' | decimalcomma}}</span>
+                      <span class="grey--text" style="font-size: 25px;" v-else>{{ item.value }}</span>
                     </v-flex>
                   </v-layout>
                 </v-flex>
