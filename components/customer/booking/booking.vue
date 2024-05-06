@@ -1,9 +1,9 @@
 <template>
-  <v-container fluid background-color="primary">
-    <v-flex>
+  <v-layout fill-height class="landing-order-img">
+    <v-flex pa-3>
       <customer-booking-create/>
     </v-flex>
-  </v-container>
+  </v-layout>
 </template>
 <script>
 import Vue from 'vue'

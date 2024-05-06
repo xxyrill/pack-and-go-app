@@ -11,7 +11,7 @@
     </v-btn>
     <v-dialog
       v-model="dialogView"
-      width="600"
+      width="1000"
     >
       <v-card>
         <v-card-title :class="(booking.status == 'pending') ? 'orange lighten-1' 
@@ -54,41 +54,88 @@
         </v-card-title>
         <v-divider/>
         <v-card-text>
-          <v-layout pa-3 column>
-            <v-flex class="pa-1 rounded-xl text-center" style="background-color: #E0E0E0;">
-              <span class="font-weight-black subtitle-1 "> Booking Details</span>
-            </v-flex>
-            <v-flex class="pa-1">
-              <v-layout column>
-                <span class="pa-1">Vehicle Type: <span class="font-weight-bold">{{ booking ? booking.vehicle_type ? booking.vehicle_type.type ? booking.vehicle_type.type : ''  : '' : '' }}</span></span>
-                <span class="pa-1">Date & Time: <span class="font-weight-bold">{{ booking.booking_date_time_start | monthyear }} {{ booking.booking_date_time_start | time}} - {{ booking.booking_date_time_end | time}}</span></span>
-                <span class="pa-1">Pick-up: <span class="font-weight-bold">{{ booking ? booking.pick_up_location ? booking.pick_up_location : '' : ''}}</span></span>
-                <span class="pa-1">House Information: <span class="font-weight-bold">{{ booking ? booking.pickup_house_information ? booking.pickup_house_information : '' : ''}}</span></span>
-                <span class="pa-1">Helper: <span class="font-weight-bold">{{ booking ? (booking.need_helper == true) ? 'YES' : 'NO' : ''}}</span></span>
-                <span class="pa-1" v-if="booking.need_helper == true">Helper use elivator: <span class="font-weight-bold">{{ booking ? (booking.pickup_helper_elivator == true) ? 'YES' : 'NO' : ''}}</span></span>
-                <span class="pa-1" v-if="booking.need_helper == true">Helper use stairs: <span class="font-weight-bold">{{ booking ? (booking.pickup_helper_stairs == true) ? 'YES' : 'NO' : ''}}</span></span>
-                <span class="pa-1">Drop-off: <span class="font-weight-bold">{{ booking ? booking.drop_off_location ? booking.drop_off_location : '' : ''}}</span></span>
+          <v-layout row wrap class="pt-2">
+            <v-flex lg6 md6 sm12 xs12 class="px-1">
+              <v-layout pa-3 column>
+                <v-flex class="pa-1 rounded-xl text-center" style="background-color: #E0E0E0;">
+                  <span class="font-weight-black subtitle-1 "> Booking Details</span>
+                </v-flex>
+                <v-flex class="pa-1">
+                  <v-layout column>
+                    <span class="pa-1">Vehicle Type: <span class="font-weight-bold">{{ booking ? booking.vehicle_type ? booking.vehicle_type.type ? booking.vehicle_type.type : ''  : '' : '' }}</span></span>
+                    <span class="pa-1">Date & Time: <span class="font-weight-bold">{{ booking.booking_date_time_start | monthyear }} {{ booking.booking_date_time_start | time}} - {{ booking.booking_date_time_end | time}}</span></span>
+                    <span class="pa-1">Pick-up: <span class="font-weight-bold">{{ booking ? booking.pick_up_location ? booking.pick_up_location : '' : ''}}</span></span>
+                    <span class="pa-1">House Information: <span class="font-weight-bold">{{ booking ? booking.pickup_house_information ? booking.pickup_house_information : '' : ''}}</span></span>
+                    <span class="pa-1">Helper: <span class="font-weight-bold">{{ booking ? (booking.need_helper == true) ? 'YES' : 'NO' : ''}}</span></span>
+                    <span class="pa-1" v-if="booking.need_helper == true">Helper use elivator: <span class="font-weight-bold">{{ booking ? (booking.pickup_helper_elivator == true) ? 'YES' : 'NO' : ''}}</span></span>
+                    <span class="pa-1" v-if="booking.need_helper == true">Helper use stairs: <span class="font-weight-bold">{{ booking ? (booking.pickup_helper_stairs == true) ? 'YES' : 'NO' : ''}}</span></span>
+                    <span class="pa-1">Drop-off: <span class="font-weight-bold">{{ booking ? booking.drop_off_location ? booking.drop_off_location : '' : ''}}</span></span>
+                  </v-layout>
+                  <v-card outlined class="pa-1">
+                    Note: {{ booking ? booking.pickup_adition_remarks ? booking.pickup_adition_remarks : '' : '' }}
+                  </v-card>
+                </v-flex>
+                <v-flex class="pa-1 rounded-xl text-center" style="background-color: #E0E0E0;">
+                  <span class="font-weight-black subtitle-1 "> Price</span>
+                </v-flex>
+                <v-flex class="pa-1">
+                  <v-layout column>
+                    <span class="pa-1">Quoted Price: <span class="font-weight-bold" v-if="booking.price">₱{{ booking ? booking.price ? booking.price : '' : '' }}</span></span>
+                  </v-layout>
+                </v-flex>
+                <v-flex class="pa-1 rounded-xl text-center" style="background-color: #E0E0E0;">
+                  <span class="font-weight-black subtitle-1 "> Booking History</span>
+                </v-flex>
+                <v-flex class="mt-2">
+                  <v-flex v-for="(item, index) of booking.booking_history" :key="index" class="pa-1">
+                    <span class="px-2">{{ item.created_at | monthdayyearwithtime }}</span> -
+                    <span class="px-2">{{ item.track_details }}</span>
+                  </v-flex>
+                </v-flex>
               </v-layout>
-              <v-card outlined class="pa-1">
-                Note: {{ booking ? booking.pickup_adition_remarks ? booking.pickup_adition_remarks : '' : '' }}
-              </v-card>
             </v-flex>
-            <v-flex class="pa-1 rounded-xl text-center" style="background-color: #E0E0E0;">
-              <span class="font-weight-black subtitle-1 "> Price</span>
-            </v-flex>
-            <v-flex class="pa-1">
-              <v-layout column>
-                <span class="pa-1">Quoted Price: <span class="font-weight-bold" v-if="booking.price">₱{{ booking ? booking.price ? booking.price : '' : '' }}</span></span>
+            <v-flex lg6 md6 sm12 xs12 class="px-1">
+              <v-layout pa-3 column>
+                <v-flex class="pa-1 rounded-xl text-center" style="background-color: #E0E0E0;">
+                  <span class="font-weight-black subtitle-1 "> Booking Items</span>
+                </v-flex>
+                <v-flex class="pa-1">
+                  <v-simple-table
+                    fixed-header
+                    height="380"
+                    dense>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left">
+                            Item
+                          </th>
+                          <th class="text-center">
+                            Quantity
+                          </th>
+                          <th class="text-center">
+                            Height
+                          </th>
+                          <th class="text-center">
+                            Weight
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(item, index) in booking.booking_items"
+                          :key="index"
+                        >
+                          <td>{{ item.item }}</td>
+                          <td class="text-center">{{ item.quantity }}</td>
+                          <td class="text-center">{{ item.height }}</td>
+                          <td class="text-center">{{ item.weight }}</td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-flex>
               </v-layout>
-            </v-flex>
-            <v-flex class="pa-1 rounded-xl text-center" style="background-color: #E0E0E0;">
-              <span class="font-weight-black subtitle-1 "> Booking History</span>
-            </v-flex>
-            <v-flex class="mt-2">
-              <v-flex v-for="(item, index) of booking.booking_history" :key="index" class="pa-1">
-                <span class="px-2">{{ item.created_at | monthdayyearwithtime }}</span> -
-                <span class="px-2">{{ item.track_details }}</span>
-              </v-flex>
             </v-flex>
           </v-layout>
         </v-card-text>

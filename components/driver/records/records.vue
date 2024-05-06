@@ -1,14 +1,16 @@
 <template>
-  <v-layout column wrap pa-4>
-    <v-flex>
-      <driver-records-filter/>
-    </v-flex>
-    <v-flex>
-      <driver-records-table/>
-    </v-flex>
-    <v-flex>
-      <chat-box/>
-    </v-flex>
+  <v-layout fill-height class="landing-order-img">
+    <v-layout column wrap pa-4>
+      <v-flex>
+        <driver-records-filter/>
+      </v-flex>
+      <v-flex>
+        <driver-records-table/>
+      </v-flex>
+      <v-flex>
+        <chat-box/>
+      </v-flex>
+    </v-layout>
   </v-layout>
 </template>
 <script>

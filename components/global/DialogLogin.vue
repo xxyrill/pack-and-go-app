@@ -1,14 +1,15 @@
 <template>
-  <v-flex class="d-flex justify-end pa-0">
-    <v-btn rounded text @click="loginDialog" color="white">LOGIN</v-btn>
+  <div class="px-2">
+    <v-btn rounded dark @click="loginDialog">LOGIN</v-btn>
     <!-- <a style="color: white; text-decoration: none" class="mr-4 pa-2 subtitle-1" @click="loginDialog">LOGIN</a> -->
     <v-dialog
       v-model="dialog"
       :width="login ? 400 : 450"
       overlay-color="black"
       class="rounded-xxl"
+      dark
     >
-      <v-card class="rounded-xxl" >
+      <v-card class="rounded-xxl" style="opacity: 90%;">
         <v-card-title class="d-flex justify-center">
           <v-flex class="pa-2" v-if="login">
             <p class="headline text-center">LOGIN</p>
@@ -24,7 +25,6 @@
             <v-text-field
               outlined
               dense
-              color="black"
               class="rounded-xl"
               v-model="form.email"
               label="Email Address"
@@ -38,7 +38,6 @@
             <v-text-field
               outlined
               dense
-              color="black"
               class="rounded-xl"
               v-model="form.password"
               placeholder="Password"
@@ -51,7 +50,7 @@
               :error-messages="this.errors ? this.errors.password ? this.errors.password[0] : '' : ''"
               v-on:keyup.enter="loginFunction"
             />
-            <p class="caption text-center"><a style="color: blue;" @click="forgotPassword">Forgot password?</a></p>
+            <p class="caption text-center"><a style="color: #8ec3eb;" @click="forgotPassword">Forgot password?</a></p>
             <v-btn block depressed @click="loginFunction" :loading="loginloading" class="white--text" color="#249d5d">
               LOGIN
             </v-btn>
@@ -82,7 +81,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-  </v-flex>
+  </div>
 </template>
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'

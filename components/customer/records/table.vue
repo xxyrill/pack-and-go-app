@@ -1,5 +1,5 @@
 <template>
-  <v-card flat color="#f0f0f0">
+  <v-card flat dark style="opacity: 90%;" class="rounded-xl">
     <v-card-text>
       <v-layout column style="min-height: 400px">
         <v-flex lg12 md12 sm12 xs12>
@@ -12,96 +12,95 @@
             :loading="loading"
             loading-text="Loading... Please wait"
           >
-          <template v-slot:item="{ item }">
-            <tr>
-              <td class="text-center pa-2">
-                  <v-card outlined :color="
-                    (item.status == 'pending') ? '#FFA726' 
-                    :(item.status == 'confirmed') ? '#FFEE58'
-                    :(item.status == 'cancelled') ? '#D32F2F'
-                    :(item.status == 'completed') ? '#43A047'
-                    :(item.status == 'reschedule') ? '#7E57C2' : 'gray'" class="px-4"><span style="color=white" class="font-weight-bold">{{ item.status | capitalfirst }}</span></v-card>
-                  <span class="caption text-decoration-underline">#{{ item.order_number }}</span>
-              </td>
-              <td class="text-center">
-                <div class="text-center">{{ item.booking_date_time_start | time}} - {{ item.booking_date_time_end | time}}</div>
-                <div class="text-center" v-for="(data, index) in item.dates" :key="index"><span class="caption font-weight-bold">{{ data.date ? data.date  : '' | monthyear }}</span></div>
-              </td>
-              <td class="text-center pa-2">
-                <div>
-                  <span class="font-weight-bold ">{{ item.pick_up_location | dotdot}}</span>
-                  <v-menu
-                    bottom
-                    offset-y
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <a
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        See all
-                      </a>
-                    </template>
-                    <v-card class="pa-3">
-                      <span class="font-weight-bold text-decoration-underline">{{ item.pick_up_location }}</span>
-                    </v-card>
-                  </v-menu>
-                </div>
-                <div>
-                  <span class="font-weight-bold ">{{ item.drop_off_location | dotdot}}</span>
-                  <v-menu
-                    bottom
-                    offset-y
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <a
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        See all
-                      </a>
-                    </template>
-                    <v-card class="pa-3">
-                      <span class="font-weight-bold text-decoration-underline">{{ item.drop_off_location }}</span>
-                    </v-card>
-                  </v-menu>
-                </div>
-              </td>
-              <td class="text-center">
-                <div class="pa-2" v-if="item.driver">
-                  <span v-if="item.driver.type == 'business'" :style="!item.driver ? 'color:red' : ''" :class=" item.driver ? 'font-weight-bold' : ''">
-                    {{ item.driver ? item.driver.user_business ? item.driver.user_business.business_name ? item.driver.user_business.business_name : 'Not Assigned': 'Not Assigned': 'Not Assigned' }}
-                  </span>
-                  <span v-else-if="item.driver.type == 'driver' || item.driver.type == 'customer'" :style="!item.driver ? 'color:red' : ''" :class=" item.driver ? 'font-weight-bold' : ''">
-                    {{ item.driver ? item.driver.first_name+' '+item.driver.last_name : 'Not Assigned' }}
-                  </span>
-                </div>
-                <div v-else class="pa-2">
-                  <span style="color: #F44336;">
-                    Not Assigned
-                  </span>
-                </div>
-              </td>
-              <td class="text-center">{{ item.vehicle_list_id ? item.vehicle_type.type : '' }}</td>
-              <td class="text-center">
-                <v-flex class="pa-1">
-                  <span v-if="item.price">{{ item.price | decimalcomma}}</span>
-                  <span v-else style="color:#F44336">Not Set</span>
-                </v-flex>
-              </td>
-              <td class="text-center px-0">
-                <v-layout column>
-                    <customer-records-view :booking="item"/>
-                    <customer-records-price :booking="item"/>
-                    <customer-records-rate :booking="item"/>
-                    <customer-records-cancel :booking="item"/>
-                </v-layout>
-              </td>
-            </tr>
-          </template>
+            <template v-slot:item.status="{ item }">
+              <v-card outlined :color="
+                (item.status == 'pending') ? '#FFA726' 
+                :(item.status == 'confirmed') ? '#FFEE58'
+                :(item.status == 'cancelled') ? '#D32F2F'
+                :(item.status == 'completed') ? '#43A047'
+                :(item.status == 'reschedule') ? '#7E57C2' : 'gray'" class="px-4">
+              <span style="color:white" class="font-weight-bold">{{ item.status | capitalfirst }}</span></v-card>
+              <span class="caption text-decoration-underline">#{{ item.order_number }}</span>
+            </template>
+            <template v-slot:item.delivery_date="{ item }">
+              <div class="text-center">{{ item.booking_date_time_start | time}} - {{ item.booking_date_time_end | time}}</div>
+              <div class="text-center" v-for="(data, index) in item.dates" :key="index"><span class="caption font-weight-bold">{{ data.date ? data.date  : '' | monthyear }}</span></div>
+            </template>
+            <template v-slot:item.route="{ item }">
+              <div>
+                <span class="font-weight-bold ">{{ item.pick_up_location | dotdot}}</span>
+                <v-menu
+                  bottom
+                  offset-y
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <a
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      See all
+                    </a>
+                  </template>
+                  <v-card class="pa-3">
+                    <span class="font-weight-bold text-decoration-underline">{{ item.pick_up_location }}</span>
+                  </v-card>
+                </v-menu>
+              </div>
+              <div>
+                <span class="font-weight-bold ">{{ item.drop_off_location | dotdot}}</span>
+                <v-menu
+                  bottom
+                  offset-y
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <a
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      See all
+                    </a>
+                  </template>
+                  <v-card class="pa-3">
+                    <span class="font-weight-bold text-decoration-underline">{{ item.drop_off_location }}</span>
+                  </v-card>
+                </v-menu>
+              </div>
+            </template>
+            <template v-slot:item.customer="{ item }">
+              <div class="pa-2" v-if="item.driver">
+                <span v-if="item.driver.type == 'business'" :style="!item.driver ? 'color:red' : ''" :class=" item.driver ? 'font-weight-bold' : ''">
+                  {{ item.driver ? item.driver.user_business ? item.driver.user_business.business_name ? item.driver.user_business.business_name : 'Not Assigned': 'Not Assigned': 'Not Assigned' }}
+                </span>
+                <span v-else-if="item.driver.type == 'driver' || item.driver.type == 'customer'" :style="!item.driver ? 'color:red' : ''" :class=" item.driver ? 'font-weight-bold' : ''">
+                  {{ item.driver ? item.driver.first_name+' '+item.driver.last_name : 'Not Assigned' }}
+                </span>
+              </div>
+              <div v-else class="pa-2">
+                <span style="color: #F44336;">
+                  Not Assigned
+                </span>
+              </div>
+            </template>
+            <template v-slot:item.type="{ item }">
+              {{ item.vehicle_list_id ? item.vehicle_type.type : '' }}
+            </template>
+            <template v-slot:item.price="{ item }">
+              <v-flex class="pa-1">
+                <span v-if="item.price">{{ item.price | decimalcomma}}</span>
+                <span v-else style="color:#F44336">Not Set</span>
+              </v-flex>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <v-layout column>
+                <customer-records-view :booking="item"/>
+                <customer-records-price :booking="item"/>
+                <customer-records-rate :booking="item"/>
+                <customer-records-cancel :booking="item"/>
+              </v-layout>
+            </template>
           </v-data-table>
         </v-flex>
-        <v-flex>
+        <v-flex dark>
           <v-pagination
             v-model="page"
             :length="pageCount"
@@ -113,9 +112,9 @@
           ></v-pagination>
         </v-flex>
       </v-layout>
+      <v-flex class="d-flex justify-end">
+      </v-flex>
     </v-card-text>
-    <v-flex class="d-flex justify-end">
-    </v-flex>
     <v-dialog
       v-model="dialogApply"
       width="350"

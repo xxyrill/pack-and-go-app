@@ -1,6 +1,6 @@
 <template>
   <v-flex>
-    <v-btn depressed color="info" @click="openDialog" small block>Update Image</v-btn>
+    <v-btn depressed color="info" @click="openDialog" small block>UPLOAD IMAGE</v-btn>
     <v-dialog
       v-model="dialogUpdateLicense"
       width="350"

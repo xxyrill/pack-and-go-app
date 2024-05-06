@@ -397,7 +397,7 @@
                             absolute
                             color="#036358"
                           >
-                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">See More</v-btn>
+                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">View ID</v-btn>
                           </v-overlay>
                         </v-fade-transition>
                       </v-card>
@@ -427,7 +427,7 @@
                             color="#036358"
                             v-if="user_data.back_license_path && hover"
                           >
-                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.back_license_path)">See More</v-btn>
+                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.back_license_path)">View ID</v-btn>
                           </v-overlay>
                         </v-fade-transition>
                       </v-card>
@@ -545,28 +545,6 @@
         <v-flex class="py-4">
           <v-layout row>
             <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
-            <span>City Tourism Number:</span>
-            </v-flex>
-            <v-flex md10 lg10 sm12 xs12>
-              <v-flex md6 lg6 sm12 xs12>
-                <v-text-field 
-                  outlined 
-                  dense 
-                  v-model="user_data.business_city_tourism_number"
-                  color="success"
-                  :disabled="!edit_data"
-                  class="skekert rounded-xl"
-                  style="font-weight: bold;"
-                  :error-messages="errors ? errors.business_city_tourism_number ? errors.business_city_tourism_number :'':''"
-                    >
-                </v-text-field>
-              </v-flex>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-        <v-flex class="py-4">
-          <v-layout row>
-            <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
             <span>Contact Person Name:</span>
             </v-flex>
             <v-flex md10 lg10 sm12 xs12>
@@ -609,6 +587,143 @@
           </v-layout>
         </v-flex>
       </v-layout>
+      <v-divider/>
+      <v-layout column  v-if="type == 'driver'">
+        <v-flex md2 lg2 sm12 xs12 class="d-flex align-center">
+          <span class="pa-3 body-1">Secondary ID:</span>
+        </v-flex>
+        <v-layout>
+          <v-flex md4 lg4 sm12 xs12>
+            <v-flex class="pa-2">
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-card
+                    class="mx-auto elevation-15"
+                  >
+                  
+                    <v-img min-height="200" max-height="200" contain :src="user_data.front_license_path ? url+'/storage/'+user_data.front_license_path : imgs.no_file"></v-img>
+                    <v-fade-transition>
+                      <v-overlay
+                        v-if="user_data.back_license_path && hover"
+                        absolute
+                        color="#036358"
+                      >
+                        <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">View ID</v-btn>
+                      </v-overlay>
+                    </v-fade-transition>
+                  </v-card>
+                </template>
+              </v-hover>
+            </v-flex>
+            <v-flex class="pa-2">
+              <profile-update-license :type="'front'" :user_driver_id="user_data.user_driver_id"/>
+            </v-flex>
+          </v-flex>
+        </v-layout>
+      </v-layout>
+      <v-flex column  v-if="type == 'business'">
+        <v-layout row wrap class="pa-3">
+          <v-flex md4 lg4 sm12 xs12>
+            <v-flex class="d-flex align-center justify-center pa-2">
+              <span class="pa-3 body-1">Government ID:</span>
+            </v-flex>
+            <v-layout>
+              <v-flex>
+                <v-flex class="pa-2">
+                  <v-hover>
+                    <template v-slot:default="{ hover }">
+                      <v-card
+                        class="mx-auto elevation-15"
+                      >
+                      
+                        <v-img min-height="200" max-height="200" contain :src="user_data.front_license_path ? url+'/storage/'+user_data.front_license_path : imgs.no_file"></v-img>
+                        <v-fade-transition>
+                          <v-overlay
+                            v-if="user_data.back_license_path && hover"
+                            absolute
+                            color="#036358"
+                          >
+                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">View ID</v-btn>
+                          </v-overlay>
+                        </v-fade-transition>
+                      </v-card>
+                    </template>
+                  </v-hover>
+                </v-flex>
+                <v-flex class="pa-2">
+                  <profile-update-license :type="'front'" :user_driver_id="user_data.user_driver_id"/>
+                </v-flex>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex md4 lg4 sm12 xs12>
+            <v-flex class="d-flex align-center justify-center pa-2">
+              <span class="pa-3 body-1">DTI Registration File:</span>
+            </v-flex>
+            <v-layout>
+              <v-flex>
+                <v-flex class="pa-2">
+                  <v-hover>
+                    <template v-slot:default="{ hover }">
+                      <v-card
+                        class="mx-auto elevation-15"
+                      >
+                      
+                        <v-img min-height="200" max-height="200" contain :src="user_data.front_license_path ? url+'/storage/'+user_data.front_license_path : imgs.no_file"></v-img>
+                        <v-fade-transition>
+                          <v-overlay
+                            v-if="user_data.back_license_path && hover"
+                            absolute
+                            color="#036358"
+                          >
+                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">View ID</v-btn>
+                          </v-overlay>
+                        </v-fade-transition>
+                      </v-card>
+                    </template>
+                  </v-hover>
+                </v-flex>
+                <v-flex class="pa-2">
+                  <profile-update-license :type="'front'" :user_driver_id="user_data.user_driver_id"/>
+                </v-flex>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex md4 lg4 sm12 xs12>
+            <v-flex class="d-flex align-center justify-center pa-2">
+              <span class="pa-3 body-1">Business Permit File:</span>
+            </v-flex>
+            <v-layout>
+              <v-flex>
+                <v-flex class="pa-2">
+                  <v-hover>
+                    <template v-slot:default="{ hover }">
+                      <v-card
+                        class="mx-auto elevation-15"
+                      >
+                      
+                        <v-img min-height="200" max-height="200" contain :src="user_data.front_license_path ? url+'/storage/'+user_data.front_license_path : imgs.no_file"></v-img>
+                        <v-fade-transition>
+                          <v-overlay
+                            v-if="user_data.back_license_path && hover"
+                            absolute
+                            color="#036358"
+                          >
+                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">View ID</v-btn>
+                          </v-overlay>
+                        </v-fade-transition>
+                      </v-card>
+                    </template>
+                  </v-hover>
+                </v-flex>
+                <v-flex class="pa-2">
+                  <profile-update-license :type="'front'" :user_driver_id="user_data.user_driver_id"/>
+                </v-flex>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-flex>
       <v-divider/>
       <v-flex class="text-end pa-2">
         <v-btn small color="success" @click="save" :disabled="!edit_data" :loading="loading_save"> 

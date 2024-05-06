@@ -1,5 +1,5 @@
 <template>
-  <v-card flat color="#f0f0f0">
+  <v-card flat dark style="opacity: 90%;" class="rounded-xl">
     <v-card-text>
       <v-layout column style="min-height: 400px">
         <v-flex lg12 md12 sm12 xs12>
@@ -12,103 +12,103 @@
             :loading="loading"
             loading-text="Loading... Please wait"
           >
-          <template v-slot:item="{ item }">
-            <tr>
-              <td class="text-center pa-2">
-                  <v-card outlined :color="
-                    (item.status == 'pending') ? '#FFA726' 
-                    :(item.status == 'confirmed') ? '#FFEE58'
-                    :(item.status == 'cancelled') ? '#D32F2F'
-                    :(item.status == 'completed') ? '#43A047'
-                    :(item.status == 'reschedule') ? '#7E57C2' : 'gray'" class="px-4"><span style="color=white" class="font-weight-bold">{{ item.status | capitalfirst }}</span></v-card>
-                  <span class="caption text-decoration-underline">#{{ item.order_number }}</span>
-                  <v-flex class="pa-1">
-                    <driver-records-reschedule :booking="item"/>
-                  </v-flex>
-              </td>
-              <td class="text-center">
-                <div class="text-center">{{ item.booking_date_time_start | time}} - {{ item.booking_date_time_end | time}}</div>
-                <div class="text-center" v-for="(data, index) in item.dates" :key="index"><span class="caption font-weight-bold">{{ data.date ? data.date  : '' | monthyear }}</span></div>
-              </td>
-              <td class="text-center pa-2">
-                <div>
-                  <span class="font-weight-bold ">{{ item.pick_up_location | dotdot}}</span>
-                  <v-menu
-                    bottom
-                    offset-y
+          <template v-slot:item.status="{ item }">
+            <v-flex class="pt-1">
+              <v-card outlined :color="
+                (item.status == 'pending') ? '#FFA726' 
+                :(item.status == 'confirmed') ? '#FFEE58'
+                :(item.status == 'cancelled') ? '#D32F2F'
+                :(item.status == 'completed') ? '#43A047'
+                :(item.status == 'reschedule') ? '#7E57C2' : 'gray'" class="px-4"><span style="color:white" class="font-weight-bold">{{ item.status | capitalfirst }}</span></v-card>
+              <span class="caption text-decoration-underline">#{{ item.order_number }}</span>
+              <v-flex class="pa-1">
+                <driver-records-reschedule :booking="item"/>
+              </v-flex>
+            </v-flex>
+          </template>
+          <template v-slot:item.delivery_date="{ item }">
+            <div class="text-center">{{ item.booking_date_time_start | time}} - {{ item.booking_date_time_end | time}}</div>
+            <div class="text-center" v-for="(data, index) in item.dates" :key="index"><span class="caption font-weight-bold">{{ data.date ? data.date  : '' | monthyear }}</span></div>
+          </template>
+          <template v-slot:item.route="{ item }">
+            <div>
+              <span class="font-weight-bold ">{{ item.pick_up_location | dotdot}}</span>
+              <v-menu
+                bottom
+                offset-y
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <a
+                    v-bind="attrs"
+                    v-on="on"
                   >
-                    <template v-slot:activator="{ on, attrs }">
-                      <a
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        See all
-                      </a>
-                    </template>
-                    <v-card class="pa-3">
-                      <span class="font-weight-bold text-decoration-underline">{{ item.pick_up_location }}</span>
-                    </v-card>
-                  </v-menu>
-                </div>
-                <div>
-                  <span class="font-weight-bold ">{{ item.drop_off_location | dotdot}}</span>
-                  <v-menu
-                    bottom
-                    offset-y
+                    See all
+                  </a>
+                </template>
+                <v-card class="pa-3">
+                  <span class="font-weight-bold text-decoration-underline">{{ item.pick_up_location }}</span>
+                </v-card>
+              </v-menu>
+            </div>
+            <div>
+              <span class="font-weight-bold ">{{ item.drop_off_location | dotdot}}</span>
+              <v-menu
+                bottom
+                offset-y
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <a
+                    v-bind="attrs"
+                    v-on="on"
                   >
-                    <template v-slot:activator="{ on, attrs }">
-                      <a
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        See all
-                      </a>
-                    </template>
-                    <v-card class="pa-3">
-                      <span class="font-weight-bold text-decoration-underline">{{ item.drop_off_location }}</span>
-                    </v-card>
-                  </v-menu>
-                </div>
-              </td>
-              <td class="text-center">
-                <div class="pa-2">
-                  <span :style="!item.customer ? 'color:red' : ''" :class=" item.customer ? 'font-weight-bold' : ''">{{ item.customer ? item.customer.first_name+' '+item.customer.last_name : 'Not Assigned' }}</span>
-                </div>
-                <div class="pa-2">
-                  <v-btn
-                    small
-                    depressed
-                    @click="message(item)"
-                    color="primary">
-                    Message
-                  </v-btn>
-                </div>
-              </td>
-              <td class="text-center">{{ item.vehicle_list_id ? item.vehicle_type.type : '' }}</td>
-              <td class="text-center">
-                <v-flex class="pa-1" v-if="item.price">{{ item.price | decimalcomma}}</v-flex>
-                <v-flex class="pa-1" v-else><span style="color:red">Not set</span></v-flex>
-                <v-flex class="pa-1" v-if="item.user_driver_id">
-                  <driver-records-change :booking="item"/>
-                </v-flex>
-              </td>
-              <td class="text-center px-0">
-                <v-layout column>
-                  <v-flex class="pa-1">
-                    <v-btn
-                      small
-                      block
-                      depressed
-                      :disabled="item.status == 'pending' ? false : true"
-                      color="success"
-                      @click="apply(item)">
-                      Accept
-                    </v-btn>
-                  </v-flex>
-                  <driver-records-view :booking="item"/>
-                </v-layout>
-              </td>
-            </tr>
+                    See all
+                  </a>
+                </template>
+                <v-card class="pa-3">
+                  <span class="font-weight-bold text-decoration-underline">{{ item.drop_off_location }}</span>
+                </v-card>
+              </v-menu>
+            </div>
+          </template>
+          <template v-slot:item.customer="{ item }">
+            <div class="pa-2">
+              <span :style="!item.customer ? 'color:red' : ''" :class=" item.customer ? 'font-weight-bold' : ''">{{ item.customer ? item.customer.first_name+' '+item.customer.last_name : 'Not Assigned' }}</span>
+            </div>
+            <div class="pa-2">
+              <v-btn
+                small
+                depressed
+                @click="message(item)"
+                color="primary">
+                Message
+              </v-btn>
+            </div>
+          </template>
+          <template v-slot:item.type="{ item }">
+            {{ item.vehicle_list_id ? item.vehicle_type.type : '' }}
+          </template>
+          <template v-slot:item.price="{ item }">
+            <v-flex class="pa-1" v-if="item.price">{{ item.price | decimalcomma}}</v-flex>
+            <v-flex class="pa-1" v-else><span style="color:red">Not set</span></v-flex>
+            <v-flex class="pa-1" v-if="item.user_driver_id">
+              <driver-records-change :booking="item"/>
+            </v-flex>
+          </template>
+          <template v-slot:item.action="{ item }">
+            <v-layout column>
+              <v-flex class="pa-1">
+                <v-btn
+                  small
+                  block
+                  depressed
+                  :disabled="item.status == 'pending' ? false : true"
+                  color="success"
+                  @click="apply(item)">
+                  Accept
+                </v-btn>
+              </v-flex>
+              <driver-records-view :booking="item"/>
+            </v-layout>
           </template>
           </v-data-table>
         </v-flex>

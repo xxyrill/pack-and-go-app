@@ -1,347 +1,417 @@
 <template>
-  <v-container>
-    <v-card class="rounded-l" min-height="650" elevation="15">
-      <v-card-title class="d-flex justify-center">
-        <v-flex md7>
-          <v-layout row mt-2 pa-6>
-            <v-avatar
-              color="primary"
-              size="50"
-              class="mx-2">
-                  <span>
-                    <Icon icon="akar-icons:person" color="white" width="25" height="25" />
-                  </span>  
-            </v-avatar>
-            <v-flex class="d-flex align-center mx-2">
-              <v-divider></v-divider>
-            </v-flex>
-            <v-avatar
-              color="primary"
-              size="50"
-              class="mx-2">
-                  <span>
-                    <Icon icon="gg:list" color="white" width="25" height="25" />
-                  </span>  
-            </v-avatar>
-            <v-flex class="d-flex align-center mx-2">
-              <v-divider></v-divider>
-            </v-flex>
-            <v-avatar
-              color="primary"
-              size="50"
-              class="mx-2">
-                  <span>
-                    <Icon icon="gravity-ui:shield-check" color="white" width="30" height="30" />
-                  </span>  
-            </v-avatar>
-            <v-flex class="d-flex align-center mx-2">
-              <v-divider ></v-divider>
-            </v-flex>
-            <v-avatar
-              color="primary"
-              size="50"
-              class="mx-2">
-                  <span>
-                    <Icon icon="lucide:check-circle" color="white" width="30" height="30" />
-                  </span>  
-            </v-avatar>
-          </v-layout>
-        </v-flex>
-      </v-card-title>
-      <v-card-text>
-        <v-flex v-if="step == 1">
-          <v-layout justify-center>
-            <v-flex md5>
-              <v-flex class="mx-3">
-                <v-text-field
-                v-model="form.first_name"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="First Name"
-                  :error-messages="errors ? errors.first_name ? errors.first_name :'':''"
-                  color="success"
-                />
+  <v-layout class="justify-center pa-3 landing-order-img" fill-height>
+    <v-flex lg5 md5 sm12 xs12>
+      <v-card dark lg6 md6 sm12 xs12 class="rounded-xl" elevation="15" style="opacity: 90%;">
+        <v-card-title class="d-flex justify-center">
+          <v-flex>
+            <v-layout row mt-2 pa-6>
+              <v-avatar
+                :color="(step > 1) ? 'success':'primary'"
+                size="50"
+                class="mx-2">
+                    <span v-if="step > 1">
+                      <Icon icon="ph:check-fat" color="white" width="25" height="25" />
+                    </span>
+                    <span v-else>
+                      <Icon icon="akar-icons:person" color="white" width="25" height="25" />
+                    </span>
+              </v-avatar>
+              <v-flex class="d-flex align-center mx-2">
+                <v-divider></v-divider>
               </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.last_name"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Last Name"
-                  :error-messages="errors ? errors.last_name ? errors.last_name :'':''"
-                  color="success"
-                />
+              <v-avatar
+                :color="(step > 2) ? 'success':'primary'"
+                size="50"
+                class="mx-2">
+                    <span v-if="step > 2">
+                      <Icon icon="ph:check-fat" color="white" width="25" height="25" />
+                    </span>  
+                    <span v-else>
+                      <Icon icon="gg:list" color="white" width="25" height="25" />
+                    </span>
+              </v-avatar>
+              <v-flex class="d-flex align-center mx-2">
+                <v-divider></v-divider>
               </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.user_name"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Username"
-                  :error-messages="errors ? errors.user_name ? errors.user_name :'':''"
-                  color="success"
-                />
+              <v-avatar
+                :color="(step > 3) ? 'success':'primary'"
+                size="50"
+                class="mx-2">
+                    <span v-if="step > 3">
+                      <Icon icon="ph:check-fat" color="white" width="25" height="25" />
+                    </span>  
+                    <span v-else>
+                      <Icon icon="gravity-ui:shield-check" color="white" width="30" height="30" />
+                    </span>
+              </v-avatar>
+              <v-flex class="d-flex align-center mx-2">
+                <v-divider ></v-divider>
               </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.email"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Email"
-                  :error-messages="errors ? errors.email ? errors.email :'':''"
-                  color="success"
-                />
-              </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.password"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Password"
-                  color="success"
-                  :error-messages="errors ? errors.password ? errors.password :'':''"
-                  type="password"
-                />
-              </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.confirm_password"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Confirm Password"
-                  color="success"
-                  :error-messages="errors ? errors.confirm_password ? errors.confirm_password :'':''"
-                  type="password"
-                />
-              </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.driver_license_number"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Drivers License Number"
-                  color="success"
-                  :error-messages="errors ? errors.driver_license_number ? errors.driver_license_number :'':''"
-                />
-              </v-flex>
-              <v-flex class="mx-3">
-                <v-dialog
-                  ref="dialog"
-                  v-model="modal"
-                  :return-value.sync="form.expiry_date"
-                  persistent
-                  width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="form.expiry_date"
-                      label="Drivers License Expiry"
-                      readonly
-                      outlined
-                      persistent-placeholder
-                      dense
-                      :error-messages="errors ? errors.expiry_date ? errors.expiry_date :'':''"
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="form.expiry_date"
-                    scrollable
+              <v-avatar
+                :color="(step > 4) ? 'success':'primary'"
+                size="50"
+                class="mx-2">
+                    <span v-if="step > 4">
+                      <Icon icon="ph:check-fat" color="white" width="25" height="25" />
+                    </span>  
+                    <span v-else>
+                      <Icon icon="lucide:check-circle" color="white" width="30" height="30" />
+                    </span>
+              </v-avatar>
+            </v-layout>
+          </v-flex>
+        </v-card-title>
+        <v-card-text>
+          <v-flex v-if="step == 1">
+            <v-layout justify-center>
+              <v-flex lg10 md10 sm10 xs10>
+                <v-flex class="pb-4 px-3">
+                  <span class="subtitle-2">PERSONAL INFO: </span>
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                  v-model="form.first_name"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    label="First Name"
+                    :error-messages="errors ? errors.first_name ? errors.first_name :'':''"
+                    color="success"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.last_name"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    label="Last Name"
+                    :error-messages="errors ? errors.last_name ? errors.last_name :'':''"
+                    color="success"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.user_name"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    label="Username"
+                    :error-messages="errors ? errors.user_name ? errors.user_name :'':''"
+                    color="success"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.email"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    label="Email"
+                    :error-messages="errors ? errors.email ? errors.email :'':''"
+                    color="success"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-layout row wrap pt-2 px-2>
+                    <v-flex lg6 md6 sm12 xs12 class="pa-1">
+                      <v-text-field
+                        v-model="form.password"
+                        dense
+                        outlined
+                        persistent-placeholder
+                        label="Password"
+                        color="success"
+                        :error-messages="errors ? errors.password ? errors.password :'':''"
+                        type="password"
+                      />
+                    </v-flex>
+                    <v-flex lg6 md6 sm12 xs12 class="pa-1">
+                      <v-text-field
+                        v-model="form.confirm_password"
+                        dense
+                        outlined
+                        persistent-placeholder
+                        label="Confirm Password"
+                        color="success"
+                        :error-messages="errors ? errors.confirm_password ? errors.confirm_password :'':''"
+                        type="password"
+                      />
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+                <v-flex class="pb-4 px-3">
+                  <span class="subtitle-2">LICENSE INFO: </span>
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.driver_license_number"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    label="Drivers License Number"
+                    color="success"
+                    :error-messages="errors ? errors.driver_license_number ? errors.driver_license_number :'':''"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-dialog
+                    ref="dialog"
+                    v-model="modal"
+                    :return-value.sync="form.expiry_date"
+                    persistent
+                    width="290px"
                   >
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="modal = false"
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="form.expiry_date"
+                        label="Drivers License Expiry"
+                        readonly
+                        outlined
+                        persistent-placeholder
+                        dense
+                        :error-messages="errors ? errors.expiry_date ? errors.expiry_date :'':''"
+                        v-bind="attrs"
+                        color="success"
+                        v-on="on"
+                        placeholder="YYYY-MM-DD"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="form.expiry_date"
+                      scrollable
                     >
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.dialog.save(form.expiry_date)"
-                    >
-                      OK
-                    </v-btn>
-                  </v-date-picker>
-                </v-dialog>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="modal = false"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.dialog.save(form.expiry_date)"
+                      >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-flex>
+                <v-flex>
+                  <v-layout row wrap pt-2 px-5>
+                    <v-flex lg6 md6 sm12 xs12 class="pa-1">
+                      <v-file-input
+                        v-model="form.driver_license_front"
+                        outlined
+                        dense
+                        prepend-icon=""
+                        prepend-inner-icon="mdi-camera"
+                        label="License Front"
+                        :error-messages="errors ? errors.driver_license_front ? errors.driver_license_front :'':''"
+                        persistent-placeholder
+                      >
+                        <template v-slot:selection="{ text }">
+                          <v-chip
+                            small
+                            label
+                            color="primary"
+                          >
+                            {{ text }}
+                          </v-chip>
+                        </template>
+                      </v-file-input>
+                    </v-flex>
+                    <v-flex lg6 md6 sm12 xs12 class="pa-1">
+                      <v-file-input
+                        v-model="form.driver_license_back"
+                        dense
+                        outlined
+                        prepend-icon=""
+                        prepend-inner-icon="mdi-camera"
+                        :error-messages="errors ? errors.driver_license_back ? errors.driver_license_back :'':''"
+                        label="License Back"
+                        persistent-placeholder
+                      >
+                        <template v-slot:selection="{ text }">
+                          <v-chip
+                            small
+                            label
+                            color="primary"
+                          >
+                            {{ text }}
+                          </v-chip>
+                        </template>
+                      </v-file-input>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
               </v-flex>
-              <v-flex>
-                <v-layout row wrap mx-3 mt-2>
-                  <v-flex mr-1>
-                    <v-file-input
-                      v-model="form.driver_license_front"
-                      outlined
-                      dense
-                      prepend-icon=""
-                      label="License Front"
-                      :error-messages="errors ? errors.driver_license_front ? errors.driver_license_front :'':''"
-                      persistent-placeholder
-                    ></v-file-input>
-                  </v-flex>
-                  <v-flex ml-1>
-                    <v-file-input
-                      v-model="form.driver_license_back"
-                      dense
-                      outlined
-                      prepend-icon=""
-                      :error-messages="errors ? errors.driver_license_back ? errors.driver_license_back :'':''"
-                      label="License Back"
-                      persistent-placeholder
-                    ></v-file-input>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
+            </v-layout>
+            <v-flex class="d-flex justify-center mt-2">
+              <v-btn
+                color="primary"
+                @click=nexStep(step)
+              >
+                Continue
+              </v-btn>
             </v-flex>
-          </v-layout>
-          <v-flex class="d-flex justify-center mt-2">
-            <v-btn
-              color="primary"
-              @click=nexStep(1)
-            >
-              Continue
-            </v-btn>
           </v-flex>
-        </v-flex>
-        <v-flex v-if="step == 2" >
-          <v-layout justify-center>
-            <v-flex md5>
-              <v-flex class="mx-3">
-                <v-autocomplete
-                  v-model="form.vehicle_list_id"
-                  :error-messages="errors ? errors.vehicle_list_id ? errors.vehicle_list_id :'':''"
-                  dense
-                  outlined
-                  color="success"
-                  :items="vehicleList"
-                  item-text="type"
-                  item-value="id"
-                  persistent-placeholder
-                  label="Type"
-                />
+          <v-flex v-if="step == 2">
+            <v-layout justify-center>
+              <v-flex lg10 md10 sm10 xs10>
+                <v-flex class="pb-4 px-3">
+                  <span class="subtitle-2">VEHICLE INFO: </span>
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-autocomplete
+                    v-model="form.vehicle_list_id"
+                    :error-messages="errors ? errors.vehicle_list_id ? errors.vehicle_list_id :'':''"
+                    dense
+                    outlined
+                    color="success"
+                    :items="vehicleList"
+                    item-text="type"
+                    item-value="id"
+                    persistent-placeholder
+                    label="Type"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.make"
+                    :error-messages="errors ? errors.make ? errors.make :'':''"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    color="success"
+                    label="Make (optional when type is Jeepney Standard or Jeepney Extended)"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.year_model"
+                    :error-messages="errors ? errors.year_model ? errors.year_model :'':''"
+                    dense
+                    color="success"
+                    outlined
+                    persistent-placeholder
+                    label="Year Model (optional when type is Jeepney Standard or Jeepney Extended)"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.plate_number"
+                    :error-messages="errors ? errors.plate_number ? errors.plate_number :'':''"
+                    dense
+                    color="success"
+                    outlined
+                    persistent-placeholder
+                    label="Plate Number"
+                  />
+                </v-flex>
+                <v-flex class="mx-3 d-flex justify-center">
+                  <v-checkbox
+                    v-model="form.helper"
+                    dense
+                    label="Do you have a helper?"
+                  ></v-checkbox>
+                </v-flex>
               </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.make"
-                  :error-messages="errors ? errors.make ? errors.make :'':''"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  color="success"
-                  label="Make (optional when type is Jeepney Standard or Jeepney Extended)"
-                />
-              </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.year_model"
-                  :error-messages="errors ? errors.year_model ? errors.year_model :'':''"
-                  dense
-                  color="success"
-                  outlined
-                  persistent-placeholder
-                  label="Year Model (optional when type is Jeepney Standard or Jeepney Extended)"
-                />
-              </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.plate_number"
-                  :error-messages="errors ? errors.plate_number ? errors.plate_number :'':''"
-                  dense
-                  color="success"
-                  outlined
-                  persistent-placeholder
-                  label="Plate Number"
-                />
-              </v-flex>
-              <v-flex class="mx-3 d-flex justify-center">
-                <v-checkbox
-                  v-model="form.helper"
-                  dense
-                  label="Do you have a helper?"
-                ></v-checkbox>
-              </v-flex>
+            </v-layout>
+            <v-flex class="d-flex justify-center">
+              <v-btn
+                outlined
+                color="primary"
+                @click=previous
+                class="mx-1"
+              >
+                Back
+              </v-btn>
+              <v-btn
+                color="primary"
+                @click=nexStep(step)
+                class="mx-1"
+              >
+                Continue
+              </v-btn>
             </v-flex>
-          </v-layout>
-          <v-flex class="d-flex justify-center">
-            <v-btn
-              color="primary"
-              @click=nexStep(2)
-            >
-              Continue
-            </v-btn>
           </v-flex>
-        </v-flex>
-        <v-flex v-if="step == 3">
-          <v-layout wrap column align-center>
-            <span class="headline font-weight-bold">Two Step Authentication</span>
-            <span class="caption">Kindly enter your phone number and we will send you a security code.</span>
-            <v-layout wrap row mt-3>
-              <v-flex px-1>
-                <v-text-field
-                  v-model="form.contact_number"
-                  dense
-                  outlined
-                  number
-                  prefix="+63"
-                  type="number"
-                  color="success"
-                  hide-spin-buttons
-                  :error-messages="errors ? errors.otp ? errors.otp[0] : '' : ''"
-                />
-              </v-flex>
-              <v-flex px-1>
+          <v-flex v-if="step == 3">
+            <v-layout wrap column align-center>
+              <span class="headline font-weight-bold">Two Step Authentication</span>
+              <span class="caption">Kindly enter your phone number and we will send you a security code.</span>
+              <v-layout wrap row mt-3>
+                <v-flex px-1>
+                  <v-text-field
+                    v-model="form.contact_number"
+                    dense
+                    outlined
+                    number
+                    prefix="+63"
+                    type="number"
+                    color="success"
+                    hide-spin-buttons
+                    :error-messages="errors ? errors.otp ? errors.otp[0] : '' : ''"
+                  />
+                </v-flex>
+                <v-flex px-1>
+                  <v-btn
+                    fab
+                    dark
+                    color="primary"
+                    small
+                    :loading="send_otp_loading"
+                    @click="sendOtp"
+                  >
+                    <v-icon dark>
+                      mdi-send
+                    </v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+              <v-card outlined width="300px" class="pa-3 mt-1">
+                <span class="d-flex justify-center">Enter your OTP key here.</span>
+                <v-otp-input
+                  length="6"
+                  v-model="verifyOtp"
+                ></v-otp-input>
+              </v-card>
+              <v-flex class="d-flex justify-center pt-5">
                 <v-btn
-                  fab
-                  dark
+                  outlined
                   color="primary"
-                  small
-                  :loading="send_otp_loading"
-                  @click="sendOtp"
+                  @click=previous
+                  class="mx-1"
                 >
-                  <v-icon dark>
-                    mdi-send
-                  </v-icon>
+                  Back
                 </v-btn>
               </v-flex>
             </v-layout>
-            <v-card outlined width="300px" class="pa-3 mt-1">
-              <span class="d-flex justify-center">Enter your OTP key here.</span>
-              <v-otp-input
-                length="6"
-                v-model="verifyOtp"
-              ></v-otp-input>
-            </v-card>
-          </v-layout>
-        </v-flex>
-        <v-flex v-if="step == 4">
-          <v-layout wrap column align-center justify-center>
-            <v-card class="pa-11" shaped raised elevation="15">
-              <v-flex>
-                <v-flex class="d-flex justify-center">
-                  <v-icon color="green" size="100">
-                    mdi-check-circle-outline
-                  </v-icon>
+          </v-flex>
+          <v-flex v-if="step == 4">
+            <v-layout justify-center pa-5>
+              <v-card class="pa-11 rounded-xxl" light elevation="15">
+                <v-flex>
+                  <v-flex class="d-flex justify-center">
+                    <v-icon color="green" size="100">
+                      mdi-check-circle-outline
+                    </v-icon>
+                  </v-flex>
+                  <v-flex class="d-flex justify-center">
+                    <span class="headline font-weight-bold">Application Submited.</span>
+                  </v-flex>
+                  <v-flex class="d-flex justify-center mt-6">
+                    <v-btn outlined color="green" @click="home">Home</v-btn>
+                  </v-flex>
                 </v-flex>
-                <v-flex class="d-flex justify-center">
-                  <span class="headline font-weight-bold">Application Submited.</span>
-                </v-flex>
-                <v-flex class="d-flex justify-center mt-6">
-                  <v-btn outlined color="green" @click="home">Home</v-btn>
-                </v-flex>
-              </v-flex>
-            </v-card>
-          </v-layout>
-        </v-flex>
-      </v-card-text>
-    </v-card>
+              </v-card>
+            </v-layout>
+          </v-flex>
+        </v-card-text>
+      </v-card>
+    </v-flex>
     <v-snackbar
       v-model="snackbar"
       top
@@ -364,7 +434,7 @@
       <div><div></div></div>
       </div></div>
     </v-overlay>
-  </v-container>
+  </v-layout>
 </template>
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
@@ -458,6 +528,9 @@
       },
       close(){
         this.dialog = false
+      },
+      previous(){
+        this.step -= 1
       },
       nexStep(value){
         if(value == 1){

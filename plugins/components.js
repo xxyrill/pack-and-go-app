@@ -7,6 +7,7 @@ import GlobalProfile from '~/components/global/GlobalProfile'
 
 //login / registration
 import DialogLogin from '~/components/global/DialogLogin'
+import DialogSignUpSelection from '~/components/global/DialogSignUpSelection'
 
 //driver
 import DriverRecords from '~/components/driver/records/records'
@@ -94,6 +95,7 @@ const components = {
   GlobalProfile,
 
   DialogLogin,
+  DialogSignUpSelection,
 
   DriverRecords,
   DriverRecordsTable,

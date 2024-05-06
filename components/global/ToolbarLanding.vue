@@ -23,7 +23,8 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <dialog-login/>
-      <v-btn text href="/customer" rounded color="white">
+      <dialog-sign-up-selection/>
+      <!-- <v-btn text href="/customer" rounded color="white">
         SIGN UP
       </v-btn>
 
@@ -33,7 +34,7 @@
 
       <v-btn text href="/driver" rounded color="white">
         SIGN UP AS DRIVER
-      </v-btn>
+      </v-btn> -->
     </v-toolbar>
   </v-card>
 </template>

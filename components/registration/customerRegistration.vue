@@ -1,188 +1,216 @@
 <template>
-  <v-container>
-    <v-card class="rounded-l" min-height="650" elevation="15">
-      <v-card-title class="d-flex justify-center">
-        <v-flex md7>
-          <v-layout row mt-2 pa-6>
-            <v-avatar
-              color="primary"
-              size="50"
-              class="mx-2">
-                  <span>
-                    <Icon icon="akar-icons:person" color="white" width="25" height="25" />
-                  </span>  
-            </v-avatar>
-            <v-flex class="d-flex align-center mx-2">
-              <v-divider></v-divider>
-            </v-flex>
-            <v-avatar
-              color="primary"
-              size="50"
-              class="mx-2">
-                  <span>
-                    <Icon icon="gravity-ui:shield-check" color="white" width="30" height="30" />
-                  </span>  
-            </v-avatar>
-            <v-flex class="d-flex align-center mx-2">
-              <v-divider ></v-divider>
-            </v-flex>
-            <v-avatar
-              color="primary"
-              size="50"
-              class="mx-2">
-                  <span>
-                    <Icon icon="lucide:check-circle" color="white" width="30" height="30" />
-                  </span>  
-            </v-avatar>
-          </v-layout>
-        </v-flex>
-      </v-card-title>
-      <v-card-text>
-        <v-flex v-if="step == 1">
-          <v-layout justify-center>
-            <v-flex md5>
-              <v-flex class="mx-3">
-                <v-text-field
-                v-model="form.first_name"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="First Name"
-                  :error-messages="errors ? errors.first_name ? errors.first_name :'':''"
-                  color="success"
-                />
+  <v-layout class="justify-center pa-3 landing-order-img" fill-height>
+    <v-flex lg5 md5 sm12 xs12>
+      <v-card dark lg6 md6 sm12 xs12 class="rounded-xl" elevation="15" style="opacity: 90%;">
+        <v-card-title class="d-flex justify-center">
+          <v-flex>
+            <v-layout row mt-2 pa-6>
+              <v-avatar
+                :color="(step > 1) ? 'success':'primary'"
+                size="50"
+                class="mx-2">
+                    <span v-if="step > 1">
+                      <Icon icon="ph:check-fat" color="white" width="25" height="25" />
+                    </span>
+                    <span v-else>
+                      <Icon icon="akar-icons:person" color="white" width="25" height="25" />
+                    </span>
+              </v-avatar>
+              <v-flex class="d-flex align-center mx-2">
+                <v-divider></v-divider>
               </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.last_name"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Last Name"
-                  :error-messages="errors ? errors.last_name ? errors.last_name :'':''"
-                  color="success"
-                />
+              <v-avatar
+                :color="(step > 3) ? 'success':'primary'"
+                size="50"
+                class="mx-2">
+                    <span v-if="step > 3">
+                      <Icon icon="ph:check-fat" color="white" width="25" height="25" />
+                    </span>  
+                    <span v-else>
+                      <Icon icon="gravity-ui:shield-check" color="white" width="30" height="30" />
+                    </span>
+              </v-avatar>
+              <v-flex class="d-flex align-center mx-2">
+                <v-divider ></v-divider>
               </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.user_name"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Username"
-                  :error-messages="errors ? errors.user_name ? errors.user_name :'':''"
-                  color="success"
-                />
-              </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.email"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Email"
-                  :error-messages="errors ? errors.email ? errors.email :'':''"
-                  color="success"
-                />
-              </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.password"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Password"
-                  color="success"
-                  :error-messages="errors ? errors.password ? errors.password :'':''"
-                  type="password"
-                />
-              </v-flex>
-              <v-flex class="mx-3">
-                <v-text-field
-                  v-model="form.confirm_password"
-                  dense
-                  outlined
-                  persistent-placeholder
-                  label="Confirm Password"
-                  color="success"
-                  :error-messages="errors ? errors.confirm_password ? errors.confirm_password :'':''"
-                  type="password"
-                />
-              </v-flex>
-            </v-flex>
-          </v-layout>
-          <v-flex class="d-flex justify-center">
-            <v-btn
-              color="primary"
-              @click=nexStep(1)
-            >
-              Continue
-            </v-btn>
+              <v-avatar
+                :color="(step > 4) ? 'success':'primary'"
+                size="50"
+                class="mx-2">
+                    <span v-if="step > 4">
+                      <Icon icon="ph:check-fat" color="white" width="25" height="25" />
+                    </span>  
+                    <span v-else>
+                      <Icon icon="lucide:check-circle" color="white" width="30" height="30" />
+                    </span>
+              </v-avatar>
+            </v-layout>
           </v-flex>
-        </v-flex>
-        <v-flex v-if="step == 2">
-          <v-layout wrap column align-center>
-            <span class="headline font-weight-bold">Two Step Authentication</span>
-            <span class="caption">Kindly enter your phone number and we will send you a security code.</span>
-            <v-layout wrap row mt-3>
-              <v-flex px-1>
-                <v-text-field
-                  v-model="form.contact_number"
-                  dense
-                  outlined
-                  number
-                  prefix="+63"
-                  type="number"
-                  color="success"
-                  hide-spin-buttons
-                  :error-messages="errors ? errors.otp ? errors.otp[0] : '' : ''"
-                />
+        </v-card-title>
+        <v-card-text>
+          <v-flex v-if="step == 1">
+            <v-layout justify-center>
+              <v-flex lg10 md10 sm10 xs10>
+                <v-flex class="pb-4 px-3">
+                  <span class="subtitle-2">PERSONAL INFO: </span>
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                  v-model="form.first_name"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    label="First Name"
+                    :error-messages="errors ? errors.first_name ? errors.first_name :'':''"
+                    color="success"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.last_name"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    label="Last Name"
+                    :error-messages="errors ? errors.last_name ? errors.last_name :'':''"
+                    color="success"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.user_name"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    label="Username"
+                    :error-messages="errors ? errors.user_name ? errors.user_name :'':''"
+                    color="success"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-text-field
+                    v-model="form.email"
+                    dense
+                    outlined
+                    persistent-placeholder
+                    label="Email"
+                    :error-messages="errors ? errors.email ? errors.email :'':''"
+                    color="success"
+                  />
+                </v-flex>
+                <v-flex class="px-3">
+                  <v-layout row wrap pt-2 px-2>
+                    <v-flex lg6 md6 sm12 xs12 class="pa-1">
+                      <v-text-field
+                        v-model="form.password"
+                        dense
+                        outlined
+                        persistent-placeholder
+                        label="Password"
+                        color="success"
+                        :error-messages="errors ? errors.password ? errors.password :'':''"
+                        type="password"
+                      />
+                    </v-flex>
+                    <v-flex lg6 md6 sm12 xs12 class="pa-1">
+                      <v-text-field
+                        v-model="form.confirm_password"
+                        dense
+                        outlined
+                        persistent-placeholder
+                        label="Confirm Password"
+                        color="success"
+                        :error-messages="errors ? errors.confirm_password ? errors.confirm_password :'':''"
+                        type="password"
+                      />
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
               </v-flex>
-              <v-flex px-1>
+            </v-layout>
+            <v-flex class="d-flex justify-center">
+              <v-btn
+                color="primary"
+                @click=nexStep(step)
+              >
+                Continue
+              </v-btn>
+            </v-flex>
+          </v-flex>
+          <v-flex v-if="step == 2">
+            <v-layout wrap column align-center>
+              <span class="headline font-weight-bold">Two Step Authentication</span>
+              <span class="caption">Kindly enter your phone number and we will send you a security code.</span>
+              <v-layout wrap row mt-3>
+                <v-flex px-1>
+                  <v-text-field
+                    v-model="form.contact_number"
+                    dense
+                    outlined
+                    number
+                    prefix="+63"
+                    type="number"
+                    color="success"
+                    hide-spin-buttons
+                    :error-messages="errors ? errors.otp ? errors.otp[0] : '' : ''"
+                  />
+                </v-flex>
+                <v-flex px-1>
+                  <v-btn
+                    fab
+                    dark
+                    color="primary"
+                    small
+                    :loading="send_otp_loading"
+                    @click="sendOtp"
+                  >
+                    <v-icon dark>
+                      mdi-send
+                    </v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+              <v-card outlined width="300px" class="pa-3 mt-1">
+                <span class="d-flex justify-center">Enter your OTP key here.</span>
+                <v-otp-input
+                  length="6"
+                  v-model="verifyOtp"
+                ></v-otp-input>
+              </v-card>
+              <v-flex class="d-flex justify-center pt-5">
                 <v-btn
-                  fab
-                  dark
+                  outlined
                   color="primary"
-                  small
-                  :loading="send_otp_loading"
-                  @click="sendOtp"
+                  @click=previous
+                  class="mx-1"
                 >
-                  <v-icon dark>
-                    mdi-send
-                  </v-icon>
+                  Back
                 </v-btn>
               </v-flex>
             </v-layout>
-            <v-card outlined width="300px" class="pa-3 mt-1">
-              <span class="d-flex justify-center">Enter your OTP key here.</span>
-              <v-otp-input
-                length="6"
-                v-model="verifyOtp"
-              ></v-otp-input>
-            </v-card>
-          </v-layout>
-        </v-flex>
-        <v-flex v-if="step == 3">
-          <v-layout wrap column align-center justify-center>
-            <v-card class="pa-11" shaped raised elevation="15">
-              <v-flex>
-                <v-flex class="d-flex justify-center">
-                  <v-icon color="green" size="100">
-                    mdi-check-circle-outline
-                  </v-icon>
+          </v-flex>
+          <v-flex v-if="step == 3">
+            <v-layout justify-center pa-5>
+              <v-card class="pa-11 rounded-xxl" light elevation="15">
+                <v-flex>
+                  <v-flex class="d-flex justify-center">
+                    <v-icon color="green" size="100">
+                      mdi-check-circle-outline
+                    </v-icon>
+                  </v-flex>
+                  <v-flex class="d-flex justify-center">
+                    <span class="headline font-weight-bold">Application Submited.</span>
+                  </v-flex>
+                  <v-flex class="d-flex justify-center mt-6">
+                    <v-btn outlined color="green" @click="home">Home</v-btn>
+                  </v-flex>
                 </v-flex>
-                <v-flex class="d-flex justify-center">
-                  <span class="headline font-weight-bold">Application Submited.</span>
-                </v-flex>
-                <v-flex class="d-flex justify-center mt-6">
-                  <v-btn outlined color="green" @click="home">Home</v-btn>
-                </v-flex>
-              </v-flex>
-            </v-card>
-          </v-layout>
-        </v-flex>
-      </v-card-text>
-    </v-card>
+              </v-card>
+            </v-layout>
+          </v-flex>
+        </v-card-text>
+      </v-card>
+    </v-flex>
     <v-snackbar
       v-model="snackbar"
       top
@@ -205,7 +233,7 @@
       <div><div></div></div>
       </div></div>
     </v-overlay>
-  </v-container>
+  </v-layout>
 </template>
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
@@ -297,6 +325,9 @@
       },
       close(){
         this.dialog = false
+      },
+      previous(){
+        this.step -= 1
       },
       nexStep(value){
         if(value == 1){

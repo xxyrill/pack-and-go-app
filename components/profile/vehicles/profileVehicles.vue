@@ -12,7 +12,7 @@
     </v-card-subtitle>
     <v-card-text>
       <v-layout column>
-        <v-flex class="text-end pa-1">
+        <v-flex class="text-end pa-1" v-if="type !== 'driver'">
           <dialog-add-vehicle/>
         </v-flex>
         <v-flex class="pa-1">
@@ -36,7 +36,7 @@
                     <v-icon
                       color="error"
                     >
-                      mdi-delete
+                      mdi-toggle-switch-off-outline
                     </v-icon>
                   </v-btn>
                 </v-flex>
@@ -66,10 +66,12 @@ import axios from 'axios'
         { text: 'Status', align: 'center', sortable: false, value: 'status'},
         { text: 'Actions', align: 'center', sortable: false, value: 'actions'},
       ],
-      items: []
+      items: [],
+      type: null
     }),
     computed: {
-      ...mapGetters('users', ['refresh_vehicles'])
+      ...mapGetters('users', ['refresh_vehicles']),
+      ...mapGetters('login', ['log'])
     },
     watch: {
       refresh_vehicles: {
@@ -79,10 +81,18 @@ import axios from 'axios'
           }
         }, deep: true
       },
+      log: {
+        handler() {
+          this.setType()    
+        }, deep: true
+      },
     },
     methods: {
       ...mapActions('users', ['USER_VEHICLE', 'USER_VEHICLE_DELETE']),
-    ...mapMutations('users', ['REFRESH_DATA_VEHICLES']),
+      ...mapMutations('users', ['REFRESH_DATA_VEHICLES']),
+      setType(){
+        this.type = this.log.type
+      },
       async getVehicles(){
         await this.USER_VEHICLE().then(data => {
           this.items = data.data.data

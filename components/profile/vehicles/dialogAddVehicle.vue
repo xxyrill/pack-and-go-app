@@ -60,6 +60,54 @@
                 :error-messages="errors ? errors.plate_number ? errors.plate_number :'':''"
               />
             </v-flex>
+            <v-flex>
+              <v-layout row class="pa-3">
+                <v-flex lg6 md6 sm12 xs12 class="px-2">
+                  <v-file-input
+                    outlined
+                    label="Official Receipt"
+                    v-model="form.or"
+                    persistent-placeholder
+                    prepend-icon=""
+                    prepend-inner-icon="mdi-camera"
+                    dense
+                    :error-messages="errors ? errors.or ? errors.or :'':''"
+                  >
+                    <template v-slot:selection="{ text }">
+                      <v-chip
+                        small
+                        label
+                        color="primary"
+                      >
+                        {{ text }}
+                      </v-chip>
+                    </template>
+                  </v-file-input>
+                </v-flex>
+                <v-flex lg6 md6 sm12 xs12 class="px-2">
+                  <v-file-input
+                    outlined
+                    label="Certificate of Registration"
+                    v-model="form.cr"
+                    persistent-placeholder
+                    prepend-icon=""
+                    prepend-inner-icon="mdi-camera"
+                    dense
+                    :error-messages="errors ? errors.cr ? errors.cr :'':''"
+                  >
+                    <template v-slot:selection="{ text }">
+                      <v-chip
+                        small
+                        label
+                        color="primary"
+                      >
+                        {{ text }}
+                      </v-chip>
+                    </template>
+                  </v-file-input>
+                </v-flex>
+              </v-layout>
+            </v-flex>
           </v-layout>
         </v-card-text>
         <v-card-actions class="d-flex justify-center">
@@ -114,6 +162,8 @@ export default {
         make : this.form ? this.form.make ? this.form.make : null : null,
         year_model : this.form ? this.form.year_model ? this.form.year_model : null : null,
         plate_number : this.form ? this.form.plate_number ? this.form.plate_number : null : null,
+        or : this.form ? this.form.or ? this.form.or : null : null,
+        cr : this.form ? this.form.cr ? this.form.cr : null : null,
       }
       let validation = this.fieldsValidation(payload)
       if(validation.error == true){
