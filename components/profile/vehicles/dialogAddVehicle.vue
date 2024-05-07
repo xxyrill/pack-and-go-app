@@ -123,6 +123,8 @@ import { mapMutations, mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 import Global from '~/plugins/mixins/global'
 import moment from 'moment';
+import { Http } from '~/plugins/http'
+
 export default {
   mixins: [Global],
   data: () => ({
@@ -170,7 +172,9 @@ export default {
         this.errors = validation.errors
       }else{
         this.errors = {}
-        await this.USER_VEHICLE_STORE(payload).then(data => {
+        await this.USER_VEHICLE_STORE(payload).then(async data => {
+          await this.uploadDocuments('or', data.data.id, this.form.or)
+          await this.uploadDocuments('cr', data.data.id, this.form.cr)
           let Toast = this.$swal.mixin({
             toast: true,
             position: "top-end",
@@ -206,6 +210,28 @@ export default {
           });
         })
       }
+    },
+    async uploadDocuments(type, id, file){
+      let fileData = new FormData()
+      fileData.append("file", file);
+      fileData.append("user_vehicle_id", id);
+      fileData.append("type", type);
+      await Http.post(`${process.env.API_URL}/api/user-vehicle/upload-documents`,
+        fileData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+        }
+      ).catch(() => {
+        this.$swal.fire({
+          title: `Something went wrong.`,
+          text: 'Please try again.', 
+          icon: 'error',
+          confirmButtonColor: '#009c25',
+          confirmButtonText: 'OK'
+        })
+      })
     },
     async addVehicle(){
       await this.getVehicleList()

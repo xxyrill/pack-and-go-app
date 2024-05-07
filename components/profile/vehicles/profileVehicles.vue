@@ -12,7 +12,7 @@
     </v-card-subtitle>
     <v-card-text>
       <v-layout column>
-        <v-flex class="text-end pa-1" v-if="type !== 'driver'">
+        <v-flex class="text-end pa-1">
           <dialog-add-vehicle/>
         </v-flex>
         <v-flex class="pa-1">
@@ -25,6 +25,56 @@
             >
             <template v-slot:item.status="{ item }">
               <span style="color: green;">Active</span>
+            </template>
+            <template v-slot:item.documents="{ item }">
+              <div>
+                <v-dialog
+                  v-model="dialog_or"
+                  width="500"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="#D35400"
+                      dark
+                      small
+                      v-bind="attrs"
+                      v-on="on"
+                      class="ma-1"
+                    >
+                      OR
+                    </v-btn>
+                  </template>
+
+                  <v-card>
+                    <v-card-text class="pa-0">
+                      <v-img :src="url+'/storage/'+item.or_path" contain/>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
+                <v-dialog
+                  v-model="dialog_cr"
+                  width="500"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="#8E44AD"
+                      dark
+                      small
+                      v-bind="attrs"
+                      v-on="on"
+                      class="ma-1"
+                    >
+                      CR
+                    </v-btn>
+                  </template>
+
+                  <v-card>
+                    <v-card-text class="pa-0">
+                      <v-img :src="url+'/storage/'+item.cr_path" contain/>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
+              </div>
             </template>
             <template v-slot:item.actions="{ item }">
               <v-flex class="d-flex align-center">
@@ -64,10 +114,14 @@ import axios from 'axios'
         { text: 'Year Model', align: 'center', sortable: false, value: 'year_model'},
         { text: 'Plate Number', align: 'center', sortable: false, value: 'plate_number'},
         { text: 'Status', align: 'center', sortable: false, value: 'status'},
+        { text: 'Documents', align: 'center', sortable: false, value: 'documents'},
         { text: 'Actions', align: 'center', sortable: false, value: 'actions'},
       ],
       items: [],
-      type: null
+      type: null,
+      url: process.env.API_URL,
+      dialog_or: false,
+      dialog_cr: false
     }),
     computed: {
       ...mapGetters('users', ['refresh_vehicles']),
@@ -101,7 +155,7 @@ import axios from 'axios'
       },
       async deleteVehicle(item){
         this.$swal.fire({
-          title: `Are you sure you want to delete this?`,
+          title: `Are you sure you want to deactivate this?`,
           text: "This action cannot be undone.",
           icon: 'question',
           showCancelButton: true,

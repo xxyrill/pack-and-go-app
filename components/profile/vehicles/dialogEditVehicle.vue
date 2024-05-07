@@ -66,6 +66,54 @@
                 :error-messages="errors ? errors.plate_number ? errors.plate_number :'':''"
               />
             </v-flex>
+            <v-flex>
+              <v-layout row class="pa-3">
+                <v-flex lg6 md6 sm12 xs12 class="px-2">
+                  <v-file-input
+                    outlined
+                    label="Official Receipt"
+                    v-model="form.or"
+                    persistent-placeholder
+                    prepend-icon=""
+                    prepend-inner-icon="mdi-camera"
+                    dense
+                    :error-messages="errors ? errors.or ? errors.or :'':''"
+                  >
+                    <template v-slot:selection="{ text }">
+                      <v-chip
+                        small
+                        label
+                        color="primary"
+                      >
+                        {{ text }}
+                      </v-chip>
+                    </template>
+                  </v-file-input>
+                </v-flex>
+                <v-flex lg6 md6 sm12 xs12 class="px-2">
+                  <v-file-input
+                    outlined
+                    label="Certificate of Registration"
+                    v-model="form.cr"
+                    persistent-placeholder
+                    prepend-icon=""
+                    prepend-inner-icon="mdi-camera"
+                    dense
+                    :error-messages="errors ? errors.cr ? errors.cr :'':''"
+                  >
+                    <template v-slot:selection="{ text }">
+                      <v-chip
+                        small
+                        label
+                        color="primary"
+                      >
+                        {{ text }}
+                      </v-chip>
+                    </template>
+                  </v-file-input>
+                </v-flex>
+              </v-layout>
+            </v-flex>
           </v-layout>
         </v-card-text>
         <v-card-actions class="d-flex justify-center">
@@ -81,6 +129,8 @@ import { mapMutations, mapActions, mapGetters } from 'vuex'
 import axios from 'axios'
 import Global from '~/plugins/mixins/global'
 import moment from 'moment';
+import { Http } from '~/plugins/http'
+
 export default {
   mixins: [Global],
   props: {
@@ -89,7 +139,8 @@ export default {
   data: () => ({
     errors: {},
     dialog_add_vehicle: false,
-    vehicle_list: []
+    vehicle_list: [],
+    form: {}
   }),
   computed: {
   },
@@ -129,7 +180,13 @@ export default {
       }else{
         this.errors = {}
         this.$set(payload, 'id', this.items.id)
-        await this.USER_VEHICLE_UPDATE(payload).then(data => {
+        await this.USER_VEHICLE_UPDATE(payload).then(async data => {
+          if(this.form.or){
+            await this.uploadDocuments('or', this.items.id, this.form.or)
+          }
+          if(this.form.cr){
+            await this.uploadDocuments('cr', this.items.id, this.form.cr)
+          }
           let Toast = this.$swal.mixin({
             toast: true,
             position: "top-end",
@@ -152,11 +209,34 @@ export default {
         })
       }
     },
+    async uploadDocuments(type, id, file){
+      let fileData = new FormData()
+      fileData.append("file", file);
+      fileData.append("user_vehicle_id", id);
+      fileData.append("type", type);
+      await Http.post(`${process.env.API_URL}/api/user-vehicle/upload-documents`,
+        fileData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+        }
+      ).catch(() => {
+        this.$swal.fire({
+          title: `Something went wrong.`,
+          text: 'Please try again.', 
+          icon: 'error',
+          confirmButtonColor: '#009c25',
+          confirmButtonText: 'OK'
+        })
+      })
+    },
     async addVehicle(){
       await this.getVehicleList()
       this.dialog_add_vehicle = true
     },
     close(){
+      this.form = {}
       this.dialog_add_vehicle = false
     },
   },

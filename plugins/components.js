@@ -48,6 +48,8 @@ import ProfileProfile from '~/components/profile/profile/profileProfile'
 import ProfileUpdateLicense from '~/components/profile/profile/updateLicensePicture'
 import ProfileUpdateEmail from '~/components/profile/profile/updateEmail'
 import ProfileUpdateContactNumber from '~/components/profile/profile/updateContactNumber'
+import ProfileUpdateIds from '~/components/profile/profile/updateIds'
+
 //profile view
 import ProfileView from '~/components/profile/viewProfile'
 
@@ -132,6 +134,7 @@ const components = {
   ProfileUpdateLicense,
   ProfileUpdateEmail,
   ProfileUpdateContactNumber,
+  ProfileUpdateIds,
 
   ProfileView,
 

@@ -149,7 +149,7 @@
                     outlined
                     number
                     prefix="+63"
-                    type="number"
+                    maxlength="10"
                     color="success"
                     hide-spin-buttons
                     :error-messages="errors ? errors.otp ? errors.otp[0] : '' : ''"

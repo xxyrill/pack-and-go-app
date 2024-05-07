@@ -180,6 +180,7 @@
                     <v-date-picker
                       v-model="form.expiry_date"
                       scrollable
+                      :min="dateNow"
                     >
                       <v-spacer></v-spacer>
                       <v-btn
@@ -350,9 +351,8 @@
                     outlined
                     number
                     prefix="+63"
-                    type="number"
+                    maxlength="10"
                     color="success"
-                    hide-spin-buttons
                     :error-messages="errors ? errors.otp ? errors.otp[0] : '' : ''"
                   />
                 </v-flex>
@@ -440,6 +440,7 @@
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   import axios from 'axios'
   import Global from '~/plugins/mixins/global'
+  import { Http } from '~/plugins/http'
 
   export default {
     props: {
@@ -475,7 +476,8 @@
       snackIcon: null,
       verifyOtp: null,
       loadingOverlay: false,
-      vehicleList: []
+      vehicleList: [],
+      dateNow: new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000).toISOString().substr(0, 10),
     }),
     computed: {
       ...mapGetters('login', ['log']),
@@ -641,7 +643,7 @@
       home(){
         this.goTo('/')
       },
-      saveFinalWithVerification(){
+      async saveFinalWithVerification(){
         let payload = {
           first_name : this.form ? this.form.first_name ? this.form.first_name : null : null,
           last_name : this.form ? this.form.last_name ? this.form.last_name : null : null,
@@ -660,8 +662,39 @@
           plate_number : this.form ? this.form.plate_number ? this.form.plate_number : null : null,
           helper : this.form ? this.form.helper ? this.form.helper : false : false,
         }
-        this.USERS_REGISTRATION(payload).then(data => {
+        await this.USERS_REGISTRATION(payload).then(async data => {
+          await this.saveLicense(data.data.id.id, 'front', this.form.driver_license_front)
+          await this.saveLicense(data.data.id.id, 'back', this.form.driver_license_back)
         }).catch(response => {
+          this.$swal.fire({
+            title: `Something went wrong.`,
+            text: 'Please try again.', 
+            icon: 'error',
+            confirmButtonColor: '#009c25',
+            confirmButtonText: 'OK'
+          })
+        })
+      },
+      async saveLicense(id, type, file){
+        let fileData = new FormData()
+        fileData.append("file", file);
+        fileData.append("user_driver_details_id", id);
+        fileData.append("type", type);
+        await Http.post(`${process.env.API_URL}/api/user/registration/save-license-file`,
+          fileData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+          }
+        ).catch(() => {
+          this.$swal.fire({
+            title: `Something went wrong.`,
+            text: 'Please try again.', 
+            icon: 'error',
+            confirmButtonColor: '#009c25',
+            confirmButtonText: 'OK'
+          })
         })
       },
       async getVehicleList(){

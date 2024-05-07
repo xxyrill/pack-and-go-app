@@ -317,7 +317,7 @@
                     outlined
                     number
                     prefix="+63"
-                    type="number"
+                    maxlength="10"
                     color="success"
                     hide-spin-buttons
                     :error-messages="errors ? errors.otp ? errors.otp[0] : '' : ''"
@@ -407,6 +407,7 @@
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   import axios from 'axios'
   import Global from '~/plugins/mixins/global'
+  import { Http } from '~/plugins/http'
 
   export default {
     props: {
@@ -582,7 +583,7 @@
       home(){
         this.goTo('/')
       },
-      saveFinalWithVerification(){
+      async saveFinalWithVerification(){
         let payload = {
           first_name : this.form ? this.form.first_name ? this.form.first_name : null : null,
           last_name : this.form ? this.form.last_name ? this.form.last_name : null : null,
@@ -602,10 +603,45 @@
           business_dti_number : this.form ? this.form.business_dti_number ? this.form.business_dti_number : null : null,
           business_tourism_number : this.form ? this.form.business_tourism_number ? this.form.business_tourism_number : null : null,
         }
-        this.USERS_REGISTRATION(payload).then(data => {
+        await this.USERS_REGISTRATION(payload).then(async data => {
+          if(this.form.business_permit){
+            await this.savePermits(data.data.id.id, 'business_permit', this.form.business_permit)
+          }
+          if(this.form.dti){
+            await this.savePermits(data.data.id.id, 'dti', this.form.dti)
+          }
         }).catch(response => {
+          this.$swal.fire({
+            title: `Something went wrong.`,
+            text: 'Please try again.', 
+            icon: 'error',
+            confirmButtonColor: '#009c25',
+            confirmButtonText: 'OK'
+          })
         })
-      }
+      },
+      async savePermits(id, type, file){
+        let fileData = new FormData()
+        fileData.append("file", file);
+        fileData.append("user_business_details_id", id);
+        fileData.append("type", type);
+        await Http.post(`${process.env.API_URL}/api/user/registration/ids`,
+          fileData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+          }
+        ).catch(() => {
+          this.$swal.fire({
+            title: `Something went wrong.`,
+            text: 'Please try again.', 
+            icon: 'error',
+            confirmButtonColor: '#009c25',
+            confirmButtonText: 'OK'
+          })
+        })
+      },
     },
 
     mounted () {

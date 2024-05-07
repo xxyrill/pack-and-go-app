@@ -601,14 +601,14 @@
                     class="mx-auto elevation-15"
                   >
                   
-                    <v-img min-height="200" max-height="200" contain :src="user_data.front_license_path ? url+'/storage/'+user_data.front_license_path : imgs.no_file"></v-img>
+                    <v-img min-height="200" max-height="200" contain :src="user_data.secondary_id_path ? url+'/storage/'+user_data.secondary_id_path : imgs.no_file"></v-img>
                     <v-fade-transition>
                       <v-overlay
-                        v-if="user_data.back_license_path && hover"
+                        v-if="user_data.secondary_id_path && hover"
                         absolute
                         color="#036358"
                       >
-                        <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">View ID</v-btn>
+                        <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.secondary_id_path)">View ID</v-btn>
                       </v-overlay>
                     </v-fade-transition>
                   </v-card>
@@ -616,7 +616,7 @@
               </v-hover>
             </v-flex>
             <v-flex class="pa-2">
-              <profile-update-license :type="'front'" :user_driver_id="user_data.user_driver_id"/>
+              <profile-update-ids :type="'driver'" :user_driver_id="user_data.user_driver_id"/>
             </v-flex>
           </v-flex>
         </v-layout>
@@ -636,14 +636,14 @@
                         class="mx-auto elevation-15"
                       >
                       
-                        <v-img min-height="200" max-height="200" contain :src="user_data.front_license_path ? url+'/storage/'+user_data.front_license_path : imgs.no_file"></v-img>
+                        <v-img min-height="200" max-height="200" contain :src="user_data.government_id_path ? url+'/storage/'+user_data.government_id_path : imgs.no_file"></v-img>
                         <v-fade-transition>
                           <v-overlay
-                            v-if="user_data.back_license_path && hover"
+                            v-if="user_data.government_id_path && hover"
                             absolute
                             color="#036358"
                           >
-                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">View ID</v-btn>
+                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.government_id_path)">View ID</v-btn>
                           </v-overlay>
                         </v-fade-transition>
                       </v-card>
@@ -651,7 +651,7 @@
                   </v-hover>
                 </v-flex>
                 <v-flex class="pa-2">
-                  <profile-update-license :type="'front'" :user_driver_id="user_data.user_driver_id"/>
+                  <profile-update-ids :type="'business'" :user_business_id="user_data.user_business_id"/>
                 </v-flex>
               </v-flex>
             </v-layout>
@@ -669,14 +669,14 @@
                         class="mx-auto elevation-15"
                       >
                       
-                        <v-img min-height="200" max-height="200" contain :src="user_data.front_license_path ? url+'/storage/'+user_data.front_license_path : imgs.no_file"></v-img>
+                        <v-img min-height="200" max-height="200" contain :src="user_data.dti_registration_path ? url+'/storage/'+user_data.dti_registration_path : imgs.no_file"></v-img>
                         <v-fade-transition>
                           <v-overlay
-                            v-if="user_data.back_license_path && hover"
+                            v-if="user_data.dti_registration_path && hover"
                             absolute
                             color="#036358"
                           >
-                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">View ID</v-btn>
+                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.dti_registration_path)">View ID</v-btn>
                           </v-overlay>
                         </v-fade-transition>
                       </v-card>
@@ -684,7 +684,7 @@
                   </v-hover>
                 </v-flex>
                 <v-flex class="pa-2">
-                  <profile-update-license :type="'front'" :user_driver_id="user_data.user_driver_id"/>
+                  <profile-update-ids :type="'dti'" :user_business_id="user_data.user_business_id"/>
                 </v-flex>
               </v-flex>
             </v-layout>
@@ -702,14 +702,14 @@
                         class="mx-auto elevation-15"
                       >
                       
-                        <v-img min-height="200" max-height="200" contain :src="user_data.front_license_path ? url+'/storage/'+user_data.front_license_path : imgs.no_file"></v-img>
+                        <v-img min-height="200" max-height="200" contain :src="user_data.business_permit_path ? url+'/storage/'+user_data.business_permit_path : imgs.no_file"></v-img>
                         <v-fade-transition>
                           <v-overlay
-                            v-if="user_data.back_license_path && hover"
+                            v-if="user_data.business_permit_path && hover"
                             absolute
                             color="#036358"
                           >
-                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.front_license_path)">View ID</v-btn>
+                            <v-btn color="orange darken-1" @click="openDialog(url+'/storage/'+user_data.business_permit_path)">View ID</v-btn>
                           </v-overlay>
                         </v-fade-transition>
                       </v-card>
@@ -717,7 +717,7 @@
                   </v-hover>
                 </v-flex>
                 <v-flex class="pa-2">
-                  <profile-update-license :type="'front'" :user_driver_id="user_data.user_driver_id"/>
+                  <profile-update-ids :type="'business_permit'" :user_business_id="user_data.user_business_id"/>
                 </v-flex>
               </v-flex>
             </v-layout>
@@ -826,7 +826,9 @@ import Imagepath from '~/plugins/mixins/imagepath'
           helper : this.user_info ? this.user_info.user_driver ? this.user_info.user_driver.helper ? this.user_info.user_driver.helper : null : null : null,
           created_at : this.user_info ? this.user_info.user_driver ? this.user_info.user_driver.created_at ? this.user_info.user_driver.created_at : null : null : null,
           license_expiry_date : this.user_info ? this.user_info.user_driver ? this.user_info.user_driver.license_expiry_date ? this.user_info.user_driver.license_expiry_date : null : null : null,
+          secondary_id_path : this.user_info ? this.user_info.user_driver ? this.user_info.user_driver.secondary_id_path ? this.user_info.user_driver.secondary_id_path : null : null : null,
 
+          user_business_id : this.user_info ? this.user_info.user_business ? this.user_info.user_business.id ? this.user_info.user_business.id : null : null : null,
           business_name : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_name ? this.user_info.user_business.business_name : null : null : null,
           business_address : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_address ? this.user_info.user_business.business_address : null : null : null,
           business_complete_address : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_complete_address ? this.user_info.user_business.business_complete_address : null : null : null,
@@ -835,6 +837,9 @@ import Imagepath from '~/plugins/mixins/imagepath'
           business_city_tourism_number : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_tourism_number ? this.user_info.user_business.business_tourism_number : null : null : null,
           business_contact_person : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_contact_person ? this.user_info.user_business.business_contact_person : null : null : null,
           business_contact_person_number : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_contact_person_number ? this.user_info.user_business.business_contact_person_number : null : null : null,
+          government_id_path : this.user_info ? this.user_info.user_business ? this.user_info.user_business.government_id_path ? this.user_info.user_business.government_id_path : null : null : null,
+          dti_registration_path : this.user_info ? this.user_info.user_business ? this.user_info.user_business.dti_registration_path ? this.user_info.user_business.dti_registration_path : null : null : null,
+          business_permit_path : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_permit_path ? this.user_info.user_business.business_permit_path : null : null : null,
         }
         this.user_data = payload
       },
