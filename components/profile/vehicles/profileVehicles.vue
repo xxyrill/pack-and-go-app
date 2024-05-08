@@ -208,7 +208,7 @@ import axios from 'axios'
       },
       showAddButtone(){
         if(this.log.type === 'driver'){
-          if(this.items.length < 2) {
+          if(this.items.length > 1) {
             this.button_add = false
           }else{
             this.button_add = true
