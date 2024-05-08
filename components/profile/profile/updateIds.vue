@@ -93,7 +93,7 @@ export default {
           }
         ).then(data => {
           this.$swal.fire({
-            title: `Driver's license ${this.type} photo has been updated.`,
+            title: `ID has been updated`,
             text: '', 
             icon: 'success',
             confirmButtonColor: '#009c25',

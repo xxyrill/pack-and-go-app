@@ -161,6 +161,9 @@ const actions = {
   USER_VEHICLE_DELETE ({ commit }, payload) {
     return deleteApi(`/user-vehicle/${payload.id}`, payload)
   },
+  USER_VEHICLE_STATUS ({ commit }, payload) {
+    return patchApi(`/user-vehicle/status/${payload.id}`, payload)
+  },
   USER_VEHICLE_LISTING ({ commit }, payload) {
     return postApi(`/user-vehicle/listing`, payload)
   },

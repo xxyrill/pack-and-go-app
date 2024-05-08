@@ -12,7 +12,7 @@
     </v-card-subtitle>
     <v-card-text>
       <v-layout column>
-        <v-flex class="text-end pa-1">
+        <v-flex class="text-end pa-1" v-if="button_add == true">
           <dialog-add-vehicle/>
         </v-flex>
         <v-flex class="pa-1">
@@ -24,7 +24,8 @@
               flat
             >
             <template v-slot:item.status="{ item }">
-              <span style="color: green;">Active</span>
+              <span style="color: green;" v-if="item.status == 'active'">Active</span>
+              <span style="color: red;" v-else>Inactive</span>
             </template>
             <template v-slot:item.documents="{ item }">
               <div>
@@ -84,9 +85,8 @@
                 <v-flex class="ma-0">
                   <v-btn icon @click="deleteVehicle(item)">
                     <v-icon
-                      color="error"
                     >
-                      mdi-toggle-switch-off-outline
+                      {{(item.status == 'active') ? 'mdi-toggle-switch-off' :'mdi-toggle-switch-outline'}}
                     </v-icon>
                   </v-btn>
                 </v-flex>
@@ -121,11 +121,12 @@ import axios from 'axios'
       type: null,
       url: process.env.API_URL,
       dialog_or: false,
-      dialog_cr: false
+      dialog_cr: false,
+      button_add: false
     }),
     computed: {
       ...mapGetters('users', ['refresh_vehicles']),
-      ...mapGetters('login', ['log'])
+      ...mapGetters('login', ['log']),
     },
     watch: {
       refresh_vehicles: {
@@ -142,7 +143,7 @@ import axios from 'axios'
       },
     },
     methods: {
-      ...mapActions('users', ['USER_VEHICLE', 'USER_VEHICLE_DELETE']),
+      ...mapActions('users', ['USER_VEHICLE', 'USER_VEHICLE_STATUS']),
       ...mapMutations('users', ['REFRESH_DATA_VEHICLES']),
       setType(){
         this.type = this.log.type
@@ -151,51 +152,70 @@ import axios from 'axios'
         await this.USER_VEHICLE().then(data => {
           this.items = data.data.data
           this.REFRESH_DATA_VEHICLES(false)
+          this.showAddButtone()
         })
       },
       async deleteVehicle(item){
-        this.$swal.fire({
-          title: `Are you sure you want to deactivate this?`,
-          text: "This action cannot be undone.",
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: '#009c25',
-          cancelButtonColor: '#b6b6b6',
-          confirmButtonText: 'Yes!',
-          cancelButtonText: 'Cancel'
-        }).then(async result => {
-          if (result.isConfirmed) {
-            let payload = {
-              id : item.id
+        if(item.status === 'active'){
+          this.$swal.fire({
+            title: `Are you sure you want to deactivate this?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#009c25',
+            cancelButtonColor: '#b6b6b6',
+            confirmButtonText: 'Yes!',
+            cancelButtonText: 'Cancel'
+          }).then(async result => {
+            if (result.isConfirmed) {
+              await this.updateVehicleStatus(item)
             }
-            await this.USER_VEHICLE_DELETE(payload).then(data =>{
-              let Toast = this.$swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                  toast.onmouseenter = this.$swal.stopTimer;
-                  toast.onmouseleave = this.$swal.resumeTimer;
-                }
-              });
-              Toast.fire({
-                icon: "success",
-                title: data.data.message
-              });
-              this.getVehicles()
-            }).catch(response => {
-              this.$swal.fire({
-                title: `Something went wrong`,
-                text: 'Please try again later.',
-                icon: 'error',
-                confirmButtonColor: '#009c25',
-                confirmButtonText: 'OK'
-              })
-            })  
+          })
+        }else{
+          this.updateVehicleStatus(item)
+        }
+      },
+      async updateVehicleStatus(item){
+        let payload = {
+          id : item.id,
+          status : (item.status == 'active') ? 'inactive' : 'active'
+        }
+        await this.USER_VEHICLE_STATUS(payload).then(data =>{
+          let Toast = this.$swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = this.$swal.stopTimer;
+              toast.onmouseleave = this.$swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "success",
+            title: data.data.message
+          });
+          this.getVehicles()
+        }).catch(response => {
+          this.$swal.fire({
+            title: `Something went wrong`,
+            text: 'Please try again later.',
+            icon: 'error',
+            confirmButtonColor: '#009c25',
+            confirmButtonText: 'OK'
+          })
+        }) 
+      },
+      showAddButtone(){
+        if(this.log.type === 'driver'){
+          if(this.items.length < 2) {
+            this.button_add = false
+          }else{
+            this.button_add = true
           }
-        })
+        }else{
+          this.button_add = true
+        }
       }
     },
     mounted () {

@@ -484,7 +484,7 @@
                                       <v-text-field
                                         outlined
                                         dense
-                                        label="Height"
+                                        label="Height(m)"
                                         persistent-placeholder
                                         v-model="form_items.height"
                                         :error-messages="errorsItemform ? errorsItemform.height ? errorsItemform.height :'':''"
@@ -494,7 +494,7 @@
                                       <v-text-field
                                         outlined
                                         dense
-                                        label="Weight"
+                                        label="Weight(kg)"
                                         persistent-placeholder
                                         v-model="form_items.weight"
                                         :error-messages="errorsItemform ? errorsItemform.weight ? errorsItemform.weight :'':''"
@@ -1068,14 +1068,6 @@ import moment from 'moment';
               this.$swal.fire({
                 title: `Please check the time.`,
                 text: `Please ensure that the start time is after the end time.`,
-                icon: 'warning',
-                confirmButtonColor: '#009c25',
-                confirmButtonText: 'OK'
-              })
-            }else if(this.deliver_items < 1){
-              this.$swal.fire({
-                title: `No items found.`,
-                text: `Please add some items.`,
                 icon: 'warning',
                 confirmButtonColor: '#009c25',
                 confirmButtonText: 'OK'

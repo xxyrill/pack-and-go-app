@@ -37,6 +37,7 @@
                   class="skekert rounded-xl"
                   style="font-weight: bold;"
                   :error-messages="errors ? errors.business_name ? errors.business_name :'':''"
+                  ref="business_name"
                     >
                 </v-text-field>
               </v-flex>
@@ -58,6 +59,7 @@
                   :disabled="!edit_data"
                   class="skekert rounded-xl"
                   style="font-weight: bold;"
+                  ref="user_name"
                   :error-messages="errors ? errors.user_name ? errors.user_name :'':''"
                     >
                 </v-text-field>
@@ -81,6 +83,7 @@
                   :disabled="!edit_data"
                   class="skekert rounded-xl"
                   style="font-weight: bold;"
+                  ref="first_name"
                   :error-messages="errors ? errors.first_name ? errors.first_name :'':''"
                     >
                 </v-text-field>
@@ -103,6 +106,7 @@
                   color="success"
                   :disabled="!edit_data"
                   class="skekert rounded-xl"
+                  ref="last_name"
                   style="font-weight: bold;"
                   :error-messages="errors ? errors.last_name ? errors.last_name :'':''"
                     >
@@ -165,6 +169,7 @@
                   class="ma-0"
                   :disabled="!edit_data"
                   dense
+                  ref="gender"
                   :error-messages="errors ? errors.gender ? errors.gender :'':''"
                 >
                   <v-radio
@@ -207,6 +212,7 @@
                       class="skekert rounded-xl"
                       style="font-weight: bold;"
                       :disabled="!edit_data"
+                      ref="birth_date"
                       :error-messages="errors ? errors.birth_date ? errors.birth_date :'':''"
                     ></v-text-field>
                   </template>
@@ -300,6 +306,7 @@
                       class="skekert rounded-xl"
                       :disabled="!edit_data"
                       style="font-weight: bold;"
+                      ref="driver_license_number"
                       :error-messages="errors ? errors.driver_license_number ? errors.driver_license_number :'':''"
                       >
                     </v-text-field>
@@ -335,6 +342,7 @@
                           placeholder="N/A"
                           style="font-weight: bold;"
                           :disabled="!edit_data"
+                          ref="birth_date"
                           :error-messages="errors ? errors.birth_date ? errors.birth_date :'':''"
                         ></v-text-field>
                       </template>
@@ -839,7 +847,7 @@ import Imagepath from '~/plugins/mixins/imagepath'
           business_contact_person_number : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_contact_person_number ? this.user_info.user_business.business_contact_person_number : null : null : null,
           government_id_path : this.user_info ? this.user_info.user_business ? this.user_info.user_business.government_id_path ? this.user_info.user_business.government_id_path : null : null : null,
           dti_registration_path : this.user_info ? this.user_info.user_business ? this.user_info.user_business.dti_registration_path ? this.user_info.user_business.dti_registration_path : null : null : null,
-          business_permit_path : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_permit_path ? this.user_info.user_business.business_permit_path : null : null : null,
+          business_permit_path : this.user_info ? this.user_info.user_business ? this.user_info.user_business.business_permit_path ? this.user_info.user_business.business_permit_path : null : null : null
         }
         this.user_data = payload
       },
@@ -891,6 +899,10 @@ import Imagepath from '~/plugins/mixins/imagepath'
         let validation = this.fieldsValidation(payload)
         if(validation.error == true){
           this.errors = validation.errors
+          let focus = Object.keys(validation.errors)
+          if(focus.length > 0){
+            this.$refs[focus[0]].focus()
+          }
         }else{
           this.loading_save = true
           this.$set(payload, 'middle_name', this.user_data ? this.user_data.middle_name ? this.user_data.middle_name : null : null )
@@ -907,8 +919,8 @@ import Imagepath from '~/plugins/mixins/imagepath'
               timer: 3000,
               timerProgressBar: true,
               didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
+                toast.onmouseenter = this.$swal.stopTimer;
+                toast.onmouseleave = this.$swal.resumeTimer;
               }
             });
             Toast.fire({
