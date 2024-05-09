@@ -327,7 +327,7 @@
                                 small
                                 :ripple="false"
                               >
-                                More information about vehicle sizes
+                                More information about vehicle sizes and booking baseline price
                               </v-btn>
                             </template>
 

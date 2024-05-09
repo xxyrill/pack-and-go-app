@@ -12,7 +12,7 @@
     </v-card-subtitle>
     <v-card-text>
       <v-layout column>
-        <v-flex class="text-end pa-1" v-if="button_add == true">
+        <v-flex class="text-end pa-1" v-if="log.type == 'business'">
           <dialog-add-vehicle/>
         </v-flex>
         <v-flex class="pa-1">
