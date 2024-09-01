@@ -51,9 +51,9 @@ module.exports = {
   ],
   env: {
     //local
-    API_URL: 'http://192.168.1.13:50506',
-    BASE_URL: 'http://192.168.1.13',
-    SITE_URL: 'http://192.168.1.13:8888/'
+    API_URL: 'http://127.0.0.1:8000',
+    BASE_URL: 'http://127.0.0.1:8000',
+    SITE_URL: 'http://172.20.10.3:8888'
 
     //production
     // API_URL: 'http://167.172.95.30',
